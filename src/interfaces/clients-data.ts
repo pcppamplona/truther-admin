@@ -1,0 +1,34 @@
+export interface ClientsData {
+  id: number;
+  name: null | string;
+  role: string;
+  is_verified: boolean;
+  can_transact: boolean;
+  status: string;
+  fee_level_id: number;
+  created_at: string;
+  updated_at: string;
+  flags: null | string;
+  expo_id: null | string;
+  kyc_approved: boolean;
+  kyc_risk: string;
+  banking_enable: boolean;
+  disinterest: boolean;
+  register_txid: null | string;
+  called_attempts_guenno: number;
+  stage_kyc: number;
+  comment_kyc: null | string;
+  providerKyc: string;
+  attemptsKyc: number;
+  password: null | string;
+  ipCreate: string;
+  error: string;
+  restrict: boolean;
+  override_instant_pay: boolean;
+  uuid: string;
+  lastLogin: null | string;
+  lastIpLogin: null | string;
+  retryKyc: number;
+  regenerateKyc: boolean;
+  master_instant_pay: boolean;
+}
