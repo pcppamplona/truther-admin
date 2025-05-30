@@ -8,6 +8,7 @@ import {
 import { ClientInfoProps } from "..";
 import { Button } from "@/components/ui/button";
 import { ModalImage } from "./components/modalImage";
+import { Info } from "@/components/info";
 
 export function KYCView({ client, userInfo }: ClientInfoProps) {
   function getStageLabel(client: any): string {
@@ -65,61 +66,31 @@ export function KYCView({ client, userInfo }: ClientInfoProps) {
             </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <p className="text-[#475467]">Nome do Cliente</p>
-              <strong>{client?.name}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">E-mail</p>
-              <strong>{userInfo?.email}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Documento</p>
-              <strong>{documentFormat(userInfo?.document)}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Telefone</p>
-              <strong>{phoneFormat(userInfo?.phone)}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Ip de criação</p>
-              <strong>{client?.ipCreate}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Data criação</p>
-              <strong>
-                {dateFormat(client?.created_at)}{" "}
-                <span className="text-[#475467] font-medium">às</span>{" "}
-                {timeFormat(client?.created_at)}
-              </strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Provider</p>
-              <strong>{client?.providerKyc}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Tentativas</p>
-              <strong>{client?.retryKyc}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Estágio</p>
-              <strong className={getStageClass(client)}>
-                {getStageLabel(client)}
-              </strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Comentário</p>
-              <strong>{client?.comment_kyc}</strong>
-            </div>
+            <Info label="Nome do Cliente" value={client?.name} />
+            <Info label="E-mail" value={userInfo?.email} />
+            <Info
+              label="Documento"
+              value={documentFormat(userInfo?.document)}
+            />
+            <Info label="Telefone" value={phoneFormat(userInfo?.phone)} />
+            <Info label="Ip de criação" value={client?.ipCreate} />
+            <Info
+              label="Data criação"
+              value={`${dateFormat(client?.created_at)} às ${timeFormat(
+                client?.created_at
+              )}`}
+            />
+            <Info label="Provider" value={client?.providerKyc} />
+            <Info label="Tentativas" value={client?.retryKyc} />
+            <Info
+              label="Estágio"
+              value={
+                <span className={getStageClass(client)}>
+                  {getStageLabel(client)}
+                </span>
+              }
+            />
+            <Info label="Comentário" value={client?.comment_kyc} />
           </CardContent>
         </Card>
 

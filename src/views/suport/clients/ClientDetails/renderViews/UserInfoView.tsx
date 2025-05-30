@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { documentFormat, getFlagUrl, phoneFormat } from "@/lib/formatters";
 import { ExternalLink, MapPinHouse, User } from "lucide-react";
 import { ClientInfoProps } from "..";
+import { Info } from "@/components/info";
 
 export default function UserInfo({ userInfo }: ClientInfoProps) {
   return (
@@ -14,35 +15,15 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
             </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <p className="text-[#475467]">Nome</p>
-              <strong>{userInfo?.name}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">E-mail</p>
-              <strong>{userInfo?.email}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Documento</p>
-              <strong>{documentFormat(userInfo?.document)}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Telefone</p>
-              <strong>{phoneFormat(userInfo?.phone)}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Nascimento</p>
-              <strong>{userInfo?.birthday}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Nome da Mãe</p>
-              <strong>{userInfo?.mothersName}</strong>
-            </div>
+            <Info label="Nome" value={userInfo?.name} />
+            <Info label="E-mail" value={userInfo?.email} />
+            <Info
+              label="Documento"
+              value={documentFormat(userInfo?.document)}
+            />
+            <Info label="Telefone" value={phoneFormat(userInfo?.phone)} />
+            <Info label="Nascimento" value={userInfo?.birthday} />
+            <Info label="Nome da Mãe" value={userInfo?.mothersName} />
 
             <div>
               <p className="text-[#475467]">País</p>
@@ -70,32 +51,14 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
             </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <p className="text-[#475467]">CEP</p>
-              <strong>{userInfo?.cep}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Rua</p>
-              <strong>
-                {userInfo?.street} - {userInfo?.house_number}
-              </strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Bairro</p>
-              <strong>{userInfo?.neighborhood}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Cidade</p>
-              <strong>{userInfo?.city}</strong>
-            </div>
-
-            <div>
-              <p className="text-[#475467]">Estado</p>
-              <strong className="uppercase">{userInfo?.state}</strong>
-            </div>
+            <Info label="CEP" value={userInfo?.cep} />
+            <Info
+              label="Rua"
+              value={`${userInfo?.street} - ${userInfo?.house_number}`}
+            />
+            <Info label="Bairro" value={userInfo?.neighborhood} />
+            <Info label="Cidade" value={userInfo?.city} />
+            <Info label="Estado" value={userInfo?.state?.toUpperCase()} />
 
             <a
               href={`https://www.google.com/maps/search/?api=1&query=${userInfo?.location.replace(
