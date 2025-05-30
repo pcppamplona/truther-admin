@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { documentFormat, getFlagUrl, phoneFormat } from "@/lib/formatters";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, MapPinHouse, User } from "lucide-react";
 import { ClientInfoProps } from "..";
 
 export default function UserInfo({ userInfo }: ClientInfoProps) {
@@ -9,7 +9,9 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Dados Pessoais</CardTitle>
+            <CardTitle className="flex flex-row items-center gap-2">
+              <User /> Dados Pessoais
+            </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -48,9 +50,7 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
                 <img
                   src={getFlagUrl(userInfo?.nationality ?? "")}
                   alt={userInfo?.nationality}
-                  width={24}
-                  height={18}
-                  style={{ borderRadius: 2 }}
+                  className="w-6 h-5 rounded-lg"
                 />
                 {userInfo?.nationality}
               </strong>
@@ -65,7 +65,9 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Endereço</CardTitle>
+            <CardTitle className="flex flex-row items-center gap-2">
+              <MapPinHouse /> Endereço
+            </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -105,7 +107,10 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
               className="block"
             >
               <div className="cursor-pointer">
-                <p className="text-[#475467] flex items-center">Localização<ExternalLink size={14} className="ml-2"/></p>
+                <p className="text-[#475467] flex items-center">
+                  Localização
+                  <ExternalLink size={14} className="ml-2" />
+                </p>
                 <strong className="uppercase">{userInfo?.location}</strong>
               </div>
             </a>

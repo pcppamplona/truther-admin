@@ -1,111 +1,89 @@
-import { useState } from "react";
-import { ChevronRight, type LucideIcon } from "lucide-react";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { useLocation } from "react-router-dom";
 import {
   SidebarGroup,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuButton,
   SidebarMenuSub,
-  SidebarMenuSubButton,
   SidebarMenuSubItem,
+  SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 
 type SubItem = {
   title: string;
   url: string;
+  matchUrls?: string[];
 };
 
 type NavItem = {
   title: string;
   url: string;
-  icon?: React.ComponentType<any> | LucideIcon;
+  icon?: React.ComponentType<any>;
   items?: SubItem[];
+  matchUrls?: string[];
 };
 
 export function NavMain({ items }: { items: NavItem[] }) {
-  const [activeUrl, setActiveUrl] = useState<string | null>(null);
+  const location = useLocation();
+  const currentPath = location.pathname.replace(/^\//, "");
+
+  const isMatch = (path: string, matchUrls?: string[]) => {
+    if (currentPath === path) return true;
+    if (matchUrls) {
+      return matchUrls.some((match) => currentPath.startsWith(match));
+    }
+    return false;
+  };
 
   return (
     <SidebarGroup>
       <SidebarMenu>
         {items.map((item) => {
-          const hasSubItems = Array.isArray(item.items) && item.items.length > 0;
-
-          const isItemActive = activeUrl === item.url;
-          const isSubItemActive = hasSubItems && item.items!.some((sub) => activeUrl === sub.url);
-          const shouldStayOpen = isItemActive || isSubItemActive;
-
-          if (hasSubItems) {
-            return (
-              <Collapsible
-                key={item.title}
-                asChild
-                open={shouldStayOpen}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      tooltip={item.title}
-                      onClick={() => setActiveUrl(item.url)}
-                      className={isItemActive ? "bg-gray-300" : undefined}
-                    >
-                      {item.icon && <item.icon />}
-                      <span>{item.title}</span>
-                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {item.items!.map((subItem) => {
-                        const isSubActive = activeUrl === subItem.url;
-                        return (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              className={isSubActive ? "bg-gray-300" : undefined}
-                            >
-                              <a
-                                href={subItem.url}
-                                onClick={() => setActiveUrl(subItem.url)}
-                                className="w-full block"
-                              >
-                                <span>{subItem.title}</span>
-                              </a>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        );
-                      })}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </SidebarMenuItem>
-              </Collapsible>
-            );
-          }
-
-          const isActive = activeUrl === item.url;
+          const isItemActive =
+            isMatch(item.url, item.matchUrls) ||
+            item.items?.some((sub) => isMatch(sub.url, sub.matchUrls));
 
           return (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
                 asChild
-                tooltip={item.title}
-                className={isActive ? "bg-gray-300" : undefined}
+                className={
+                  isItemActive ? "text-[var(--primaryColor)] font-semibold" : ""
+                }
               >
-                <a
-                  href={item.url}
-                  onClick={() => setActiveUrl(item.url)}
-                  className="w-full flex items-center gap-2"
-                >
+                <a href={`/${item.url}`} className="w-full block">
                   {item.icon && <item.icon />}
-                  <span>{item.title}</span>
+                  {item.title}
                 </a>
               </SidebarMenuButton>
+
+              {item.items && (
+                <SidebarMenuSub>
+                  {item.items.map((subItem) => {
+                    const isSubActive = isMatch(subItem.url, subItem.matchUrls);
+
+                    return (
+                      <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuSubButton
+                          asChild
+                          className={
+                            isSubActive
+                              ? "text-[var(--primaryColor)] font-semibold"
+                              : ""
+                          }
+                        >
+                          <a
+                            href={`/${subItem.url}`}
+                            className="w-full block text-sm pl-4"
+                          >
+                            {subItem.title}
+                          </a>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    );
+                  })}
+                </SidebarMenuSub>
+              )}
             </SidebarMenuItem>
           );
         })}

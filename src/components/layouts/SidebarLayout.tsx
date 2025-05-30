@@ -21,7 +21,8 @@ interface SidebarLayoutProps {
     label: string;
     href?: string;
   }[];
-  current?: string;
+  current?: React.ReactNode | string
+  ;
 }
 
 export function SidebarLayout({
@@ -40,11 +41,22 @@ export function SidebarLayout({
             <Breadcrumb>
               <BreadcrumbList>
                 {breadcrumb.map((item, idx) => (
-                  <BreadcrumbItem key={idx} className="hidden md:block">
-                    <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
-                  </BreadcrumbItem>
+                  <>
+                    <BreadcrumbItem key={idx} className="hidden md:block">
+                      <BreadcrumbLink href={item.href}>
+                        {item.label}
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+
+                    {idx < breadcrumb.length - 1 && (
+                      <BreadcrumbSeparator className="hidden md:block" />
+                    )}
+                  </>
                 ))}
-                {breadcrumb.length > 0 && <BreadcrumbSeparator className="hidden md:block" />}
+
+                {breadcrumb.length > 0 && (
+                  <BreadcrumbSeparator className="hidden md:block" />
+                )}
                 <BreadcrumbItem>
                   <BreadcrumbPage>{current}</BreadcrumbPage>
                 </BreadcrumbItem>
@@ -52,9 +64,7 @@ export function SidebarLayout({
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          {children}
-        </div>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
