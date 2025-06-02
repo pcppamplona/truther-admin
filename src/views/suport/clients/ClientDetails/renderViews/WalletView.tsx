@@ -6,6 +6,7 @@ import { documentFormat, getFlagUrl, phoneFormat } from "@/lib/formatters";
 import { useEffect, useState } from "react";
 import { AclwalletData } from "@/interfaces/aclwallets-data";
 import { Info } from "@/components/info";
+import { WalletSendGas } from "./components/walletSendGas";
 
 export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
   const { data: wallets = [] } = useWalletDoc(userinfo.document);
@@ -59,7 +60,6 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
               />
               <Info label="País" value={walletAddress?.nacionality} />
 
-              {/* Para mostrar a bandeira junto, faça fora do Info: */}
               <div className="flex items-center gap-2 text-[#475467]">
                 <img
                   src={getFlagUrl(walletAddress?.nacionality ?? "")}
@@ -99,7 +99,7 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
             ].map((item) => (
               <div
                 key={item.name}
-                className="flex items-start gap-3 p-3 bg-muted/50 rounded-md"
+                className="flex items-center gap-3 p-3 bg-muted/50 rounded-md"
               >
                 <img
                   src={item.img}
@@ -111,6 +111,7 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
                   <p className="text-xs text-[#475467]">Endereço</p>
                   <strong className="text-xs break-all">{item.value}</strong>
                 </div>
+                <WalletSendGas network={item?.name} userName={walletAddress?.name} />
               </div>
             ))}
           </CardContent>

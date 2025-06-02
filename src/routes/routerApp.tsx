@@ -5,6 +5,8 @@ import Notifications from "@/views/marketing/notifications";
 import Suport from "@/views/suport";
 import Clients from "@/views/suport/clients";
 import ClientDetails from "@/views/suport/clients/ClientDetails";
+import Decode from "@/views/suport/decode";
+import SendGas from "@/views/suport/sendGas";
 import { Route, Routes } from "react-router";
 
 export default function RoutesApp() {
@@ -15,9 +17,10 @@ export default function RoutesApp() {
       <Route path="/suport" element={<Suport />} />
       <Route path="/clients" element={<Clients />} />
       <Route path="/clientDetails" element={<ClientDetails />} />
+      <Route path="/sendgas" element={<SendGas />} />
+      <Route path="/decode" element={<Decode />} />
       <Route path="/notifications" element={<Notifications />} />
       <Route path="/marketing" element={<Marketing />} />
-
     </Routes>
   );
 }

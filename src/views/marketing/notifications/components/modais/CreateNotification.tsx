@@ -22,7 +22,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 
 export function CreateNotification() {
-  const [notificationData, setNotificationData] =
+  const [notificationData, ] =
     useState<Partial<NotificationData>>();
   const handleSubmit = async () => {};
 

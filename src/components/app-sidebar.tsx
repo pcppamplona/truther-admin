@@ -1,4 +1,4 @@
-import * as React from "react";
+// import * as React from "react";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -14,7 +14,7 @@ import {
 import { useAuth } from "@/store/auth";
 import { Presentation, BotMessageSquare, House } from "lucide-react";
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar(/* { ...props }: React.ComponentProps<typeof Sidebar> */) {
   const { user } = useAuth();
 
   const data = {

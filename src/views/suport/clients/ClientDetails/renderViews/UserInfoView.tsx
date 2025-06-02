@@ -1,8 +1,72 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { documentFormat, getFlagUrl, phoneFormat } from "@/lib/formatters";
-import { ExternalLink, MapPinHouse, User } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  dateFormat,
+  documentFormat,
+  getFlagUrl,
+  phoneFormat,
+} from "@/lib/formatters";
+import { ArrowLeftRight, ExternalLink, MapPinHouse, User } from "lucide-react";
 import { ClientInfoProps } from "..";
 import { Info } from "@/components/info";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+export const data = [
+  {
+    id: "1",
+    createdAt: "2025-05-30T08:15:00Z",
+    typeNotification: "BLOCKCHAIN",
+    origin: "0x1aB3fD91fABc1234567890",
+    destiny: "0x9cE5Df12aBCe9876543210",
+    coin: "USDT"
+  },
+  {
+    id: "2",
+    createdAt: "2025-05-30T09:45:00Z",
+    typeNotification: "BLOCKCHAIN",
+    origin: "0x3bC6eF72aDEF2233445566",
+    destiny: "0x6fD4aE31bCCa1122334455",
+    coin: "BTC"
+  },
+  {
+    id: "3",
+    createdAt: "2025-05-30T10:30:00Z",
+    typeNotification: "TRANSFERÊNCIA",
+    origin: "Banco 237 - Conta 123456-7",
+    destiny: "Banco 001 - Conta 987654-3",
+    coin: "BRL"
+  },
+  {
+    id: "4",
+    createdAt: "2025-05-30T11:00:00Z",
+    typeNotification: "PIX",
+    origin: "julio@email.com",
+    destiny: "cpf: 123.456.789-00",
+    coin: "BRL"
+  },
+  {
+    id: "5",
+    createdAt: "2025-05-30T11:30:00Z",
+    typeNotification: "BLOCKCHAIN",
+    origin: "0x7eA1B92CcEf45678901234",
+    destiny: "0x4fC3D12bBAcD5678901234",
+    coin: "ETH"
+  },
+  {
+    id: "6",
+    createdAt: "2025-05-30T12:00:00Z",
+    typeNotification: "TRANSFERÊNCIA",
+    origin: "Banco 104 - Conta 000112-0",
+    destiny: "Banco 033 - Conta 998877-1",
+    coin: "BRL"
+  }
+
+];
 
 export default function UserInfo({ userInfo }: ClientInfoProps) {
   return (
@@ -80,6 +144,57 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
           </CardContent>
         </Card>
       </div>
+      <Card>
+        
+        <CardHeader>
+            <CardTitle className="flex flex-row items-center gap-2">
+              <ArrowLeftRight /> Transações
+            </CardTitle>
+            <CardDescription>Todas as transações efetuadas por {userInfo?.name}</CardDescription>
+          </CardHeader>
+        <CardContent className="px-4 lg:px-6 pt-0 pb-4">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableCell className="font-semibold text-gray-500">
+                  ID
+                </TableCell>
+                <TableCell className="font-semibold text-gray-500">
+                  Data
+                </TableCell>
+                <TableCell className="font-semibold text-gray-500">
+                  Tipo
+                </TableCell>
+                <TableCell className="font-semibold text-gray-500">
+                  Origem
+                </TableCell>
+                <TableCell className="font-semibold text-gray-500">
+                  Destino
+                </TableCell>
+                <TableCell className="font-semibold text-gray-500">
+                  Moeda
+                </TableCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data?.map((notification) => (
+                <TableRow
+                  key={notification.id}
+                  className="cursor-pointer hover:bg-gray-50 transition"
+                >
+                  <TableCell>{notification.id}</TableCell>
+                  <TableCell>{dateFormat(notification.createdAt)}</TableCell>
+                  <TableCell>{notification.typeNotification}</TableCell>
+                  <TableCell>{notification.origin}</TableCell>
+                  <TableCell>{notification.destiny}</TableCell>
+                  <TableCell>{notification.coin}</TableCell>
+
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }
