@@ -31,7 +31,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         title: "Suporte",
-        url: "suport",
+        url: "clients",//suport
         icon: BotMessageSquare,
         items: [
           {
@@ -55,7 +55,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         title: "Marketing",
-        url: "marketing",
+        url: "notifications", //marketing
         icon: Presentation,
         items: [
           {

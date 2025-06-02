@@ -1,4 +1,7 @@
 import { SidebarLayout } from "@/components/layouts/SidebarLayout";
+// import { UserCreationForm } from "./components/UserCreationForm";
+import ListNotifications from "./components/ListNotifications";
+import CalendarNotifications from "./components/CalendarNotifications";
 
 export default function Notifications() {
   return (
@@ -6,12 +9,12 @@ export default function Notifications() {
       breadcrumb={[{ label: "Marketing", href: "" }]}
       current="Notificações"
     >
-      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <div className="aspect-video rounded-xl bg-muted/50" />
-        <div className="aspect-video rounded-xl bg-muted/50" />
-        <div className="aspect-video rounded-xl bg-muted/50" />
+      <div className="flex flex-1 flex-col max-h-screen">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
+          <ListNotifications />
+          <CalendarNotifications />
+        </div>
       </div>
-      <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
     </SidebarLayout>
   );
 }

@@ -1,5 +1,6 @@
 import Dashboard from "@/views/dashboard";
 import Login from "@/views/login";
+import Marketing from "@/views/marketing";
 import Notifications from "@/views/marketing/notifications";
 import Suport from "@/views/suport";
 import Clients from "@/views/suport/clients";
@@ -15,6 +16,8 @@ export default function RoutesApp() {
       <Route path="/clients" element={<Clients />} />
       <Route path="/clientDetails" element={<ClientDetails />} />
       <Route path="/notifications" element={<Notifications />} />
+      <Route path="/marketing" element={<Marketing />} />
+
     </Routes>
   );
 }
