@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   dateFormat,
   documentFormat,
@@ -23,7 +29,7 @@ export const data = [
     typeNotification: "BLOCKCHAIN",
     origin: "0x1aB3fD91fABc1234567890",
     destiny: "0x9cE5Df12aBCe9876543210",
-    coin: "USDT"
+    coin: "USDT",
   },
   {
     id: "2",
@@ -31,7 +37,7 @@ export const data = [
     typeNotification: "BLOCKCHAIN",
     origin: "0x3bC6eF72aDEF2233445566",
     destiny: "0x6fD4aE31bCCa1122334455",
-    coin: "BTC"
+    coin: "BTC",
   },
   {
     id: "3",
@@ -39,7 +45,7 @@ export const data = [
     typeNotification: "TRANSFERÊNCIA",
     origin: "Banco 237 - Conta 123456-7",
     destiny: "Banco 001 - Conta 987654-3",
-    coin: "BRL"
+    coin: "BRL",
   },
   {
     id: "4",
@@ -47,7 +53,7 @@ export const data = [
     typeNotification: "PIX",
     origin: "julio@email.com",
     destiny: "cpf: 123.456.789-00",
-    coin: "BRL"
+    coin: "BRL",
   },
   {
     id: "5",
@@ -55,7 +61,7 @@ export const data = [
     typeNotification: "BLOCKCHAIN",
     origin: "0x7eA1B92CcEf45678901234",
     destiny: "0x4fC3D12bBAcD5678901234",
-    coin: "ETH"
+    coin: "ETH",
   },
   {
     id: "6",
@@ -63,9 +69,8 @@ export const data = [
     typeNotification: "TRANSFERÊNCIA",
     origin: "Banco 104 - Conta 000112-0",
     destiny: "Banco 033 - Conta 998877-1",
-    coin: "BRL"
-  }
-
+    coin: "BRL",
+  },
 ];
 
 export default function UserInfo({ userInfo }: ClientInfoProps) {
@@ -145,13 +150,14 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
         </Card>
       </div>
       <Card>
-        
         <CardHeader>
-            <CardTitle className="flex flex-row items-center gap-2">
-              <ArrowLeftRight /> Transações
-            </CardTitle>
-            <CardDescription>Todas as transações efetuadas por {userInfo?.name}</CardDescription>
-          </CardHeader>
+          <CardTitle className="flex flex-row items-center gap-2">
+            <ArrowLeftRight /> Transações
+          </CardTitle>
+          <CardDescription>
+            Todas as transações efetuadas por {userInfo?.name}
+          </CardDescription>
+        </CardHeader>
         <CardContent className="px-4 lg:px-6 pt-0 pb-4">
           <Table>
             <TableHeader>
@@ -180,15 +186,41 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
               {data?.map((notification) => (
                 <TableRow
                   key={notification.id}
-                  className="cursor-pointer hover:bg-gray-50 transition"
+                  className="cursor-pointer hover:bg-input transition"
                 >
                   <TableCell>{notification.id}</TableCell>
                   <TableCell>{dateFormat(notification.createdAt)}</TableCell>
-                  <TableCell>{notification.typeNotification}</TableCell>
+                  <TableCell className="flex items-center gap-2">
+                    <img
+                      src={
+                        {
+                          BLOCKCHAIN: "/blockchain.png",
+                          TRANSFERÊNCIA: "/transfer.png",
+                          PIX: "/pix.png",
+                        }[notification.typeNotification] || "/default.png"
+                      }
+                      alt={notification.typeNotification}
+                      className="w-6 h-6 object-contain"
+                    />
+                    {notification.typeNotification}
+                  </TableCell>
                   <TableCell>{notification.origin}</TableCell>
                   <TableCell>{notification.destiny}</TableCell>
-                  <TableCell>{notification.coin}</TableCell>
-
+                  <TableCell className="flex items-center gap-2">
+                    <img
+                      src={
+                        {
+                          USDT: "/usdt.png",
+                          BTC: "/bitcoin.png",
+                          ETH: "/eth.png",
+                          BRL: "/brl.png",
+                        }[notification.coin] || "/default.png"
+                      }
+                      alt={notification.coin}
+                      className="w-6 h-6 object-contain"
+                    />
+                    {notification.coin}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

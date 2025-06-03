@@ -1,24 +1,26 @@
-import { applyThemeToCSSVariables } from "@/lib/utils";
 import { useThemeStore } from "@/store/theme";
 import { Moon, Sun } from "lucide-react";
 
 export function ToggleThemeButton() {
-  const { mode, setMode } = useThemeStore();
+  const { theme, setTheme } = useThemeStore();
+
+  const isDark =
+    theme === "dark" ||
+    (theme === "system" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   const toggleTheme = () => {
-    const nextMode = mode === "dark" ? "light" : "dark";
-    setMode(nextMode);
-
-    const { theme } = useThemeStore.getState();
-    applyThemeToCSSVariables(theme);
+    if (theme === "light") {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
   };
 
   return (
-    <div
-      className="p-2 rounded-full bg-[var(--primaryColor)] text-[var(--bgPrimaryColor)] hover:opacity-80 transition sm:ml-4 cursor-pointer"
-      onClick={toggleTheme}
-    >
-      {mode === "dark" ? <Moon size={18} /> : <Sun size={18}/>}
+    <div className="flex items-center cursor-pointer gap-2" onClick={toggleTheme}>
+      {isDark ? <Moon /> : <Sun />}
+      {isDark ? "Escuro" : "Claro"}
     </div>
   );
 }

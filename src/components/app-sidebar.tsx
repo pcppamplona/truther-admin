@@ -91,7 +91,7 @@ export function AppSidebar(/* { ...props }: React.ComponentProps<typeof Sidebar>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="border-b-gray-200 border-b-1">
+      <SidebarContent className="border-b-border border-b-1">
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>

@@ -22,9 +22,9 @@ export default function ListClients() {
   return (
     <>
       <CardHeader>
-        <CardTitle className="text-2xl font-bold tabular-nums @[650px]/card:text-2xl text-gray-600">
+        <CardTitle className="text-2xl font-bold tabular-nums @[650px]/card:text-2xl">
           Todos os Clientes
-          <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2 mt-4">
+          <div className="flex items-center border border-border rounded-lg px-3 py-2 mt-4">
             <Search size={16} className="mr-2" />
             <input
               type="text"

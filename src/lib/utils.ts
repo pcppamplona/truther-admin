@@ -1,8 +1,8 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import ky from "ky";
-import { Theme } from "@/store/theme";
-
+import { useThemeStore } from "@/store/theme";
+import { useEffect } from "react";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -14,9 +14,12 @@ export const api = ky.create({
   },
 });
 
-export const applyThemeToCSSVariables = (theme: Theme) => {
-  const root = document.documentElement;
-  Object.entries(theme).forEach(([key, value]) => {
-    root.style.setProperty(`--${key}`, value);
-  });
-};
+export function ThemeInitializer() {
+  const initializeTheme = useThemeStore((state) => state.initializeTheme)
+
+  useEffect(() => {
+    initializeTheme()
+  }, [initializeTheme])
+
+  return null 
+}

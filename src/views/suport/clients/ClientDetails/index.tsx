@@ -45,7 +45,7 @@ export default function ClientDetails() {
         </>
       }
     >
-      <div className="flex flex-col md:flex-row flex-wrap gap-2 w-full max-w-4xl border-b border-b-gray-200">
+      <div className="flex flex-col md:flex-row flex-wrap gap-2 w-full max-w-4xl border-b">
         {["Perfil", "KYC", "Carteiras", "NFE"].map((tab) => {
           const icon = {
             Perfil: <CircleUserRound size={18} />,
@@ -63,8 +63,8 @@ export default function ClientDetails() {
               className={`flex items-center gap-2 px-4 py-3 text-sm border-b-3
                 ${
                   isActive
-                    ? "text-[#00E588] border-[#00E588] font-semibold"
-                    : "text-black/50 border-transparent font-medium"
+                    ? "text-primary border-primary font-semibold"
+                    : "border-transparent font-medium"
                 }`}
             >
               {icon}

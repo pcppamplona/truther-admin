@@ -48,7 +48,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
               <SidebarMenuButton
                 asChild
                 className={
-                  isItemActive ? "text-[var(--primaryColor)] font-semibold" : ""
+                  isItemActive ? "text-primary font-semibold" : ""
                 }
               >
                 <a href={`/${item.url}`} className="w-full block">
@@ -68,7 +68,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
                           asChild
                           className={
                             isSubActive
-                              ? "text-[var(--primaryColor)] font-semibold"
+                              ? "text-primary font-semibold"
                               : ""
                           }
                         >

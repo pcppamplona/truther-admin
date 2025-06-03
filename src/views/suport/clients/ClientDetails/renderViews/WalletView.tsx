@@ -1,7 +1,7 @@
 import { useWalletDoc } from "@/services/wallets/useWallets";
 import { UserInfoData } from "@/interfaces/userinfo-data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPinHouse, User, WalletCards } from "lucide-react";
+import { MapPinHouse, PiggyBank, User, WalletCards } from "lucide-react";
 import { documentFormat, getFlagUrl, phoneFormat } from "@/lib/formatters";
 import { useEffect, useState } from "react";
 import { AclwalletData } from "@/interfaces/aclwallets-data";
@@ -60,7 +60,7 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
               />
               <Info label="País" value={walletAddress?.nacionality} />
 
-              <div className="flex items-center gap-2 text-[#475467]">
+              <div className="flex items-center gap-2">
                 <img
                   src={getFlagUrl(walletAddress?.nacionality ?? "")}
                   alt={walletAddress?.nacionality}
@@ -104,14 +104,61 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
                 <img
                   src={item.img}
                   alt={item.name}
-                  className="w-8 h-8 object-contain"
+                  className="w-10 h-10 object-contain"
                 />
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold">{item.name}</h3>
-                  <p className="text-xs text-[#475467]">Endereço</p>
+                  <p className="text-xs">Endereço</p>
                   <strong className="text-xs break-all">{item.value}</strong>
                 </div>
-                <WalletSendGas network={item?.name} userName={walletAddress?.name} />
+                <WalletSendGas
+                  network={item?.name}
+                  userName={walletAddress?.name}
+                />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <PiggyBank /> Saldo nas carteiras
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="flex flex-row gap-4 justify-between">
+            {[
+              {
+                name: "VRL",
+                img: "/vrl.png",
+                value: "$ 1200",
+              },
+              {
+                name: "TETHER",
+                img: "/usdt.png",
+                value: "$ 00.00",
+              },
+              {
+                name: "Bitcoin",
+                img: "/bitcoin.png",
+                value: "$ 00.00",
+              },
+            ].map((item) => (
+              <div
+                key={item.name}
+                className="w-full flex flex-col items-center gap-2 p-4 bg-muted/50 rounded-md shadow-sm"
+              >
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  className="w-10 h-10 object-contain"
+                />
+                <h3 className="text-sm font-semibold text-center">
+                  {item.name}
+                </h3>
+                <p className="text-xs text-muted-foreground">Valor</p>
+                <strong className="text-sm text-center">{item.value}</strong>
               </div>
             ))}
           </CardContent>

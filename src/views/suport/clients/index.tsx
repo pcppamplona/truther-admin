@@ -4,7 +4,7 @@ import ListClients from "./ListClients";
 export default function Clients() {
   return (
     <SidebarLayout
-      breadcrumb={[{ label: "Suporte", href: "#" }]}
+      breadcrumb={[{ label: "Suporte", href: "/clients" }]}
       current="Clientes"
     >
       <div className="flex flex-1 flex-col">

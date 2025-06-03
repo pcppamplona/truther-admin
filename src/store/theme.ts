@@ -1,61 +1,39 @@
-import { create } from 'zustand';
+import { create } from "zustand"
 
-export type Theme = {
-  primaryColor: string
-  dangerColor: string
-  warningColor: string
-  bgPrimaryColor: string
-  bgSecondaryColor: string
-  titleColor: string
-  paragraphColor: string
-  mutedColor: string
-  borderColor: string
-}
-  
-export const lightTheme: Theme = {
-  primaryColor: '#00E588',
-  dangerColor: '#EA6565',
-  warningColor: '#E59500',
-  bgPrimaryColor: '#FFFFFF',
-  bgSecondaryColor: '#F9FAFB',
-  titleColor: '#0A0A0A',
-  paragraphColor: '#393939',
-  mutedColor: '#868686',
-  borderColor: '#D9D9D9',
+export type Theme = "light" | "dark" | "system"
+
+type ThemeStore = {
+  theme: Theme
+  setTheme: (theme: Theme) => void
+  initializeTheme: () => void
 }
 
-export const darkTheme: Theme = {
-  primaryColor: '#00E588',
-  dangerColor: '#EA6565',
-  warningColor: '#E59500',
-  bgPrimaryColor: '#0A0A0A',
-  bgSecondaryColor: '#1A1B1A',
-  titleColor: '#FFFFFF',
-  paragraphColor: '#D9D9D9',
-  mutedColor: '#868686',
-  borderColor: '#393939',
+const storageKey = "vite-ui-theme"
+
+export const useThemeStore = create<ThemeStore>((set) => ({
+  theme: (localStorage.getItem(storageKey) as Theme) || "system",
+
+  setTheme: (theme) => {
+    localStorage.setItem(storageKey, theme)
+    set({ theme })
+    applyTheme(theme)
+  },
+
+  initializeTheme: () => {
+    const stored = (localStorage.getItem(storageKey) as Theme) || "system"
+    set({ theme: stored })
+    applyTheme(stored)
+  },
+}))
+
+function applyTheme(theme: Theme) {
+  const root = document.documentElement
+  root.classList.remove("light", "dark")
+
+  if (theme === "system") {
+    const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+    root.classList.add(systemPrefersDark ? "dark" : "light")
+  } else {
+    root.classList.add(theme)
+  }
 }
-
-
-export const themes = {
-  light: lightTheme,
-  dark: darkTheme,
-} as const;
-
-export type ThemeMode = keyof typeof themes;
-
-type ThemeState = {
-  mode: ThemeMode;
-  theme: Theme;
-  setMode: (mode: ThemeMode) => void;
-};
-
-export const useThemeStore = create<ThemeState>((set) => ({
-  mode: 'dark', 
-  theme: darkTheme,
-  setMode: (mode) =>
-    set(() => ({
-      mode,
-      theme: themes[mode],
-    })),
-}));

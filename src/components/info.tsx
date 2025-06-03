@@ -7,7 +7,7 @@ export function Info({
 }) {
   return (
     <div>
-      <p className="text-sm text-[#475467]">{label}</p>
+      <p className="text-sm text-muted-foreground">{label}</p>
       <strong className="text-sm break-all">{value || "-"}</strong>
     </div>
   );
