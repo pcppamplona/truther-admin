@@ -24,7 +24,7 @@ export default function Login() {
         <img
           src="/banner.png"
           alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:grayscale"
+          className="absolute inset-0 h-full w-full object-cover dark:white"
         />
       </div>
     </div>

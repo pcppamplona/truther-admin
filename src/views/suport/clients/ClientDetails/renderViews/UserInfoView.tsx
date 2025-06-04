@@ -22,7 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export const data = [
+export const TransactionsData = [
   {
     id: "1",
     createdAt: "2025-05-30T08:15:00Z",
@@ -183,7 +183,7 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data?.map((notification) => (
+              {TransactionsData?.map((notification) => (
                 <TableRow
                   key={notification.id}
                   className="cursor-pointer hover:bg-input transition"

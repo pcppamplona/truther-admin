@@ -23,7 +23,7 @@ export default function ListNotifications() {
   };
 
   return (
-    <Card>
+    <Card className="flex flex-col h-full">
       <CardHeader>
         <CardTitle className="text-2xl font-bold tabular-nums @[650px]/card:text-2xl">
           Todas as Notificações
@@ -45,7 +45,7 @@ export default function ListNotifications() {
         </div>
       </CardHeader>
 
-      <div className="w-full px-4 lg:px-6">
+      <div className="w-full px-4 lg:px-6 overflow-y-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -95,7 +95,7 @@ export default function ListNotifications() {
                             label="Lida"
                             value={
                               notification.read ? (
-                                <span className="flex items-center gap-2 text-blue-600">
+                                <span className="flex items-center gap-2 text-blue-500">
                                   Sim <CheckCheck size={16} />
                                 </span>
                               ) : (

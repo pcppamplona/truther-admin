@@ -26,7 +26,7 @@ export function UserCreationForm() {
 
       <div>
         <Label>Área</Label>
-        {/* <Select value={selectedArea} onValueChange={setSelectedArea}>
+        <Select value={selectedArea} onValueChange={setSelectedArea}>
           <SelectTrigger>
             <SelectValue placeholder="Selecione uma área" />
           </SelectTrigger>
@@ -38,7 +38,7 @@ export function UserCreationForm() {
             <SelectItem value="compliance">Compliance</SelectItem>
             <SelectItem value="juridico">Jurídico</SelectItem>
           </SelectContent>
-        </Select> */}
+        </Select>
       </div>
 
       <Button type="submit" className="w-full">

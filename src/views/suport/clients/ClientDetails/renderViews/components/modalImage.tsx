@@ -19,7 +19,7 @@ export function ModalImage({ src, alt }: ModalImageProps) {
             className="rounded border border-border w-full max-h-70"
           />
           <div className="absolute top-2 right-2 bg-white rounded-full p-1 shadow group-hover:scale-110 transition-transform">
-            <Maximize size={16} />
+            <Maximize size={16} color="black"/>
           </div>
         </div>
       </DialogTrigger>

@@ -14,6 +14,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import React from "react";
 
 interface SidebarLayoutProps {
   children: ReactNode;
@@ -21,8 +22,7 @@ interface SidebarLayoutProps {
     label: string;
     href?: string;
   }[];
-  current?: React.ReactNode | string
-  ;
+  current?: React.ReactNode | string;
 }
 
 export function SidebarLayout({
@@ -41,8 +41,8 @@ export function SidebarLayout({
             <Breadcrumb>
               <BreadcrumbList>
                 {breadcrumb.map((item, idx) => (
-                  <>
-                    <BreadcrumbItem key={idx} className="hidden md:block">
+                  <React.Fragment key={idx}>
+                    <BreadcrumbItem className="hidden md:block">
                       <BreadcrumbLink href={item.href}>
                         {item.label}
                       </BreadcrumbLink>
@@ -51,7 +51,7 @@ export function SidebarLayout({
                     {idx < breadcrumb.length - 1 && (
                       <BreadcrumbSeparator className="hidden md:block" />
                     )}
-                  </>
+                  </React.Fragment>
                 ))}
 
                 {breadcrumb.length > 0 && (

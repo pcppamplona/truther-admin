@@ -9,6 +9,7 @@ import { ClientInfoProps } from "..";
 import { Button } from "@/components/ui/button";
 import { ModalImage } from "./components/modalImage";
 import { Info } from "@/components/info";
+import { SquareUserRound } from "lucide-react";
 
 export function KYCView({ client, userInfo }: ClientInfoProps) {
   function getStageLabel(client: any): string {
@@ -61,7 +62,8 @@ export function KYCView({ client, userInfo }: ClientInfoProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>
+            <CardTitle className="flex flex-row items-center gap-2">
+              <SquareUserRound />
               Informações sobre o <strong>KYC</strong>
             </CardTitle>
           </CardHeader>
@@ -102,14 +104,14 @@ export function KYCView({ client, userInfo }: ClientInfoProps) {
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2 sm:col-span-2">
-              <p className="text-[#475467]">Selfie</p>
+              <p>Selfie</p>
               <ModalImage
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2_oO4KOIumgPrZL2XNvR7Krj5qHEfyRy1pQ&s"
                 alt="Selfie"
               />
             </div>
             <div className="space-y-2">
-              <p className="text-[#475467]">Documento - Frente</p>
+              <p>Documento - Frente</p>
 
               <ModalImage
                 src="https://files.readme.io/f2dfedb-us-template-front.png"
@@ -118,7 +120,7 @@ export function KYCView({ client, userInfo }: ClientInfoProps) {
             </div>
 
             <div className="space-y-2">
-              <p className="text-[#475467]">Documento - Verso</p>
+              <p>Documento - Verso</p>
               <ModalImage
                 src="https://files.readme.io/6c18515-us-template-back.png"
                 alt="Selfie"
@@ -127,7 +129,7 @@ export function KYCView({ client, userInfo }: ClientInfoProps) {
 
             <div className="items-start sm:col-span-2 flex flex-wrap gap-4">
               <Button
-                className="text-white bg-[#00E588]"
+                className="bg-primary"
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.backgroundColor = "#00cf74")
                 }
@@ -139,7 +141,7 @@ export function KYCView({ client, userInfo }: ClientInfoProps) {
               </Button>
 
               <Button
-                className="text-white bg-[#EA6565]"
+                className="bg-destructive"
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.backgroundColor = "#d75252")
                 }
@@ -151,7 +153,7 @@ export function KYCView({ client, userInfo }: ClientInfoProps) {
               </Button>
 
               <Button
-                className="text-white bg-[#E59500]"
+                className="bg-chart-3"
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.backgroundColor = "#cc8300")
                 }
@@ -162,7 +164,7 @@ export function KYCView({ client, userInfo }: ClientInfoProps) {
                 Refazer
               </Button>
 
-              <Button className="text-white bg-gray-800 hover:bg-gray-900">
+              <Button className="bg-chart-2 hover:bg-gray-900">
                 Desinteresse
               </Button>
             </div>

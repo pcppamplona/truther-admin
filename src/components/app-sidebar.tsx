@@ -12,7 +12,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/store/auth";
-import { Presentation, BotMessageSquare, House } from "lucide-react";
+import { Presentation, BotMessageSquare, House, DollarSign } from "lucide-react";
 
 export function AppSidebar(/* { ...props }: React.ComponentProps<typeof Sidebar> */) {
   const { user } = useAuth();
@@ -61,6 +61,21 @@ export function AppSidebar(/* { ...props }: React.ComponentProps<typeof Sidebar>
           {
             title: "Notificações",
             url: "notifications",
+          },
+        ],
+      },
+      {
+        title: "Financeiro",
+        url: "refund", //financier
+        icon: DollarSign,
+        items: [
+          {
+            title: "Reembolso",
+            url: "refund",
+          },
+           {
+            title: "Saque",
+            url: "cashout",
           },
         ],
       },

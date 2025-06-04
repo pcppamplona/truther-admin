@@ -49,7 +49,7 @@ export default function Decode() {
                 Cancelar
               </Button>
               <Button
-                className="bg-green-500 text-white"
+                className="bg-primary text-white"
                 onClick={handleSubmit}
               >
                 Decodificar

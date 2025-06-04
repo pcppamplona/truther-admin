@@ -18,14 +18,19 @@ export default function CalendarNotifications() {
   const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth());
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
 
-  const monthStart = new Date(selectedYear, selectedMonth, 1);
-  const monthEnd = endOfMonth(monthStart);
+  const calendarDays = useMemo(() => {
+    const startOfMonth = new Date(selectedYear, selectedMonth, 1);
+    const endOfMonthDate = endOfMonth(startOfMonth);
 
-  const daysInMonth = useMemo(() => {
-    return eachDayOfInterval({
-      start: monthStart,
-      end: monthEnd,
+    const startWeekDay = startOfMonth.getDay(); 
+    const daysInCurrentMonth = eachDayOfInterval({
+      start: startOfMonth,
+      end: endOfMonthDate,
     });
+
+    const placeholders = Array.from({ length: startWeekDay });
+
+    return [...placeholders, ...daysInCurrentMonth];
   }, [selectedMonth, selectedYear]);
 
   function getNotificationsForDay(day: Date) {
@@ -63,7 +68,7 @@ export default function CalendarNotifications() {
   }, [notifications, selectedYear, selectedMonth]);
 
   return (
-    <Card className="w-full">
+    <Card className="flex flex-col h-full">
       <CardHeader>
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <CardTitle className="text-xl font-bold ">
@@ -116,8 +121,13 @@ export default function CalendarNotifications() {
           </div>
         ))}
 
-        {daysInMonth.map((day) => {
+        {calendarDays.map((day, index) => {
+          if (!(day instanceof Date)) {
+            return <div key={`empty-${index}`} className="h-20" />;
+          }
+
           const dayNotifications = getNotificationsForDay(day);
+
           return (
             <div
               key={day.toISOString()}
@@ -138,7 +148,7 @@ export default function CalendarNotifications() {
         })}
       </div>
 
-      <div className="px-6 pb-6">
+      <div className="px-6 pb-6 flex-1 overflow-y-auto">
         <h2 className="text-lg font-semibold mb-2">Notificações deste mês:</h2>
 
         {monthNotifications.length === 0 ? (
