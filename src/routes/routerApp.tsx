@@ -10,6 +10,7 @@ import Clients from "@/views/suport/clients";
 import ClientDetails from "@/views/suport/clients/ClientDetails";
 import Decode from "@/views/suport/decode";
 import SendGas from "@/views/suport/sendGas";
+import Users from "@/views/users";
 import { Route, Routes } from "react-router";
 
 export default function RoutesApp() {
@@ -30,6 +31,9 @@ export default function RoutesApp() {
       <Route path="/financier" element={<Financier />} />
       <Route path="/refund" element={<Refund />} />
       <Route path="/cashout" element={<Cashout />} />
+
+      <Route path="/users" element={<Users />} />
+
     </Routes>
   );
 }

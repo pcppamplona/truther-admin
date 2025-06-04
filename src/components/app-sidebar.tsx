@@ -12,7 +12,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/store/auth";
-import { Presentation, BotMessageSquare, House, DollarSign } from "lucide-react";
+import { Presentation, BotMessageSquare, House, DollarSign, User } from "lucide-react";
 
 export function AppSidebar(/* { ...props }: React.ComponentProps<typeof Sidebar> */) {
   const { user } = useAuth();
@@ -78,6 +78,11 @@ export function AppSidebar(/* { ...props }: React.ComponentProps<typeof Sidebar>
             url: "cashout",
           },
         ],
+      },
+      {
+        title: "Usuários",
+        url: "users",
+        icon: User,
       },
     ],
   };

@@ -34,7 +34,6 @@ export function useAuth() {
     setError(null);
 
     try {
-      // Puxa todos os dados da rota /authentication
       const response = await api.get("authentication");
       const data: AuthData[] = await response.json();
 
