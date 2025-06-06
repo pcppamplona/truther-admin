@@ -47,6 +47,11 @@ export function AppSidebar(/* { ...props }: React.ComponentProps<typeof Sidebar>
             title: "Decodificar",
             url: "decode",
           },
+          
+          {
+            title: "Ocorrências",
+            url: "ocurrences",
+          },
           {
             title: "Reportes",
             url: "report",

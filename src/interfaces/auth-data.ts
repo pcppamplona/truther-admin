@@ -1,3 +1,6 @@
+import { GroupSuport } from "./ocurrences-data";
+
+
 export interface AuthData {
   id: number;
   uuid: string;
@@ -10,4 +13,7 @@ export interface AuthData {
   deleteAt: string | null;
   forceResetPwd: boolean;
   typeAuth: string;
+
+  //teste pro sistema de tickets
+  groupLevel: GroupSuport
 }

@@ -96,7 +96,7 @@ export default function SendGas() {
               <Button variant="outline" onClick={handleReset}>
                 Cancelar
               </Button>
-              <Button className="bg-green-500 text-white" onClick={handleSubmit}>
+              <Button  onClick={handleSubmit}>
                 Enviar
               </Button>
             </CardFooter>

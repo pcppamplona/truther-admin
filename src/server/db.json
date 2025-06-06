@@ -11,7 +11,22 @@
       "updateAt": "2024-12-20T00:35:14.905Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
+    },
+    {
+      "id": 4,
+      "uuid": "1f17746c-894e-45d8-8042-df7799c7f25b",
+      "name": "Caroline De Melo Cardoso",
+      "username": "carol_cardoso@smartpay.com.vc",
+      "password": "1234567",
+      "active": true,
+      "createdAt": "2024-01-02T19:10:42.705Z",
+      "updateAt": "2024-01-02T19:10:42.705Z",
+      "deleteAt": null,
+      "forceResetPwd": true,
+      "typeAuth": "ADMIN",
+      "groupLevel": "N2"
     },
     {
       "id": 5,
@@ -24,20 +39,8 @@
       "updateAt": "2025-01-30T23:38:09.740Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
-    },
-    {
-      "id": 4,
-      "uuid": "1f17746c-894e-45d8-8042-df7799c7f25b",
-      "name": "Caroline De Melo Cardoso",
-      "username": "carol_cardoso@smartpay.com.vc",
-      "password": "$2b$10$xqbpInbFqr1eKHRMvnwfN.e/mlUcywk.ChGM.IVKjj1WOUVfWSJem",
-      "active": true,
-      "createdAt": "2024-01-02T19:10:42.705Z",
-      "updateAt": "2024-01-02T19:10:42.705Z",
-      "deleteAt": null,
-      "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 8,
@@ -50,7 +53,8 @@
       "updateAt": "2024-02-26T21:08:00.935Z",
       "deleteAt": null,
       "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 9,
@@ -63,7 +67,8 @@
       "updateAt": "2024-02-26T21:10:00.850Z",
       "deleteAt": null,
       "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 14,
@@ -76,7 +81,8 @@
       "updateAt": "2025-01-07T22:06:09.899Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 12,
@@ -89,7 +95,8 @@
       "updateAt": "2024-07-11T22:11:04.521Z",
       "deleteAt": null,
       "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 13,
@@ -102,7 +109,8 @@
       "updateAt": "2024-10-11T23:09:16.481Z",
       "deleteAt": null,
       "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 15,
@@ -115,7 +123,8 @@
       "updateAt": "2024-10-15T23:48:57.104Z",
       "deleteAt": null,
       "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 16,
@@ -128,7 +137,8 @@
       "updateAt": "2024-10-16T19:44:32.593Z",
       "deleteAt": null,
       "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 11,
@@ -141,7 +151,8 @@
       "updateAt": "2024-10-18T23:20:37.362Z",
       "deleteAt": null,
       "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 18,
@@ -154,7 +165,8 @@
       "updateAt": "2025-01-21T21:51:32.606Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 33,
@@ -167,7 +179,8 @@
       "updateAt": "2025-05-08T20:31:08.377Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 34,
@@ -180,7 +193,8 @@
       "updateAt": "2025-05-12T22:33:43.101Z",
       "deleteAt": null,
       "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 7,
@@ -193,7 +207,8 @@
       "updateAt": "2024-11-23T06:31:10.315Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 1,
@@ -206,7 +221,8 @@
       "updateAt": "2024-10-22T18:48:56.769Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 17,
@@ -219,7 +235,8 @@
       "updateAt": "2024-10-24T19:36:31.293Z",
       "deleteAt": null,
       "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 28,
@@ -232,7 +249,8 @@
       "updateAt": "2024-12-26T23:46:58.017Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 30,
@@ -245,7 +263,8 @@
       "updateAt": "2024-10-18T23:20:37.362Z",
       "deleteAt": null,
       "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 19,
@@ -258,7 +277,8 @@
       "updateAt": "2024-11-06T21:14:33.894Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 27,
@@ -271,7 +291,8 @@
       "updateAt": "2024-12-03T16:48:02.416Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 31,
@@ -284,7 +305,8 @@
       "updateAt": "2024-10-18T23:20:37.362Z",
       "deleteAt": null,
       "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 32,
@@ -297,7 +319,8 @@
       "updateAt": "2025-02-20T00:49:41.371Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 22,
@@ -310,7 +333,8 @@
       "updateAt": "2024-11-23T07:00:57.641Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 29,
@@ -323,7 +347,8 @@
       "updateAt": "2025-01-07T21:22:00.898Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 6,
@@ -336,7 +361,8 @@
       "updateAt": "2024-10-31T07:01:50.738Z",
       "deleteAt": null,
       "forceResetPwd": true,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     },
     {
       "id": 21,
@@ -349,7 +375,8 @@
       "updateAt": "2024-11-28T19:47:58.864Z",
       "deleteAt": null,
       "forceResetPwd": false,
-      "typeAuth": "ADMIN"
+      "typeAuth": "ADMIN",
+      "groupLevel": "N1"
     }
   ],
   "userinfo": [
@@ -2362,6 +2389,281 @@
       "createdAt": "2025-02-16T02:34:43.771Z",
       "updatedAt": "2025-02-16T02:34:43.771Z",
       "userId": null
+    }
+  ],
+  "tickets": [
+    {
+      "id": 1,
+      "title": "Erro ao acessar o sistema",
+      "description": "Usuário relata erro 500 ao tentar acessar o sistema.",
+      "status": {
+        "title": "Pendente",
+        "status": "PENDENTE",
+        "description": "Ticket ainda não tratado"
+      },
+      "assignedTo": {
+        "id": 20,
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "createdBy": {
+        "id": 20,
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "lastInteractedBy": {
+        "id": 20,
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "client": {
+        "id": 17482,
+        "name": "Claudine Thais Moreira Da Fonseca",
+        "document": "33531523856",
+        "phone": "48999271397"
+      },
+      "createdAt": "2025-06-01T08:30:00Z",
+      "startedAt": "2025-06-01T08:32:00Z",
+      "expiredAt": 4,
+      "comments": [
+        {
+          "id": "1",
+          "author": "Jonathan Santos",
+          "message": "Recebido, vamos analisar.",
+          "date": "2025-06-01T08:35:00Z"
+        },
+        {
+          "id": "2",
+          "author": "Jonathan Santos",
+          "message": "Enviado para a análise do processo de acesso.",
+          "date": "2025-06-01T09:35:00Z"
+        }
+      ],
+      "replies": [],
+      "groupSuport": "N1"
+    },
+    {
+      "id": 2,
+      "title": "Problema de login",
+      "description": "Cliente não consegue logar com CPF.",
+      "status": {
+        "title": "Em andamento",
+        "status": "EM ANDAMENTO",
+        "description": "Análise em progresso"
+      },
+      "assignedTo": {
+        "id": 4,
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
+      },
+      "createdBy": {
+        "id": 4,
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
+      },
+      "lastInteractedBy": {
+        "id": 4,
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
+      },
+      "client": {
+        "id": 17483,
+        "name": "Matheus Aurelius Da Silva",
+        "document": "53327376883",
+        "phone": "11937123456"
+      },
+      "createdAt": "2025-06-02T10:00:00Z",
+      "startedAt": "2025-06-02T10:10:00Z",
+      "expiredAt": 3,
+      "destinationGroupId": "N2",
+      "comments": [],
+      "replies": [
+        {
+          "id": "r1",
+          "author": "Caroline De Melo Cardoso",
+          "message": "Estamos investigando o problema.",
+          "date": "2025-06-02T10:15:00Z",
+          "visibleToCustomer": true
+        }
+      ],
+      "groupSuport": "N2"
+    },
+    {
+      "id": 3,
+      "title": "Solicitação de alteração cadastral",
+      "description": "Alterar endereço e telefone no cadastro do cliente.",
+      "status": {
+        "title": "Finalizado",
+        "status": "FINALIZADO",
+        "description": "Solicitação concluída"
+      },
+      "assignedTo": {
+        "id": 21,
+        "name": "Carlos Lima",
+        "groupSuport": "N1"
+      },
+      "createdBy": {
+        "id": 12,
+        "name": "Rita Mendes",
+        "groupSuport": "N1"
+      },
+      "lastInteractedBy": {
+        "id": 21,
+        "name": "Carlos Lima",
+        "groupSuport": "N1"
+      },
+      "client": {
+        "id": 3,
+        "name": "Global SA",
+        "document": "32345678000100",
+        "phone": "+5511977777777"
+      },
+      "createdAt": "2025-06-01T09:00:00Z",
+      "startedAt": "2025-06-01T09:10:00Z",
+      "expiredAt": 6,
+      "comments": [],
+      "replies": [
+        {
+          "id": "r2",
+          "author": "Carlos Lima",
+          "message": "Dados atualizados com sucesso.",
+          "date": "2025-06-01T09:30:00Z",
+          "visibleToCustomer": true
+        }
+      ],
+      "groupSuport": "N1"
+    },
+    {
+      "id": 4,
+      "title": "Ocorrencia 1",
+      "description": "teste 1",
+      "status": {
+        "title": "PENDENTE",
+        "status": "PENDENTE",
+        "description": "Status criado pelo usuário"
+      },
+      "assignedTo": {
+        "id": 20,
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "createdBy": {
+        "id": 20,
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "client": {
+        "id": 17481,
+        "phone": "21971524446",
+        "document": "10152803742",
+        "name": "Marcos Vinicius Leite Da Silva"
+      },
+      "createdAt": "2025-06-06T01:28:10.722Z",
+      "startedAt": "",
+      "expiredAt": 4,
+      "comments": [
+        {
+          "author": "",
+          "message": "teste de comentário",
+          "date": ""
+        }
+      ],
+      "replies": [],
+      "groupSuport": "N1"
+    },
+    {
+      "id": 5,
+      "title": "Ocorrente teste 2",
+      "description": "Ocorrente teste 2",
+      "status": {
+        "title": "PENDENTE",
+        "status": "PENDENTE",
+        "description": "Status criado pelo usuário"
+      },
+      "assignedTo": {
+        "id": 20,
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "createdBy": {
+        "id": 20,
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "client": {
+        "name": "Noel Rocha Morais",
+        "phone": "11976432882",
+        "document": "34129897896"
+      },
+      "createdAt": "2025-06-06T02:23:54.271Z",
+      "startedAt": "",
+      "expiredAt": "10",
+      "comments": [
+        {
+          "author": "",
+          "message": "",
+          "date": ""
+        }
+      ],
+      "replies": [],
+      "groupSuport": "N1"
+    },
+    {
+      "id": 6,
+      "title": "ocorrencia 3",
+      "description": "teste ocorrencia 3",
+      "status": {
+        "title": "PENDENTE",
+        "status": "PENDENTE",
+        "description": "Status criado pelo usuário"
+      },
+      "assignedTo": {
+        "id": 20,
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "createdBy": {
+        "id": 20,
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "client": {
+        "name": "Noel Rocha Morais",
+        "document": "34129897896",
+        "phone": "11976432882"
+      },
+      "createdAt": "2025-06-06T02:35:00.638Z",
+      "startedAt": "",
+      "expiredAt": "16",
+      "comments": [],
+      "replies": [],
+      "groupSuport": "N1"
+    }
+  ],
+  "ticketAudit": [
+    {
+      "id": 1,
+      "ticketId": 1,
+      "action": "ATRIBUÍDO",
+      "performedBy": {
+        "id": 20,
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "Ocorrência atribuída ao usuário Pedro",
+      "date": "2025-06-05T12:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "ticketId": 5,
+      "action": "CRIADO",
+      "performedBy": {
+        "id": 20,
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "Ticket criado por Jonathan Santos.",
+      "date": "2025-06-06T02:23:54.286Z"
     }
   ]
 }

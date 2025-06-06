@@ -74,7 +74,7 @@ export function CreateNotification() {
 
         <DialogFooter>
           <Button variant="outline">Cancelar</Button>
-          <Button onClick={handleSubmit} className="bg-green-500 text-white">
+          <Button onClick={handleSubmit} >
             Criar
           </Button>
         </DialogFooter>

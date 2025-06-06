@@ -9,6 +9,8 @@ import Suport from "@/views/suport";
 import Clients from "@/views/suport/clients";
 import ClientDetails from "@/views/suport/clients/ClientDetails";
 import Decode from "@/views/suport/decode";
+import Ocurrences from "@/views/suport/occurrences";
+import OcurrenceDetails from "@/views/suport/occurrences/OcurrenceDetails";
 import SendGas from "@/views/suport/sendGas";
 import Users from "@/views/users";
 import { Route, Routes } from "react-router";
@@ -23,7 +25,9 @@ export default function RoutesApp() {
       <Route path="/clients" element={<Clients />} />
       <Route path="/clientDetails" element={<ClientDetails />} />
       <Route path="/sendgas" element={<SendGas />} />
-      <Route path="/decode" element={<Decode />} />/
+      <Route path="/decode" element={<Decode />} />
+      <Route path="/ocurrences" element={<Ocurrences />} />
+      <Route path="/ocurrenceDetails" element={<OcurrenceDetails />} />
 
       <Route path="/marketing" element={<Marketing />} />
       <Route path="/notifications" element={<Notifications />} />
