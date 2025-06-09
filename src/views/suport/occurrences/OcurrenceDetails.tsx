@@ -87,15 +87,15 @@ export default function OcurrenceDetails() {
                 <User /> Dados Cliente
               </CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Info label="ID" value={ticket.client.id} />
+            {/* <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Info label="ID" value={ticket.requester.id } />
               <Info label="Nome" value={ticket.client.name} />
               <Info
                 label="Documento"
                 value={documentFormat(ticket.client.document)}
               />
               <Info label="Telefone" value={phoneFormat(ticket.client.phone)} />
-            </CardContent>
+            </CardContent> */}
           </Card>
 
           <Card>
@@ -116,34 +116,6 @@ export default function OcurrenceDetails() {
               ) : (
                 <p className="text-sm text-muted-foreground">
                   Nenhum comentário adicionado.
-                </p>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Respostas</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {ticket.replies?.length ? (
-                ticket.replies.map((reply) => (
-                  <div key={reply.id}>
-                    <p className="text-sm font-semibold">{reply.author}</p>
-                    <p className="text-sm">{reply.message}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {dateFormat(reply.date)}
-                    </p>
-                    <p className="text-xs">
-                      Visível ao cliente:{" "}
-                      {reply.visibleToCustomer ? "Sim" : "Não"}
-                    </p>
-                    <hr />
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  Nenhuma resposta adicionada.
                 </p>
               )}
             </CardContent>

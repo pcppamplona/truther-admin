@@ -2,24 +2,19 @@ export interface TicketData {
   id?: number;
   title: string;
   description: string;
+  expiredAt?: string;
   status: TicketStatus;
-  assignedTo: UserSuport;           
-  
-  // Identificações de usuários
-  createdBy: UserSuport;               
-  lastInteractedBy?: UserSuport;                       
-  client: Client;               
-  
-  // Datas
-  createdAt: string;
-  startedAt?: string;                 
-  expiredAt?: string;                 
-  
-  // Comentários e respostas
-  comments?: Comment[];
-  replies?: Reply[];
-  
   groupSuport: GroupSuport; 
+  createdAt: string;
+  createdBy: UserSuport;               
+
+  assignedTo?: UserSuport | null;        
+  lastInteractedBy?: UserSuport;                       
+  requester: Requester | null;
+  startedAt?: string;                 
+  
+  // Comentários
+  comments?: Comment[];
 }
 
 export type GroupSuport = "N1" | "N2" | "N3" | "PRODUTO" | "MKT" | "ADMIN" ;
@@ -43,7 +38,7 @@ export interface UserSuport {
   groupSuport: GroupSuport;
 }
 
-export interface Client {
+export interface Requester {
   id: number;
   name: string;
   document: string;

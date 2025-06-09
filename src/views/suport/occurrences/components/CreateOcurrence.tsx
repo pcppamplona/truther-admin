@@ -23,86 +23,85 @@ import {
   useCreateTicketAudit,
 } from "@/services/Tickets/useTickets";
 import { useAuth } from "@/store/auth";
-import { Plus } from "lucide-react";
-import { useState } from "react";
+import { FileUser, Phone, Plus, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getTicketInfoByTitle } from "./utilsOcurrences";
+import { Textarea } from "@/components/ui/textarea";
+import { useUserInfoDocument } from "@/services/clients/useUserinfo";
+import { MaskInput } from "@/components/ui/maskInput";
+import { UserInfoData } from "@/interfaces/userinfo-data";
+import { Info } from "@/components/info";
+import { documentFormat, phoneFormat } from "@/lib/formatters";
 
 export function CreateOcurrence() {
   const { user } = useAuth();
   const [ticketData, setTicketData] = useState<Partial<TicketData>>({
     comments: [],
-    replies: [],
   });
+
+  const [document, setDocument] = useState("");
+  const { data: userInfoData } = useUserInfoDocument(
+    document.replace(/\D/g, "")
+  );
+  const [selectedUser, setSelectedUser] = useState<UserInfoData | null>(null);
+
+  useEffect(() => {
+    if (userInfoData && userInfoData.length > 0) {
+      const user = userInfoData[0];
+      handleChange("requester", {
+        id: user.id,
+        name: user.name,
+        document: user.document,
+        phone: user.phone,
+      });
+    }
+  }, [userInfoData]);
+
   const [step, setStep] = useState(1);
 
   const handleNext = () => setStep((prev) => Math.min(prev + 1, 5));
   const handleBack = () => setStep((prev) => Math.max(prev - 1, 1));
   const handleReset = () => {
     setStep(1);
-    setTicketData({ comments: [], replies: [] });
+    setTicketData({});
   };
 
   const handleChange = (field: keyof TicketData, value: any) => {
     setTicketData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleCommentChange = (index: number, field: string, value: any) => {
-    const updated = [...(ticketData.comments || [])];
-    updated[index] = { ...updated[index], [field]: value };
-    handleChange("comments", updated);
-  };
-
-  const handleReplyChange = (index: number, field: string, value: any) => {
-    const updated = [...(ticketData.replies || [])];
-    updated[index] = { ...updated[index], [field]: value };
-    handleChange("replies", updated);
-  };
-
-  const addComment = () => {
-    handleChange("comments", [
-      ...(ticketData.comments || []),
-      { author: "", message: "", date: "" },
-    ]);
-  };
-
-  const addReply = () => {
-    handleChange("replies", [
-      ...(ticketData.replies || []),
-      { author: "", message: "", date: "", visibleToCustomer: false },
-    ]);
-  };
-
   const handleSubmit = async () => {
     const payload: TicketData = {
       title: ticketData.title || "",
       description: ticketData.description || "",
+      expiredAt: ticketData.expiredAt,
       status: {
         title: ticketData.status?.status || "PENDENTE",
         status: ticketData.status?.status || "PENDENTE",
         description: "Status criado pelo usuário",
       },
+      groupSuport: ticketData.groupSuport || "N1",
+      createdAt: new Date().toISOString(),
+      createdBy: {
+        id: user?.id || 0,
+        name: user?.name || "",
+        groupSuport: user?.groupLevel || "N1",
+      },
+
       assignedTo: {
         id: user?.id || 0,
         name: user?.name || "",
         groupSuport: user?.groupLevel || "N1",
       },
-      createdBy: {
-        id: user?.id || 0,
-        name: user?.name || "",
-        groupSuport: user?.groupLevel  || "N1",
-      },
       lastInteractedBy: undefined,
-      client: ticketData.client || {
+      requester: ticketData.requester || {
         id: 0,
         name: "",
         document: "",
         phone: "",
       },
-      createdAt: new Date().toISOString(),
       startedAt: "",
-      expiredAt: ticketData.expiredAt,
       comments: ticketData.comments || [],
-      replies: ticketData.replies || [],
-      groupSuport: ticketData.groupSuport || "N1",
     };
     try {
       const newTicket = await useCreateTicket(payload);
@@ -116,7 +115,7 @@ export function CreateOcurrence() {
           performedBy: {
             id: user?.id || 0,
             name: user?.name || "",
-            groupSuport: user?.groupLevel  || "N1",
+            groupSuport: user?.groupLevel || "N1",
           },
           message: `Ticket criado por ${user?.name || "usuário desconhecido"}.`,
           date: new Date().toISOString(),
@@ -134,9 +133,8 @@ export function CreateOcurrence() {
 
   const stepTitles: Record<number, string> = {
     1: "Ocorrência",
-    2: "Informações do Cliente",
-    3: "Comentários e Respostas",
-    4: "Revisão Final",
+    2: "Informações do Requerente",
+    3: "Revisão Final",
   };
 
   return (
@@ -151,7 +149,7 @@ export function CreateOcurrence() {
         <DialogHeader>
           <DialogDescription>Criar novo ticket Ocorrência</DialogDescription>
           <Progress
-            value={(step / 4) * 100}
+            value={(step / 3) * 100}
             className="bg-gray-200 dark:bg-gray-700 [&>div]:bg-primary mb-8"
           />
           <DialogTitle>{stepTitles[step]}</DialogTitle>
@@ -160,18 +158,46 @@ export function CreateOcurrence() {
         <div className="space-y-4">
           {step === 1 && (
             <>
-              <Input
-                type="text"
-                placeholder="Título"
-                value={ticketData.title || ""}
-                onChange={(e) => handleChange("title", e.target.value)}
-              />
-              <Input
-                type="text"
+              <Select
+                onValueChange={(value) => {
+                  const info = getTicketInfoByTitle(value);
+                  handleChange("title", value);
+                  handleChange("description", info.description);
+                  handleChange("expiredAt", info.expiredAt);
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={ticketData.title || "Título"} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Erro de KYC">Erro de KYC</SelectItem>
+                  <SelectItem value="N3 KYC ERROR">N3 KYC ERROR</SelectItem>
+                  <SelectItem value="Retorno de KYC ERROR pro anterior">
+                    Retorno de KYC ERROR pro anterior
+                  </SelectItem>
+                  <SelectItem value="Avaliação de tratativa de evento">
+                    Avaliação de tratativa de evento
+                  </SelectItem>
+                  <SelectItem value="EMAIL AJUDA UNIVERSITARIOS">
+                    EMAIL AJUDA UNIVERSITARIOS
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Textarea
                 placeholder="Descrição"
                 value={ticketData.description || ""}
                 onChange={(e) => handleChange("description", e.target.value)}
               />
+
+              <Input
+                type="number"
+                placeholder="Expiração(horas)"
+                value={ticketData.expiredAt || ""}
+                onChange={(e) => handleChange("expiredAt", e.target.value)}
+                disabled
+              />
+
               <Select
                 onValueChange={(value) =>
                   handleChange("status", { status: value })
@@ -188,178 +214,77 @@ export function CreateOcurrence() {
                   <SelectItem value="PENDENTE">PENDENTE</SelectItem>
                 </SelectContent>
               </Select>
-
-              <Select
-                onValueChange={(value) => handleChange("groupSuport", value)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue
-                    placeholder={ticketData.groupSuport || "Grupo de Suporte"}
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="N1">N1</SelectItem>
-                  <SelectItem value="N2">N2</SelectItem>
-                  <SelectItem value="N3">N3</SelectItem>
-                  <SelectItem value="PRODUTO">PRODUTO</SelectItem>
-                  <SelectItem value="MKT">MKT</SelectItem>
-                  <SelectItem value="ADMIN">ADMIN</SelectItem>
-                </SelectContent>
-              </Select>
-              <Input
-                type="number"
-                placeholder="Expiração(horas)"
-                value={ticketData.expiredAt || ""}
-                onChange={(e) => handleChange("expiredAt", e.target.value)}
-              />
             </>
           )}
 
           {step === 2 && (
             <>
-              <Input
-                type="text"
-                placeholder="Nome do cliente"
-                value={ticketData.client?.name || ""}
-                onChange={(e) =>
-                  handleChange("client", {
-                    ...ticketData.client,
-                    name: e.target.value,
-                  })
+              <MaskInput
+                mask={
+                  document.replace(/\D/g, "").length > 11
+                    ? "99.999.999/9999-99"
+                    : "999.999.999-99"
                 }
-              />
-              <Input
-                type="text"
+                value={document}
+                onChange={(val) => {
+                  setDocument(val);
+                  setSelectedUser(null);
+                  handleChange("requester", undefined);
+                }}
                 placeholder="Documento"
-                value={ticketData.client?.document || ""}
-                onChange={(e) =>
-                  handleChange("client", {
-                    ...ticketData.client,
-                    document: e.target.value,
-                  })
-                }
               />
-              <Input
-                type="text"
-                placeholder="Telefone"
-                value={ticketData.client?.phone || ""}
-                onChange={(e) =>
-                  handleChange("client", {
-                    ...ticketData.client,
-                    phone: e.target.value,
-                  })
-                }
-              />
+
+              {/* FlashCard */}
+              {document.replace(/\D/g, "").length >= 11 &&
+                !selectedUser &&
+                Array.isArray(userInfoData) &&
+                userInfoData.length > 0 && (
+                  <div>
+                    <div className="bg-muted border rounded-md shadow-md hover:bg-input">
+                      {userInfoData.map((user) => (
+                        <div
+                          key={user.id}
+                          className="p-4 cursor-pointer space-y-4"
+                          onClick={() => {
+                            setSelectedUser(user);
+                            handleChange("requester", {
+                              id: user.id,
+                              name: user.name,
+                              document: user.document,
+                              phone: user.phone,
+                            });
+                          }}
+                        >
+                          <div className="font-semibold flex flex-row items-center gap-2">
+                            <User size={18} />
+                            {user.name}
+                          </div>
+                          <div className="text-sm text-muted-foreground flex flex-row items-center gap-2">
+                            <FileUser size={18} />
+                            {documentFormat(user.document)}
+                          </div>
+                          <div className="text-sm text-muted-foreground flex flex-row items-center gap-2">
+                            <Phone size={18} />
+                            {phoneFormat(user.phone)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+              {/* Dados do requerente fixados após seleção */}
+              {selectedUser && (
+                <div className="mt-2 p-4 border rounded-md bg-muted space-y-2">
+                  <Info label="Nome" value={selectedUser.name} />
+                  <Info label="Documento" value={documentFormat(selectedUser.document)} />
+                  <Info label="Telefone" value={phoneFormat(selectedUser.phone)} />
+                </div>
+              )}
             </>
           )}
 
           {step === 3 && (
-            <>
-              <div>
-                <p className="font-semibold mb-2">Comentários</p>
-                {(ticketData.comments || []).map((comment, index) => (
-                  <div
-                    key={index}
-                    className="space-y-2 p-1 mb-4 bg-secondary rounded-lg"
-                  >
-                    <Input
-                      placeholder="Autor"
-                      value={user?.name}
-                      disabled
-                      className="bg-background"
-                      onChange={(e) =>
-                        handleCommentChange(index, "author", e.target.value)
-                      }
-                    />
-                    <Input
-                      placeholder="Mensagem"
-                      className="bg-background"
-                      value={comment.message}
-                      onChange={(e) =>
-                        handleCommentChange(index, "message", e.target.value)
-                      }
-                    />
-                    <Input
-                      placeholder="Data"
-                      className="bg-background"
-                      type="date"
-                      value={comment.date}
-                      onChange={(e) =>
-                        handleCommentChange(index, "date", e.target.value)
-                      }
-                    />
-                  </div>
-                ))}
-                <Button type="button" variant="outline" onClick={addComment}>
-                  Adicionar Comentário
-                </Button>
-              </div>
-
-              <div>
-                <p className="font-semibold mb-2 mt-6">Respostas</p>
-                {(ticketData.replies || []).map((reply, index) => (
-                  <div
-                    key={index}
-                    className="space-y-2 p-1 mb-4 bg-secondary rounded-lg"
-                  >
-                    <Input
-                      placeholder="Autor"
-                      className="bg-background"
-                      value={reply.author}
-                      onChange={(e) =>
-                        handleReplyChange(index, "author", e.target.value)
-                      }
-                    />
-                    <Input
-                      placeholder="Mensagem"
-                      className="bg-background"
-                      value={reply.message}
-                      onChange={(e) =>
-                        handleReplyChange(index, "message", e.target.value)
-                      }
-                    />
-                    <Input
-                      placeholder="Data"
-                      className="bg-background"
-                      type="date"
-                      value={reply.date}
-                      onChange={(e) =>
-                        handleReplyChange(index, "date", e.target.value)
-                      }
-                    />
-                    <Select
-                      onValueChange={(value) =>
-                        handleReplyChange(
-                          index,
-                          "visibleToCustomer",
-                          value === "true"
-                        )
-                      }
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue
-                          placeholder={
-                            reply.visibleToCustomer
-                              ? "Visível ao cliente"
-                              : "Oculto do cliente"
-                          }
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="true">Visível ao cliente</SelectItem>
-                        <SelectItem value="false">Oculto do cliente</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                ))}
-                <Button type="button" variant="outline" onClick={addReply}>
-                  Adicionar Resposta
-                </Button>
-              </div>
-            </>
-          )}
-
-          {step === 4 && (
             <pre className="text-sm bg-gray-100 dark:bg-gray-800 p-2 rounded">
               {JSON.stringify(ticketData, null, 2)}
             </pre>
@@ -379,7 +304,7 @@ export function CreateOcurrence() {
               Voltar
             </Button>
           )}
-          {step < 4 ? (
+          {step < 3 ? (
             <Button onClick={handleNext}>Próximo</Button>
           ) : (
             <Button onClick={handleSubmit}>Criar ticket</Button>
