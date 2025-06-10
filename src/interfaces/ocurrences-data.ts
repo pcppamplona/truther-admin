@@ -7,14 +7,10 @@ export interface TicketData {
   groupSuport: GroupSuport; 
   createdAt: string;
   createdBy: UserSuport;               
-
   assignedTo?: UserSuport | null;        
   lastInteractedBy?: UserSuport;                       
   requester: Requester | null;
   startedAt?: string;                 
-  
-  // Comentários
-  comments?: TicketComment[];
 }
 
 export type GroupSuport = "N1" | "N2" | "N3" | "PRODUTO" | "MKT" | "ADMIN" ;
@@ -45,26 +41,21 @@ export interface Requester {
   phone: string;
 }
 
-export interface TicketComment  {
-  id?: string;
-  author: string;
-  message: string;
-  date: string;
-}
 
-export interface Reply {
-  id: string;
+export interface TicketComment {
+  id?: string;
+  ticketId: string;
   author: string;
   message: string;
   date: string;
-  visibleToCustomer: boolean;
 }
 
 export interface TicketAudit {
-  id?: number;
+  id?: string | number;
   ticketId: number;
-  action: "CRIADO" | "ATRIBUÍDO" | "ATUALIZADO" | "FINALIZADO";
+  action: "Adicionou" | "Atribuíu" | "Atualizou" | "Finalizou";
   performedBy: UserSuport;
   message: string;
+  description: string;
   date: string;
 }

@@ -17,6 +17,15 @@ export const statusColors: Record<Status, string> = {
   "AGUARDANDO RESPOSTA DO CLIENTE": "#CCCC00",
 };
 
+type Action = "Adicionou" | "Atribuíu" | "Atualizou" | "Finalizou";
+
+export const auditActionColors: Record<Action, string> = {
+  "Adicionou": "#22c55e",       
+  "Atribuíu": "#3b82f6",    
+  "Atualizou": "#eab308",    
+  "Finalizou": "#ef4444", 
+};
+
 export function hexToRGBA(hex: string, alpha: number): string {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
@@ -24,8 +33,12 @@ export function hexToRGBA(hex: string, alpha: number): string {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-export function getStatusColorRGBA(status: Status, alpha: number): string {
-  const hex = statusColors[status];
+export function getColorRGBA<T extends string>(
+  key: T,
+  colorMap: Record<T, string>,
+  alpha: number
+): string {
+  const hex = colorMap[key];
   return hexToRGBA(hex, alpha);
 }
 
@@ -59,13 +72,3 @@ export function getTicketInfoByTitle(title: string): {
 
   return mapping[title] || { description: "", expiredAt: 0 };
 }
-
-
-type Action = "CRIADO" | "ATRIBUÍDO" | "ATUALIZADO" | "FINALIZADO";
-
-export const auditActionColors: Record<Action, string> = {
-  "CRIADO": "#22c55e",       
-  "ATRIBUÍDO": "#3b82f6",    
-  "ATUALIZADO": "#eab308",    
-  "FINALIZADO": "#ef4444", 
-};

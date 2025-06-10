@@ -34,9 +34,7 @@ import { documentFormat, getInitials } from "@/lib/formatters";
 
 export function CreateOcurrence() {
   const { user } = useAuth();
-  const [ticketData, setTicketData] = useState<Partial<TicketData>>({
-    comments: [],
-  });
+  const [ticketData, setTicketData] = useState<Partial<TicketData>>({});
 
   const [document, setDocument] = useState("");
   const { data: userInfoData } = useUserInfoDocument(
@@ -80,19 +78,18 @@ export function CreateOcurrence() {
         status: ticketData.status?.status,
         description: ticketData.status?.description,
       },
-      groupSuport: ticketData.groupSuport || "N1",
+      groupSuport: user?.groupLevel,
       createdAt: new Date().toISOString(),
       createdBy: {
         id: user?.id || 0,
         name: user?.name || "",
-        groupSuport: user?.groupLevel || "N1",
+        groupSuport: user?.groupLevel,
       },
 
       assignedTo: null,
       lastInteractedBy: undefined,
       requester: ticketData.requester || null,
       startedAt: "",
-      comments: ticketData.comments || [],
     };
     try {
       const newTicket = await useCreateTicket(payload);
@@ -102,13 +99,14 @@ export function CreateOcurrence() {
       if (newTicket?.id) {
         const auditPayload: TicketAudit = {
           ticketId: newTicket.id,
-          action: "CRIADO",
+          action: "Adicionou",
           performedBy: {
             id: user?.id || 0,
             name: user?.name || "",
-            groupSuport: user?.groupLevel || "N1",
+            groupSuport: user?.groupLevel,
           },
-          message: `Ticket criado por ${user?.name || "usuário desconhecido"}.`,
+          message: `um novo Ticket`,
+          description: `Ticket criado por ${user?.name || "usuário desconhecido"}.`,
           date: new Date().toISOString(),
         };
 

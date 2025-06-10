@@ -1,4 +1,4 @@
-import { TicketAudit, TicketData } from "@/interfaces/ocurrences-data";
+import { TicketAudit, TicketComment, TicketData } from "@/interfaces/ocurrences-data";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 
@@ -38,6 +38,33 @@ export const updateTicket = async (
 
   return await response.json<TicketData>();
 };
+
+export async function useCreateTicketComment(
+  CreateTicketComment: TicketComment
+): Promise<TicketComment | null> {
+  try {
+    const newTicketComment: TicketComment = await api
+      .post("ticketComments", { json: CreateTicketComment })
+      .json<TicketComment>();
+    return newTicketComment;
+  } catch (error) {
+    console.error("Erro ao criar comentário do ticket:", error);
+    return null;
+  }
+}
+
+export function useTicketComments(ticketId: string) {
+  return useQuery({
+    queryKey: ["ticketComments", ticketId],
+    queryFn: async () => {
+      const comments = await api
+        .get(`ticketComments?ticketId=${ticketId}`)
+        .json<TicketComment[]>();
+      return comments;
+    },
+    enabled: !!ticketId,
+  });
+}
 
 export async function useCreateTicket(
   CreateTicket: TicketData

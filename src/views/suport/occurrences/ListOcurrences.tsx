@@ -22,16 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { dateFormat, timeFormat } from "@/lib/formatters";
 import { CreateOcurrence } from "./components/CreateOcurrence";
 import { useAuth } from "@/store/auth"
-import { getStatusColorRGBA } from "./components/utilsOcurrences";
-
-
-
-export function hexToRGBA(hex: string, alpha: number): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
+import { getColorRGBA, statusColors } from "./components/utilsOcurrences";
 
 const groupHierarchy = ["N1", "N2", "N3", "PRODUTO", "MKT", "ADMIN"] as const;
 
@@ -148,8 +139,8 @@ export default function ListOcurrences() {
                   <div
                     className="px-3 py-1 rounded-lg text-sm font-semibold lowercase"
                     style={{
-                      backgroundColor: getStatusColorRGBA(ticket.status.status, 0.2),
-                      color: getStatusColorRGBA(ticket.status.status, 0.9),
+                      backgroundColor:  getColorRGBA(ticket.status.status, statusColors, 0.2),
+                      color:  getColorRGBA(ticket.status.status, statusColors, 0.9),
                       width: "fit-content",
                     }}
                   >

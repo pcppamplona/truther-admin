@@ -11,51 +11,51 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Plus } from "lucide-react";
 import { useAuth } from "@/store/auth";
-import { useLocation } from "react-router";
-import { updateTicket, useCreateTicketAudit } from "@/services/Tickets/useTickets";
+import { useCreateTicketAudit, useCreateTicketComment } from "@/services/Tickets/useTickets";
 import { TicketAudit, TicketComment } from "@/interfaces/ocurrences-data";
 
-export default function CreateComment() {
+export interface CommentProps {
+  ticketId: string;
+}
+
+export default function CreateComment({ ticketId }: CommentProps) {
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
   const { user } = useAuth();
-  const location = useLocation();
-  const ticketId = location.state?.id;
 
 const handleSubmit = async () => {
   if (!message.trim() || !ticketId || !user) return;
 
   const newComment: TicketComment = {
+    ticketId,
     author: user.name,
     message: message.trim(),
     date: new Date().toISOString(),
   };
 
   try {
-    await updateTicket(ticketId, {
-      comments: [newComment],
-    });
+    await useCreateTicketComment(newComment);
 
     const auditPayload: TicketAudit = {
-      ticketId,
-      action: "CRIADO",
+      ticketId: Number(ticketId),
+      action: "Adicionou",
       performedBy: {
         id: user.id,
         name: user.name,
         groupSuport: user.groupLevel,
       },
-      message: `Comentário adicionado por ${user.name}.`,
+      message: `um novo Comentário`,
+      description: `Comentário adicionado por ${user.name}, ao ticket: ${ticketId}`,
       date: new Date().toISOString(),
     };
 
-    await useCreateTicketAudit(auditPayload); 
+    await useCreateTicketAudit(auditPayload);
     setMessage("");
     setOpen(false);
   } catch (error) {
     console.error("Erro ao adicionar comentário:", error);
   }
 };
-
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
