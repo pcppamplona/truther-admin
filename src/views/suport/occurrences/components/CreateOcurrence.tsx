@@ -23,15 +23,14 @@ import {
   useCreateTicketAudit,
 } from "@/services/Tickets/useTickets";
 import { useAuth } from "@/store/auth";
-import { FileUser, Phone, Plus, User } from "lucide-react";
+import { ChevronRight, CircleX, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getTicketInfoByTitle } from "./utilsOcurrences";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserInfoDocument } from "@/services/clients/useUserinfo";
 import { MaskInput } from "@/components/ui/maskInput";
 import { UserInfoData } from "@/interfaces/userinfo-data";
-import { Info } from "@/components/info";
-import { documentFormat, phoneFormat } from "@/lib/formatters";
+import { documentFormat, getInitials } from "@/lib/formatters";
 
 export function CreateOcurrence() {
   const { user } = useAuth();
@@ -44,6 +43,7 @@ export function CreateOcurrence() {
     document.replace(/\D/g, "")
   );
   const [selectedUser, setSelectedUser] = useState<UserInfoData | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   useEffect(() => {
     if (userInfoData && userInfoData.length > 0) {
@@ -59,7 +59,7 @@ export function CreateOcurrence() {
 
   const [step, setStep] = useState(1);
 
-  const handleNext = () => setStep((prev) => Math.min(prev + 1, 5));
+  const handleNext = () => setStep((prev) => Math.min(prev + 1, 3));
   const handleBack = () => setStep((prev) => Math.max(prev - 1, 1));
   const handleReset = () => {
     setStep(1);
@@ -76,9 +76,9 @@ export function CreateOcurrence() {
       description: ticketData.description || "",
       expiredAt: ticketData.expiredAt,
       status: {
-        title: ticketData.status?.status || "PENDENTE",
-        status: ticketData.status?.status || "PENDENTE",
-        description: "Status criado pelo usuário",
+        title: ticketData.status?.title,
+        status: ticketData.status?.status,
+        description: ticketData.status?.description,
       },
       groupSuport: ticketData.groupSuport || "N1",
       createdAt: new Date().toISOString(),
@@ -88,18 +88,9 @@ export function CreateOcurrence() {
         groupSuport: user?.groupLevel || "N1",
       },
 
-      assignedTo: {
-        id: user?.id || 0,
-        name: user?.name || "",
-        groupSuport: user?.groupLevel || "N1",
-      },
+      assignedTo: null,
       lastInteractedBy: undefined,
-      requester: ticketData.requester || {
-        id: 0,
-        name: "",
-        document: "",
-        phone: "",
-      },
+      requester: ticketData.requester || null,
       startedAt: "",
       comments: ticketData.comments || [],
     };
@@ -219,66 +210,115 @@ export function CreateOcurrence() {
 
           {step === 2 && (
             <>
-              <MaskInput
-                mask={
-                  document.replace(/\D/g, "").length > 11
-                    ? "99.999.999/9999-99"
-                    : "999.999.999-99"
-                }
-                value={document}
-                onChange={(val) => {
-                  setDocument(val);
-                  setSelectedUser(null);
-                  handleChange("requester", undefined);
+              <Select
+                onValueChange={(value) => {
+                  setSelectedOption(value);
+                  if (value === "none") {
+                    setSelectedUser(null);
+                    handleChange("requester", null);
+                  } else if (value === "client") {
+                  } else if (value === "create") {
+                  }
                 }}
-                placeholder="Documento"
-              />
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o tipo de remetente" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="client">
+                    Remetente cliente Truther
+                  </SelectItem>
+                  <SelectItem value="none">Sem remetente</SelectItem>
+                  <SelectItem value="create">Cadastrar remetente</SelectItem>
+                </SelectContent>
+              </Select>
 
-              {/* FlashCard */}
-              {document.replace(/\D/g, "").length >= 11 &&
-                !selectedUser &&
-                Array.isArray(userInfoData) &&
-                userInfoData.length > 0 && (
-                  <div>
-                    <div className="bg-muted border rounded-md shadow-md hover:bg-input">
-                      {userInfoData.map((user) => (
-                        <div
-                          key={user.id}
-                          className="p-4 cursor-pointer space-y-4"
-                          onClick={() => {
-                            setSelectedUser(user);
-                            handleChange("requester", {
-                              id: user.id,
-                              name: user.name,
-                              document: user.document,
-                              phone: user.phone,
-                            });
-                          }}
-                        >
-                          <div className="font-semibold flex flex-row items-center gap-2">
-                            <User size={18} />
-                            {user.name}
+              {selectedOption === "client" && (
+                <>
+                  <MaskInput
+                    mask={
+                      document.replace(/\D/g, "").length > 11
+                        ? "99.999.999/9999-99"
+                        : "999.999.999-99"
+                    }
+                    value={document}
+                    onChange={(val) => {
+                      setDocument(val);
+                      setSelectedUser(null);
+                      handleChange("requester", undefined);
+                    }}
+                    placeholder="Documento"
+                  />
+
+                  {/* FlashCard */}
+                  {document.replace(/\D/g, "").length >= 11 &&
+                    !selectedUser &&
+                    Array.isArray(userInfoData) &&
+                    userInfoData.length > 0 && (
+                      <div className="bg-muted border rounded-md shadow-md hover:bg-input">
+                        {userInfoData.map((user) => (
+                          <div
+                            key={user.id}
+                            className="p-4 cursor-pointer space-y-4"
+                            onClick={() => {
+                              setSelectedUser(user);
+                              handleChange("requester", {
+                                id: user.id,
+                                name: user.name,
+                                document: user.document,
+                                phone: user.phone,
+                              });
+                            }}
+                          >
+                            <div className="flex items-center rounded-lg">
+                              <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary">
+                                {getInitials(user.name)}
+                              </div>
+                              <div className="flex flex-col overflow-hidden ml-4">
+                                <span className="truncate font-medium text-sm text-gray-900 dark:text-white">
+                                  {user.name}
+                                </span>
+                                <span className="truncate text-xs ">
+                                  {documentFormat(user.document)}
+                                </span>
+                              </div>
+                              <ChevronRight className="ml-auto size-4" />
+                            </div>
                           </div>
-                          <div className="text-sm text-muted-foreground flex flex-row items-center gap-2">
-                            <FileUser size={18} />
-                            {documentFormat(user.document)}
-                          </div>
-                          <div className="text-sm text-muted-foreground flex flex-row items-center gap-2">
-                            <Phone size={18} />
-                            {phoneFormat(user.phone)}
-                          </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
+                    )}
+
+                  {/* Dados do requerente fixados após seleção */}
+                  {selectedUser && (
+                    <div className="flex items-center rounded-lg border-l-2 border-l-primary p-4 cursor-pointer">
+                      <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary">
+                        {getInitials(selectedUser.name)}
+                      </div>
+                      <div className="flex flex-col overflow-hidden ml-4">
+                        <span className="truncate font-medium text-sm">
+                          {selectedUser.name}
+                        </span>
+                        <span className="truncate text-xs ">
+                          {documentFormat(selectedUser.document)}
+                        </span>
+                      </div>
+                      <CircleX
+                        className="ml-auto size-4 text-destructive"
+                        onClick={() => {
+                          setSelectedUser(null);
+                          setDocument("");
+                          handleChange("requester", undefined);
+                        }}
+                      />
                     </div>
-                  </div>
-                )}
+                  )}
+                </>
+              )}
 
-              {/* Dados do requerente fixados após seleção */}
-              {selectedUser && (
-                <div className="mt-2 p-4 border rounded-md bg-muted space-y-2">
-                  <Info label="Nome" value={selectedUser.name} />
-                  <Info label="Documento" value={documentFormat(selectedUser.document)} />
-                  <Info label="Telefone" value={phoneFormat(selectedUser.phone)} />
+              {selectedOption === "create" && (
+                <div className="mt-4 text-muted-foreground italic">
+                  Função de cadastro de remetente ainda não implementada.
                 </div>
               )}
             </>

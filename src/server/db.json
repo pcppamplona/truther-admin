@@ -2393,337 +2393,15 @@
   ],
   "tickets": [
     {
-      "id": "1",
-      "title": "Erro ao acessar o sistema",
-      "description": "Usuário relata erro 500 ao tentar acessar o sistema.",
-      "status": {
-        "title": "Pendente",
-        "status": "PENDENTE",
-        "description": "Ticket ainda não tratado"
-      },
-      "assignedTo": {
-        "id": 20,
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "createdBy": {
-        "id": 20,
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "lastInteractedBy": {
-        "id": 20,
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "client": {
-        "id": 17482,
-        "name": "Claudine Thais Moreira Da Fonseca",
-        "document": "33531523856",
-        "phone": "48999271397"
-      },
-      "createdAt": "2025-06-01T08:30:00Z",
-      "startedAt": "2025-06-01T08:32:00Z",
-      "expiredAt": 4,
-      "comments": [
-        {
-          "id": "1",
-          "author": "Jonathan Santos",
-          "message": "Recebido, vamos analisar.",
-          "date": "2025-06-01T08:35:00Z"
-        },
-        {
-          "id": "2",
-          "author": "Jonathan Santos",
-          "message": "Enviado para a análise do processo de acesso.",
-          "date": "2025-06-01T09:35:00Z"
-        }
-      ],
-      "replies": [],
-      "groupSuport": "N1"
-    },
-    {
-      "id": "2",
-      "title": "Problema de login",
-      "description": "Cliente não consegue logar com CPF.",
-      "status": {
-        "title": "Em andamento",
-        "status": "EM ANDAMENTO",
-        "description": "Análise em progresso"
-      },
-      "assignedTo": {
-        "id": 4,
-        "name": "Caroline De Melo Cardoso",
-        "groupSuport": "N2"
-      },
-      "createdBy": {
-        "id": 4,
-        "name": "Caroline De Melo Cardoso",
-        "groupSuport": "N2"
-      },
-      "lastInteractedBy": {
-        "id": 4,
-        "name": "Caroline De Melo Cardoso",
-        "groupSuport": "N2"
-      },
-      "client": {
-        "id": 17483,
-        "name": "Matheus Aurelius Da Silva",
-        "document": "53327376883",
-        "phone": "11937123456"
-      },
-      "createdAt": "2025-06-02T10:00:00Z",
-      "startedAt": "2025-06-02T10:10:00Z",
-      "expiredAt": 3,
-      "destinationGroupId": "N2",
-      "comments": [],
-      "replies": [
-        {
-          "id": "r1",
-          "author": "Caroline De Melo Cardoso",
-          "message": "Estamos investigando o problema.",
-          "date": "2025-06-02T10:15:00Z",
-          "visibleToCustomer": true
-        }
-      ],
-      "groupSuport": "N2"
-    },
-    {
-      "id": "3",
-      "title": "Solicitação de alteração cadastral",
-      "description": "Alterar endereço e telefone no cadastro do cliente.",
-      "status": {
-        "title": "Finalizado",
-        "status": "FINALIZADO",
-        "description": "Solicitação concluída"
-      },
-      "assignedTo": {
-        "id": 21,
-        "name": "Carlos Lima",
-        "groupSuport": "N1"
-      },
-      "createdBy": {
-        "id": 12,
-        "name": "Rita Mendes",
-        "groupSuport": "N1"
-      },
-      "lastInteractedBy": {
-        "id": 21,
-        "name": "Carlos Lima",
-        "groupSuport": "N1"
-      },
-      "client": {
-        "id": 3,
-        "name": "Global SA",
-        "document": "32345678000100",
-        "phone": "+5511977777777"
-      },
-      "createdAt": "2025-06-01T09:00:00Z",
-      "startedAt": "2025-06-01T09:10:00Z",
-      "expiredAt": 6,
-      "comments": [],
-      "replies": [
-        {
-          "id": "r2",
-          "author": "Carlos Lima",
-          "message": "Dados atualizados com sucesso.",
-          "date": "2025-06-01T09:30:00Z",
-          "visibleToCustomer": true
-        }
-      ],
-      "groupSuport": "N1"
-    },
-    {
-      "id": "4",
-      "title": "Ocorrencia 1",
-      "description": "teste 1",
-      "status": {
-        "title": "PENDENTE",
-        "status": "PENDENTE",
-        "description": "Status criado pelo usuário"
-      },
-      "assignedTo": {
-        "id": 20,
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "createdBy": {
-        "id": 20,
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "client": {
-        "id": 17481,
-        "phone": "21971524446",
-        "document": "10152803742",
-        "name": "Marcos Vinicius Leite Da Silva"
-      },
-      "createdAt": "2025-06-06T01:28:10.722Z",
-      "startedAt": "",
-      "expiredAt": 4,
-      "comments": [
-        {
-          "author": "",
-          "message": "teste de comentário",
-          "date": ""
-        }
-      ],
-      "replies": [],
-      "groupSuport": "N1"
-    },
-    {
-      "id": "5",
-      "title": "Ocorrente teste 2",
-      "description": "Ocorrente teste 2",
-      "status": {
-        "title": "PENDENTE",
-        "status": "PENDENTE",
-        "description": "Status criado pelo usuário"
-      },
-      "assignedTo": {
-        "id": 20,
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "createdBy": {
-        "id": 20,
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "client": {
-        "name": "Noel Rocha Morais",
-        "phone": "11976432882",
-        "document": "34129897896"
-      },
-      "createdAt": "2025-06-06T02:23:54.271Z",
-      "startedAt": "",
-      "expiredAt": "10",
-      "comments": [
-        {
-          "author": "",
-          "message": "",
-          "date": ""
-        }
-      ],
-      "replies": [],
-      "groupSuport": "N1"
-    },
-    {
-      "id": "6",
-      "title": "ocorrencia 3",
-      "description": "teste ocorrencia 3",
-      "status": {
-        "title": "PENDENTE",
-        "status": "PENDENTE",
-        "description": "Status criado pelo usuário"
-      },
-      "assignedTo": {
-        "id": 20,
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "createdBy": {
-        "id": 20,
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "client": {
-        "name": "Noel Rocha Morais",
-        "document": "34129897896",
-        "phone": "11976432882"
-      },
-      "createdAt": "2025-06-06T02:35:00.638Z",
-      "startedAt": "",
-      "expiredAt": "16",
-      "comments": [],
-      "replies": [],
-      "groupSuport": "N1"
-    },
-    {
-      "id": "97c2",
-      "title": "Ocorrencia teste 23",
-      "description": "Ocorrencia teste 23",
-      "status": {
-        "title": "PENDENTE",
-        "status": "PENDENTE",
-        "description": "Status criado pelo usuário"
-      },
-      "assignedTo": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "createdBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "client": {
-        "name": "17482",
-        "document": "33531523856",
-        "phone": "48999271397"
-      },
-      "createdAt": "2025-06-06T13:53:16.019Z",
-      "startedAt": "",
-      "expiredAt": "6",
-      "comments": [
-        {
-          "author": "",
-          "message": "comentário 1",
-          "date": "2025-06-05"
-        },
-        {
-          "author": "",
-          "message": "trocar o teclado",
-          "date": "2025-06-06"
-        }
-      ],
-      "replies": [],
-      "groupSuport": "N1"
-    },
-    {
-      "id": "4ab2",
-      "title": "Erro de KYC",
-      "description": "Verificar se o usuário é novo Verificar motivo de reject do Kyc",
-      "status": {
-        "title": "PENDENTE",
-        "status": "PENDENTE",
-        "description": "Status criado pelo usuário"
-      },
-      "assignedTo": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "createdBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "client": {
-        "name": "pedro",
-        "document": "22555555445",
-        "phone": "1115155155"
-      },
-      "createdAt": "2025-06-06T14:29:11.659Z",
-      "startedAt": "",
-      "expiredAt": "4",
-      "comments": [],
-      "replies": [],
-      "groupSuport": "N1"
-    },
-    {
-      "id": "1867",
+      "id": "0d58",
       "title": "Erro de KYC",
       "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
       "expiredAt": 4,
       "status": {
-        "title": "PENDENTE",
-        "status": "PENDENTE",
-        "description": "Status criado pelo usuário"
+        "status": "PENDENTE"
       },
       "groupSuport": "N1",
-      "createdAt": "2025-06-06T20:09:36.059Z",
+      "createdAt": "2025-06-10T03:08:35.063Z",
       "createdBy": {
         "id": "20",
         "name": "Jonathan Santos",
@@ -2741,112 +2419,51 @@
         "phone": "48999271397"
       },
       "startedAt": "",
-      "comments": []
-    },
-    {
-      "id": "5dba",
-      "title": "Erro de KYC",
-      "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
-      "expiredAt": 4,
-      "status": {
-        "title": "PENDENTE",
-        "status": "PENDENTE",
-        "description": "Status criado pelo usuário"
-      },
-      "groupSuport": "N1",
-      "createdAt": "2025-06-09T20:16:13.126Z",
-      "createdBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "assignedTo": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "requester": {
-        "id": "6749",
-        "name": "Matheus Aurelius Da Silva",
-        "document": "53327376883",
-        "phone": "11937123456"
-      },
-      "startedAt": "",
-      "comments": []
+      "comments": [
+        {
+          "author": "Jonathan Santos",
+          "message": "Teste de comentário",
+          "date": "2025-06-10T03:56:06.700Z"
+        }
+      ]
     }
   ],
   "ticketAudit": [
     {
-      "id": "1",
-      "ticketId": 1,
+      "id": "363e",
+      "ticketId": "0d58",
+      "action": "CRIADO",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "Ticket criado por Jonathan Santos.",
+      "date": "2025-06-10T03:08:35.682Z"
+    },
+    {
+      "id": "e9b3",
+      "ticketId": "0d58",
       "action": "ATRIBUÍDO",
       "performedBy": {
-        "id": 20,
+        "id": "20",
         "name": "Jonathan Santos",
         "groupSuport": "N1"
       },
-      "message": "Ocorrência atribuída ao usuário Pedro",
-      "date": "2025-06-05T12:00:00.000Z"
+      "message": "Ocorrência 0d58 atribuída a Jonathan Santos.",
+      "date": "2025-06-10T03:08:53.455Z"
     },
     {
-      "id": "2",
-      "ticketId": 5,
-      "action": "CRIADO",
-      "performedBy": {
-        "id": 20,
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "message": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-06T02:23:54.286Z"
-    },
-    {
-      "id": "297d",
-      "ticketId": "97c2",
+      "id": "a951",
+      "ticketId": "0d58",
       "action": "CRIADO",
       "performedBy": {
         "id": "20",
         "name": "Jonathan Santos",
         "groupSuport": "N1"
       },
-      "message": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-06T13:53:16.042Z"
-    },
-    {
-      "id": "5946",
-      "ticketId": "4ab2",
-      "action": "CRIADO",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "message": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-06T14:29:11.676Z"
-    },
-    {
-      "id": "6bd9",
-      "ticketId": "1867",
-      "action": "CRIADO",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "message": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-06T20:09:36.077Z"
-    },
-    {
-      "id": "3e39",
-      "ticketId": "5dba",
-      "action": "CRIADO",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "message": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-09T20:16:13.150Z"
+      "message": "Comentário adicionado por Jonathan Santos.",
+      "date": "2025-06-10T03:56:06.714Z"
     }
   ]
 }

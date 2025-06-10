@@ -14,6 +14,31 @@ export const useTickets = () => {
   });
 };
 
+export const useTicketId = (id: number) => {
+  return useQuery({
+    queryKey: ["ticket-id", id],
+    queryFn: async (): Promise<TicketData[]> => {
+      const response = await api.get("tickets", {
+        searchParams: { id: String(id) },
+      });
+      return await response.json<TicketData[]>();
+    },
+    staleTime: Number.POSITIVE_INFINITY,
+    refetchOnMount: true,
+  });
+};
+
+export const updateTicket = async (
+  id: number,
+  data: Partial<TicketData>
+): Promise<TicketData> => {
+  const response = await api.patch(`tickets/${id}`, {
+    json: data,
+  });
+
+  return await response.json<TicketData>();
+};
+
 export async function useCreateTicket(
   CreateTicket: TicketData
 ): Promise<TicketData | null> {

@@ -58,7 +58,7 @@ export default function ListOcurrences() {
 
     const matchesFilter = (() => {
       if (filter === "Minhas Ocorrências") {
-        return ticket.assignedTo.id === userId;
+        return ticket.assignedTo?.id === userId;
       }
 
       if (groupHierarchy.includes(filter as any)) {
@@ -156,7 +156,8 @@ export default function ListOcurrences() {
                     {ticket.status.status}
                   </div>
                 </TableCell>
-                <TableCell>{ticket.assignedTo.name}</TableCell>
+                <TableCell>{ticket.assignedTo?.name ?? "Não atribuído"}</TableCell>
+
                 <TableCell>{ticket.groupSuport}</TableCell>
                 <TableCell>{dateFormat(ticket.createdAt)} às {timeFormat(ticket.createdAt)}</TableCell>
                   <TableCell>{ticket.expiredAt} horas</TableCell>

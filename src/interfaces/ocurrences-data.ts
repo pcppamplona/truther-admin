@@ -14,7 +14,7 @@ export interface TicketData {
   startedAt?: string;                 
   
   // Comentários
-  comments?: Comment[];
+  comments?: TicketComment[];
 }
 
 export type GroupSuport = "N1" | "N2" | "N3" | "PRODUTO" | "MKT" | "ADMIN" ;
@@ -45,8 +45,8 @@ export interface Requester {
   phone: string;
 }
 
-export interface Comment {
-  id: string;
+export interface TicketComment  {
+  id?: string;
   author: string;
   message: string;
   date: string;

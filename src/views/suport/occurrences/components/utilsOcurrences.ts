@@ -59,3 +59,13 @@ export function getTicketInfoByTitle(title: string): {
 
   return mapping[title] || { description: "", expiredAt: 0 };
 }
+
+
+type Action = "CRIADO" | "ATRIBUÍDO" | "ATUALIZADO" | "FINALIZADO";
+
+export const auditActionColors: Record<Action, string> = {
+  "CRIADO": "#22c55e",       
+  "ATRIBUÍDO": "#3b82f6",    
+  "ATUALIZADO": "#eab308",    
+  "FINALIZADO": "#ef4444", 
+};
