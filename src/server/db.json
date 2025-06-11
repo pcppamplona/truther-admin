@@ -2393,43 +2393,17 @@
   ],
   "tickets": [
     {
-      "id": "9960",
-      "title": "EMAIL AJUDA UNIVERSITARIOS",
-      "description": "Querido Cliente sua demanda já está em análise com nosso grupo de pessoas qualificadas (ou não) do N3 aguarde atualizações",
-      "expiredAt": 0,
+      "id": "02b7",
+      "reason": "N3 KYC ERROR",
+      "description": "Verificar se o nível anterior não conseguiria resolver",
+      "expiredAt": 2,
       "status": {
-        "status": "PENDENTE"
+        "title": "",
+        "status": "PENDENTE",
+        "description": ""
       },
       "groupSuport": "N1",
-      "createdAt": "2025-06-10T19:34:44.397Z",
-      "createdBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "assignedTo": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "requester": {
-        "id": "6747",
-        "name": "Cleber Frutuoso Pereira Da Silva",
-        "document": "79490530115",
-        "phone": "31993941853"
-      },
-      "startedAt": ""
-    },
-    {
-      "id": "4396",
-      "title": "Erro de KYC",
-      "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
-      "expiredAt": 4,
-      "status": {
-        "status": "PENDENTE"
-      },
-      "groupSuport": "N1",
-      "createdAt": "2025-06-10T20:19:26.949Z",
+      "createdAt": "2025-06-11T16:09:56.292Z",
       "createdBy": {
         "id": "20",
         "name": "Jonathan Santos",
@@ -2440,50 +2414,32 @@
       "startedAt": ""
     },
     {
-      "id": "8bbc",
-      "title": "Erro de KYC",
+      "id": "bd83",
+      "reason": "Erro de KYC",
       "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
       "expiredAt": 4,
       "status": {
-        "status": "PENDENTE"
+        "title": "",
+        "status": "PENDENTE",
+        "description": ""
       },
-      "groupSuport": "N2",
-      "createdAt": "2025-06-10T20:26:37.629Z",
+      "groupSuport": "N1",
+      "createdAt": "2025-06-11T16:10:04.476Z",
       "createdBy": {
-        "id": "4",
-        "name": "Caroline De Melo Cardoso",
-        "groupSuport": "N2"
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
       },
       "assignedTo": null,
-      "requester": {
-        "id": "6749",
-        "name": "Matheus Aurelius Da Silva",
-        "document": "53327376883",
-        "phone": "11937123456"
-      },
+      "requester": null,
       "startedAt": ""
     }
   ],
-  "ticketComments": [
-    {
-      "id": "a1c2",
-      "ticketId": "9960",
-      "author": "Jonathan Santos",
-      "message": "Tarefa foi dada em andamento por mim",
-      "date": "2025-06-10T19:49:18.077Z"
-    },
-    {
-      "id": "93d4",
-      "ticketId": "9960",
-      "author": "Jonathan Santos",
-      "message": "tarefa ainda como pendente esperando admin",
-      "date": "2025-06-10T19:50:50.469Z"
-    }
-  ],
+  "ticketComments": [],
   "ticketAudit": [
     {
-      "id": "adb6",
-      "ticketId": "9960",
+      "id": "a0db",
+      "ticketId": "02b7",
       "action": "Adicionou",
       "performedBy": {
         "id": "20",
@@ -2492,50 +2448,11 @@
       },
       "message": "um novo Ticket",
       "description": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-10T19:34:44.409Z"
+      "date": "2025-06-11T16:09:56.307Z"
     },
     {
-      "id": "2290",
-      "ticketId": "9960",
-      "action": "Atribuíu",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "message": "um ticket",
-      "description": "Ocorrência 9960 atribuída a Jonathan Santos.",
-      "date": "2025-06-10T19:48:45.778Z"
-    },
-    {
-      "id": "fe95",
-      "ticketId": "9960",
-      "action": "Adicionou",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "message": "um novo Comentário",
-      "description": "Comentário adicionado por Jonathan Santos, ao ticket: 9960",
-      "date": "2025-06-10T19:49:18.091Z"
-    },
-    {
-      "id": "b7b1",
-      "ticketId": 9960,
-      "action": "Adicionou",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "message": "um novo Comentário",
-      "description": "Comentário adicionado por Jonathan Santos, ao ticket: 9960",
-      "date": "2025-06-10T19:50:50.481Z"
-    },
-    {
-      "id": "3ac4",
-      "ticketId": "4396",
+      "id": "b981",
+      "ticketId": "bd83",
       "action": "Adicionou",
       "performedBy": {
         "id": "20",
@@ -2544,46 +2461,7 @@
       },
       "message": "um novo Ticket",
       "description": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-10T20:19:26.962Z"
-    },
-    {
-      "id": "8bf0",
-      "ticketId": "d802",
-      "action": "Adicionou",
-      "performedBy": {
-        "id": "4",
-        "name": "Caroline De Melo Cardoso",
-        "groupSuport": "N2"
-      },
-      "message": "um novo Ticket",
-      "description": "Ticket criado por Caroline De Melo Cardoso.",
-      "date": "2025-06-10T20:21:50.481Z"
-    },
-    {
-      "id": "2a46",
-      "ticketId": "6ce4",
-      "action": "Adicionou",
-      "performedBy": {
-        "id": "4",
-        "name": "Caroline De Melo Cardoso",
-        "groupSuport": "N2"
-      },
-      "message": "um novo Ticket",
-      "description": "Ticket criado por Caroline De Melo Cardoso.",
-      "date": "2025-06-10T20:23:29.674Z"
-    },
-    {
-      "id": "af3e",
-      "ticketId": "8bbc",
-      "action": "Adicionou",
-      "performedBy": {
-        "id": "4",
-        "name": "Caroline De Melo Cardoso",
-        "groupSuport": "N2"
-      },
-      "message": "um novo Ticket",
-      "description": "Ticket criado por Caroline De Melo Cardoso.",
-      "date": "2025-06-10T20:26:37.640Z"
+      "date": "2025-06-11T16:10:04.492Z"
     }
   ]
 }

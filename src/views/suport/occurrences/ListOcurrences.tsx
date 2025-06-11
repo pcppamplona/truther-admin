@@ -21,7 +21,7 @@ import { TicketData } from "@/interfaces/ocurrences-data";
 import { useNavigate } from "react-router-dom";
 import { dateFormat, timeFormat } from "@/lib/formatters";
 import { CreateOcurrence } from "./components/CreateOcurrence";
-import { useAuth } from "@/store/auth"
+import { useAuth } from "@/store/auth";
 import { getColorRGBA, statusColors } from "./components/utilsOcurrences";
 
 const groupHierarchy = ["N1", "N2", "N3", "PRODUTO", "MKT", "ADMIN"] as const;
@@ -41,7 +41,7 @@ export default function ListOcurrences() {
     : [];
 
   const filteredTickets = Tickets?.filter((ticket) => {
-    const matchesSearch = ticket.title
+    const matchesSearch = (ticket.reason ?? "")
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
 
@@ -127,31 +127,43 @@ export default function ListOcurrences() {
               <TableHead className="font-semibold text-gray-500">
                 Tempo de expiração
               </TableHead>
-              
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredTickets?.map((ticket) => (
               <TableRow key={ticket.id} onClick={() => handleRowClick(ticket)}>
                 <TableCell>{ticket.id}</TableCell>
-                <TableCell>{ticket.title}</TableCell>
+                <TableCell>{ticket.reason}</TableCell>
                 <TableCell>
                   <div
                     className="px-3 py-1 rounded-lg text-sm font-semibold lowercase"
                     style={{
-                      backgroundColor:  getColorRGBA(ticket.status.status, statusColors, 0.2),
-                      color:  getColorRGBA(ticket.status.status, statusColors, 0.9),
+                      backgroundColor: getColorRGBA(
+                        ticket.status.status,
+                        statusColors,
+                        0.2
+                      ),
+                      color: getColorRGBA(
+                        ticket.status.status,
+                        statusColors,
+                        0.9
+                      ),
                       width: "fit-content",
                     }}
                   >
                     {ticket.status.status}
                   </div>
                 </TableCell>
-                <TableCell>{ticket.assignedTo?.name ?? "Não atribuído"}</TableCell>
+                <TableCell>
+                  {ticket.assignedTo?.name ?? "Não atribuído"}
+                </TableCell>
 
                 <TableCell>{ticket.groupSuport}</TableCell>
-                <TableCell>{dateFormat(ticket.createdAt)} às {timeFormat(ticket.createdAt)}</TableCell>
-                  <TableCell>{ticket.expiredAt} horas</TableCell>
+                <TableCell>
+                  {dateFormat(ticket.createdAt)} às{" "}
+                  {timeFormat(ticket.createdAt)}
+                </TableCell>
+                <TableCell>{ticket.expiredAt} horas</TableCell>
               </TableRow>
             ))}
           </TableBody>

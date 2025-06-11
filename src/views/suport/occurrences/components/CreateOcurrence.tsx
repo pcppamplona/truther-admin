@@ -7,8 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/dialog"
 import { Progress } from "@/components/ui/progress";
 import {
   Select,
@@ -70,20 +69,21 @@ export function CreateOcurrence() {
 
   const handleSubmit = async () => {
     const payload: TicketData = {
-      title: ticketData.title || "",
+      reason: ticketData.reason || "",
       description: ticketData.description || "",
       expiredAt: ticketData.expiredAt,
       status: {
-        title: ticketData.status?.title,
-        status: ticketData.status?.status,
-        description: ticketData.status?.description,
+        title: ticketData.status?.title || "",
+        status: "PENDENTE",
+        description: ticketData.status?.description || "",
       },
-      groupSuport: user?.groupLevel,
+      groupSuport: user!.groupLevel,
+
       createdAt: new Date().toISOString(),
       createdBy: {
         id: user?.id || 0,
         name: user?.name || "",
-        groupSuport: user?.groupLevel,
+        groupSuport: user!.groupLevel,
       },
 
       assignedTo: null,
@@ -103,10 +103,12 @@ export function CreateOcurrence() {
           performedBy: {
             id: user?.id || 0,
             name: user?.name || "",
-            groupSuport: user?.groupLevel,
+            groupSuport: user!.groupLevel,
           },
           message: `um novo Ticket`,
-          description: `Ticket criado por ${user?.name || "usuário desconhecido"}.`,
+          description: `Ticket criado por ${
+            user?.name || "usuário desconhecido"
+          }.`,
           date: new Date().toISOString(),
         };
 
@@ -150,13 +152,13 @@ export function CreateOcurrence() {
               <Select
                 onValueChange={(value) => {
                   const info = getTicketInfoByTitle(value);
-                  handleChange("title", value);
+                  handleChange("reason", value);
                   handleChange("description", info.description);
                   handleChange("expiredAt", info.expiredAt);
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder={ticketData.title || "Título"} />
+                  <SelectValue placeholder={ticketData.reason || "Motivo"} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Erro de KYC">Erro de KYC</SelectItem>
@@ -178,31 +180,6 @@ export function CreateOcurrence() {
                 value={ticketData.description || ""}
                 onChange={(e) => handleChange("description", e.target.value)}
               />
-
-              <Input
-                type="number"
-                placeholder="Expiração(horas)"
-                value={ticketData.expiredAt || ""}
-                onChange={(e) => handleChange("expiredAt", e.target.value)}
-                disabled
-              />
-
-              <Select
-                onValueChange={(value) =>
-                  handleChange("status", { status: value })
-                }
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue
-                    placeholder={
-                      ticketData.status?.status || "Selecione o status"
-                    }
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="PENDENTE">PENDENTE</SelectItem>
-                </SelectContent>
-              </Select>
             </>
           )}
 

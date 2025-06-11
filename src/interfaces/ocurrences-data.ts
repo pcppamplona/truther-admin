@@ -1,6 +1,6 @@
 export interface TicketData {
   id?: number;
-  title: string;
+  reason: string;
   description: string;
   expiredAt?: string;
   status: TicketStatus;

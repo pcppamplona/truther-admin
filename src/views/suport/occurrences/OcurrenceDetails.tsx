@@ -125,7 +125,7 @@ export default function OcurrenceDetails() {
                   {ticket.status.status}
                 </div>
               </div>
-              <Info label="Título" value={ticket.title} />
+              <Info label="Título" value={ticket.reason} />
 
               <Info
                 label="Tempo de expiração"
