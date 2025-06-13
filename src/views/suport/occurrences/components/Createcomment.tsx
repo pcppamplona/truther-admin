@@ -35,24 +35,20 @@ export default function CreateComment({ ticket }: CommentProps) {
       return;
     }
 
-    try {
-      if (!ticket.assignedTo) {
-        setConfirming(true);
-        return;
-      }
-
-      await handleCreateComment();
-    } catch (error) {
-      console.error("Erro ao adicionar comentário:", error);
+    if (!ticket.assignedTo) {
+      // Ticket sem responsável: abrir confirmação
+      setConfirming(true);
+      return;
     }
+
+    // Ticket já tem responsável: cria comentário direto
+    await handleCreateComment();
   };
 
-  const handleCreateComment = async () => {
+  const handleCreateComment = async (assignIfNeeded = false) => {
     if (!user || !ticket.id || !message.trim()) return;
 
-    const needsAssignment = !ticket.assignedTo?.id;
-    if (needsAssignment) {
-      // Atualiza o ticket, aguarda o retorno
+    if (assignIfNeeded) {
       await updateTicket(ticket.id, {
         assignedTo: {
           id: user.id,
@@ -74,8 +70,7 @@ export default function CreateComment({ ticket }: CommentProps) {
         date: new Date().toISOString(),
       });
     }
-
-    // Independente da atribuição, cria o comentário
+    
     await useCreateTicketComment({
       ticketId: String(ticket.id),
       author: user.name,
@@ -84,7 +79,7 @@ export default function CreateComment({ ticket }: CommentProps) {
     });
 
     await useCreateTicketAudit({
-      ticketId: Number(ticket.id),
+      ticketId: ticket.id,
       action: "Adicionou",
       performedBy: {
         id: user.id,
@@ -153,9 +148,10 @@ export default function CreateComment({ ticket }: CommentProps) {
             <Button variant="outline" onClick={() => setConfirming(false)}>
               Cancelar
             </Button>
+
             <Button
               onClick={async () => {
-                await handleCreateComment();
+                await handleCreateComment(true);
                 setMessage("");
                 setConfirming(false);
                 setOpen(false);

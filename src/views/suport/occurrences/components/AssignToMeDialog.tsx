@@ -14,18 +14,15 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Bookmark, BookmarkCheck } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
 import {
   TicketData,
   TicketAudit,
-  TicketComment,
   GroupSuport,
 } from "@/interfaces/ocurrences-data";
 import { useAuth } from "@/store/auth";
 import {
   updateTicket,
   useCreateTicketAudit,
-  useCreateTicketComment,
 } from "@/services/Tickets/useTickets";
 
 interface AssignToMeDialogProps {
@@ -43,7 +40,6 @@ const groupHierarchy: Record<GroupSuport, number> = {
 
 export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
   const [open, setOpen] = useState(false);
-  const [comment, setComment] = useState("");
   const { user } = useAuth();
 
   const handleAssignToMe = async () => {
@@ -83,19 +79,6 @@ export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
         date: new Date().toISOString(),
       };
       await useCreateTicketAudit(auditPayload);
-
-      // Registrar comentário (opcional)
-      if (comment.trim()) {
-        const commentPayload: TicketComment = {
-          ticketId: String(ticket.id),
-          author: user.name,
-          message: comment.trim(),
-          date: new Date().toISOString(),
-        };
-        await useCreateTicketComment(commentPayload);
-      }
-
-      setComment("");
     } catch (err) {
       console.error("Erro ao atribuir ocorrência ou registrar ações:", err);
     }
@@ -145,13 +128,6 @@ export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
         <p className="text-sm text-muted-foreground">
           Deseja realmente se atribuir a esta ocorrência?
         </p>
-
-        <Textarea
-          placeholder="Adicione um comentário (opcional)..."
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          className="mt-4 min-h-[100px]"
-        />
 
         <DialogFooter className="mt-4">
           <Button variant="outline" onClick={() => setOpen(false)}>

@@ -39,6 +39,7 @@ export default function OcurrenceDetails() {
   const ticketId = location.state?.id;
   const { user } = useAuth();
   const { data: audits } = useTicketAuditId(ticketId);
+  console.log("auditos do ticket:", ticketId, ">", audits)
   const { data: commentsData } = useTicketComments(ticketId);
   const { data: tickets } = useTickets();
   const ticket: TicketData | undefined = tickets?.find(
