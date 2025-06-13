@@ -17,11 +17,11 @@ export const statusColors: Record<Status, string> = {
   "AGUARDANDO RESPOSTA DO CLIENTE": "#CCCC00",
 };
 
-type Action = "Adicionou" | "Atribuíu" | "Atualizou" | "Finalizou";
+type Action = "Adicionou" | "Atribuiu" | "Atualizou" | "Finalizou";
 
 export const auditActionColors: Record<Action, string> = {
   "Adicionou": "#22c55e",       
-  "Atribuíu": "#3b82f6",    
+  "Atribuiu": "#3b82f6",    
   "Atualizou": "#eab308",    
   "Finalizou": "#ef4444", 
 };

@@ -33,7 +33,7 @@
       "uuid": "23a64a43-8b22-459f-b8bc-cff756dd72a2",
       "name": "Gustavo Lopes",
       "username": "gustavo_lopes@smartpay.com.vc",
-      "password": "$2b$10$NOYsWcbp40QyFuIaNVztsuJfPv34tytQomdkx7oA/YDk13.1Nmtl.",
+      "password": "1234567",
       "active": true,
       "createdAt": "2024-01-02T19:16:53.508Z",
       "updateAt": "2025-01-30T23:38:09.740Z",
@@ -2393,28 +2393,7 @@
   ],
   "tickets": [
     {
-      "id": "02b7",
-      "reason": "N3 KYC ERROR",
-      "description": "Verificar se o nível anterior não conseguiria resolver",
-      "expiredAt": 2,
-      "status": {
-        "title": "",
-        "status": "PENDENTE",
-        "description": ""
-      },
-      "groupSuport": "N1",
-      "createdAt": "2025-06-11T16:09:56.292Z",
-      "createdBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "assignedTo": null,
-      "requester": null,
-      "startedAt": ""
-    },
-    {
-      "id": "bd83",
+      "id": "6e47",
       "reason": "Erro de KYC",
       "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
       "expiredAt": 4,
@@ -2424,44 +2403,208 @@
         "description": ""
       },
       "groupSuport": "N1",
-      "createdAt": "2025-06-11T16:10:04.476Z",
+      "createdAt": "2025-06-12T21:33:50.534Z",
       "createdBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
+        "id": "5",
+        "name": "Gustavo Lopes",
         "groupSuport": "N1"
       },
-      "assignedTo": null,
+      "assignedTo": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "requester": null,
+      "startedAt": ""
+    },
+    {
+      "id": "d2cc",
+      "reason": "N3 KYC ERROR",
+      "description": "Verificar se o nível anterior não conseguiria resolver",
+      "expiredAt": 2,
+      "status": {
+        "title": "",
+        "status": "PENDENTE",
+        "description": ""
+      },
+      "groupSuport": "N1",
+      "createdAt": "2025-06-12T21:38:04.406Z",
+      "createdBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "requester": null,
+      "startedAt": ""
+    },
+    {
+      "id": "fa95",
+      "reason": "Retorno de KYC ERROR pro anterior",
+      "description": "Entrar em contato com o cliente para avisar o procedimento",
+      "expiredAt": 1,
+      "status": {
+        "title": "",
+        "status": "PENDENTE",
+        "description": ""
+      },
+      "groupSuport": "N1",
+      "createdAt": "2025-06-12T21:42:49.150Z",
+      "createdBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "requester": null,
+      "startedAt": ""
+    },
+    {
+      "id": "311d",
+      "reason": "",
+      "description": "",
+      "status": {
+        "title": "",
+        "status": "PENDENTE",
+        "description": ""
+      },
+      "groupSuport": "N1",
+      "createdAt": "2025-06-12T21:45:05.462Z",
+      "createdBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
       "requester": null,
       "startedAt": ""
     }
   ],
-  "ticketComments": [],
+  "ticketComments": [
+    {
+      "id": "1799",
+      "ticketId": "6e47",
+      "author": "Gustavo Lopes",
+      "message": "teste comentário simples",
+      "date": "2025-06-12T21:34:58.998Z"
+    }
+  ],
   "ticketAudit": [
     {
-      "id": "a0db",
-      "ticketId": "02b7",
+      "id": "660e",
+      "ticketId": "6e47",
       "action": "Adicionou",
       "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
+        "id": "5",
+        "name": "Gustavo Lopes",
         "groupSuport": "N1"
       },
       "message": "um novo Ticket",
-      "description": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-11T16:09:56.307Z"
+      "description": "Ticket criado por Gustavo Lopes.",
+      "date": "2025-06-12T21:33:50.547Z"
     },
     {
-      "id": "b981",
-      "ticketId": "bd83",
+      "id": "0570",
+      "ticketId": "6e47",
       "action": "Adicionou",
       "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Gustavo Lopes, ao ticket: 6e47",
+      "date": "2025-06-12T21:34:59.011Z"
+    },
+    {
+      "id": "448d",
+      "ticketId": "d2cc",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
         "groupSuport": "N1"
       },
       "message": "um novo Ticket",
-      "description": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-11T16:10:04.492Z"
+      "description": "Ticket criado por Gustavo Lopes.",
+      "date": "2025-06-12T21:38:04.417Z"
+    },
+    {
+      "id": "e4ab",
+      "ticketId": "d2cc",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência d2cc atribuída a Gustavo Lopes.",
+      "date": "2025-06-12T21:38:17.249Z"
+    },
+    {
+      "id": "e2fb",
+      "ticketId": "fa95",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Gustavo Lopes.",
+      "date": "2025-06-12T21:42:49.162Z"
+    },
+    {
+      "id": "bf6a",
+      "ticketId": "fa95",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência fa95 atribuída a Gustavo Lopes.",
+      "date": "2025-06-12T21:43:20.175Z"
+    },
+    {
+      "id": "3d2e",
+      "ticketId": "311d",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Gustavo Lopes.",
+      "date": "2025-06-12T21:45:05.475Z"
+    },
+    {
+      "id": "ac79",
+      "ticketId": "311d",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência 311d atribuída a Gustavo Lopes.",
+      "date": "2025-06-12T21:45:20.907Z"
     }
   ]
 }

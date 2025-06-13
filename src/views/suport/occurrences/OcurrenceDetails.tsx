@@ -3,49 +3,44 @@ import { SidebarLayout } from "@/components/layouts/SidebarLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Info } from "@/components/info";
 import {
-  updateTicket,
-  useCreateTicketAudit,
   useTicketAuditId,
   useTicketComments,
   useTickets,
 } from "@/services/Tickets/useTickets";
-import { TicketAudit, TicketData } from "@/interfaces/ocurrences-data";
+import { TicketData } from "@/interfaces/ocurrences-data";
 import {
   dateFormat,
   documentFormat,
   phoneFormat,
   timeFormat,
 } from "@/lib/formatters";
-import {
-  Bookmark,
-  BookmarkCheck,
-  FolderOpenDot,
-  GitMerge,
-  MessageCircleMore,
-  User,
-} from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { useAuth } from "@/store/auth";
+import { FolderOpenDot, GitMerge, MessageCircleMore, User } from "lucide-react";
 import CreateComment from "./components/Createcomment";
 import {
   auditActionColors,
   getColorRGBA,
   statusColors,
 } from "./components/utilsOcurrences";
+import { TicketStatusDropdown } from "./components/TicketStatusDropdown";
+import { AssignToMeDialog } from "./components/AssignToMeDialog";
+import { useAuth } from "@/store/auth";
+
+const groupHierarchy = {
+  N1: 1,
+  N2: 2,
+  N3: 3,
+  PRODUTO: 4,
+  MKT: 5,
+  ADMIN: 6,
+};
 
 export default function OcurrenceDetails() {
   const location = useLocation();
   const ticketId = location.state?.id;
   const { user } = useAuth();
-
   const { data: audits } = useTicketAuditId(ticketId);
   const { data: commentsData } = useTicketComments(ticketId);
   const { data: tickets } = useTickets();
-
   const ticket: TicketData | undefined = tickets?.find(
     (t) => t.id === ticketId
   );
@@ -54,36 +49,15 @@ export default function OcurrenceDetails() {
     return <p>Ocorrência não encontrada.</p>;
   }
 
-  const handleAssignToMe = async () => {
-    if (!ticket || !user) return;
+  const canComment = (() => {
+    const assigned = ticket.assignedTo;
+    if (!assigned) return true;
+    if (assigned.id === user?.id) return true;
 
-    try {
-      await updateTicket(ticketId, {
-        assignedTo: {
-          id: user.id,
-          name: user.name,
-          groupSuport: user.groupLevel,
-        },
-      });
-
-      const auditPayload: TicketAudit = {
-        ticketId: ticketId,
-        action: "Atribuíu",
-        performedBy: {
-          id: user.id,
-          name: user.name,
-          groupSuport: user.groupLevel,
-        },
-        message: `um ticket`,
-        description: `Ocorrência ${ticketId} atribuída a ${user.name}.`,
-        date: new Date().toISOString(),
-      };
-
-      await useCreateTicketAudit(auditPayload);
-    } catch (err) {
-      console.error("Erro ao atribuir ocorrência ou registrar auditoria:", err);
-    }
-  };
+    const userLevel = groupHierarchy[user?.groupLevel!];
+    const assignedLevel = groupHierarchy[assigned.groupSuport];
+    return userLevel > assignedLevel;
+  })();
 
   return (
     <SidebarLayout
@@ -106,26 +80,14 @@ export default function OcurrenceDetails() {
               <Info label="ID" value={ticket.id} />
               <div>
                 <p className="text-sm text-muted-foreground">Status</p>
-                <div
-                  className="px-3 py-1 rounded-sm text-sm font-semibold lowercase"
-                  style={{
-                    backgroundColor: getColorRGBA(
-                      ticket.status.status,
-                      statusColors,
-                      0.2
-                    ),
-                    color: getColorRGBA(
-                      ticket.status.status,
-                      statusColors,
-                      0.9
-                    ),
-                    width: "fit-content",
-                  }}
-                >
-                  {ticket.status.status}
-                </div>
+
+                <TicketStatusDropdown
+                  ticket={ticket}
+                  statusColors={statusColors}
+                  getColorRGBA={getColorRGBA}
+                />
               </div>
-              <Info label="Título" value={ticket.reason} />
+              <Info label="Motivo" value={ticket.reason} />
 
               <Info
                 label="Tempo de expiração"
@@ -145,38 +107,7 @@ export default function OcurrenceDetails() {
                   value={ticket.assignedTo?.name ?? "Não atribuído"}
                 />
 
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      onClick={handleAssignToMe}
-                      disabled={ticket.assignedTo?.id === user?.id}
-                      className="flex items-center gap-1"
-                    >
-                      {ticket.assignedTo ? (
-                        <>
-                          <BookmarkCheck className="text-muted-foreground" />
-                          <span className="text-muted-foreground text-sm">
-                            Atribuído
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          <Bookmark className="text-primary" />
-                          <span className="text-primary text-sm">
-                            Atribuir a mim
-                          </span>
-                        </>
-                      )}
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>
-                      {ticket.assignedTo
-                        ? "Este ticket já possui responsável"
-                        : "Atribuir este ticket a você"}
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
+                <AssignToMeDialog ticket={ticket} />
               </div>
             </CardContent>
           </Card>
@@ -188,9 +119,9 @@ export default function OcurrenceDetails() {
                 Auditoria da Ocorrência
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 overflow-y-auto">
-              {audits?.map((audit) => (
-                <div key={audit.id} className="border-b py-4">
+            <CardContent className="flex-1 overflow-y-auto pb-2">
+              {audits?.map((audit, index) => (
+                <div key={audit.id}>
                   <p className="text-sm">
                     <span className="font-semibold">
                       {audit.performedBy.name}
@@ -207,7 +138,7 @@ export default function OcurrenceDetails() {
                           audit.action,
                           auditActionColors,
                           0.9
-                        ),  
+                        ),
                       }}
                     >
                       {audit.action}
@@ -220,6 +151,10 @@ export default function OcurrenceDetails() {
                   <p className="text-xs text-muted-foreground">
                     {dateFormat(audit.date)} às {timeFormat(audit.date)}
                   </p>
+
+                  {index < audits.length - 1 && (
+                    <div className="my-4 border-t border-muted" />
+                  )}
                 </div>
               ))}
             </CardContent>
@@ -259,18 +194,22 @@ export default function OcurrenceDetails() {
                 <div className="flex flex-row items-center gap-2">
                   <MessageCircleMore /> Comentários
                 </div>
-                <CreateComment ticketId={ticketId} />
+                {canComment && <CreateComment ticket={ticket} />}
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 overflow-y-auto space-y-4">
+            <CardContent className="flex-1 overflow-y-auto">
               {commentsData && commentsData.length > 0 ? (
-                commentsData.map((comment) => (
+                commentsData.map((comment, index) => (
                   <div key={comment.id}>
-                    <p className="text-sm font-semibold">{comment.author}</p>
-                    <p className="text-sm">{comment.message}</p>
                     <p className="text-xs text-muted-foreground">
                       {dateFormat(comment.date)} às {timeFormat(comment.date)}
                     </p>
+                    <p className="text-sm font-semibold">{comment.author}</p>
+                    <p className="text-sm">{comment.message}</p>
+
+                    {index < commentsData.length - 1 && (
+                      <div className="my-4 border-t border-muted" />
+                    )}
                   </div>
                 ))
               ) : (
