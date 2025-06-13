@@ -7,7 +7,7 @@ import {
   useTicketComments,
   useTickets,
 } from "@/services/Tickets/useTickets";
-import { TicketData } from "@/interfaces/ocurrences-data";
+import { groupHierarchy, TicketData } from "@/interfaces/ocurrences-data";
 import {
   dateFormat,
   documentFormat,
@@ -25,23 +25,15 @@ import { TicketStatusDropdown } from "./components/TicketStatusDropdown";
 import { AssignToMeDialog } from "./components/AssignToMeDialog";
 import { useAuth } from "@/store/auth";
 
-const groupHierarchy = {
-  N1: 1,
-  N2: 2,
-  N3: 3,
-  PRODUTO: 4,
-  MKT: 5,
-  ADMIN: 6,
-};
-
 export default function OcurrenceDetails() {
   const location = useLocation();
   const ticketId = location.state?.id;
   const { user } = useAuth();
+
   const { data: audits } = useTicketAuditId(ticketId);
-  console.log("auditos do ticket:", ticketId, ">", audits)
   const { data: commentsData } = useTicketComments(ticketId);
   const { data: tickets } = useTickets();
+  
   const ticket: TicketData | undefined = tickets?.find(
     (t) => t.id === ticketId
   );

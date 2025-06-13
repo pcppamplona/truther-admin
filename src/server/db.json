@@ -47,7 +47,7 @@
       "uuid": "f6963179-5917-4700-aa0c-4deaad28fba6",
       "name": "Gustavo Linhares",
       "username": "gustavo@digitalhorizon.sv",
-      "password": "$2b$10$WhmwN.Dxj9oI/OoWB7EuluD/bCcMg45fMzvpMo/EDBRzgaQrY0hki",
+      "password": "1234567",
       "active": true,
       "createdAt": "2024-02-26T21:08:00.935Z",
       "updateAt": "2024-02-26T21:08:00.935Z",
@@ -2424,7 +2424,7 @@
       "expiredAt": 4,
       "status": {
         "title": "",
-        "status": "PENDENTE",
+        "status": "PENDENTE EXPIRADO",
         "description": ""
       },
       "groupSuport": "N1",
@@ -2435,9 +2435,9 @@
         "groupSuport": "N1"
       },
       "assignedTo": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
+        "id": "4",
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
       },
       "requester": null,
       "startedAt": ""
@@ -2458,6 +2458,56 @@
         "id": "5",
         "name": "Gustavo Lopes",
         "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "requester": null,
+      "startedAt": ""
+    },
+    {
+      "id": "5656",
+      "reason": "Avaliação de tratativa de evento",
+      "description": "Verificar atuação deste evento",
+      "expiredAt": 100,
+      "status": {
+        "title": "",
+        "status": "PENDENTE",
+        "description": ""
+      },
+      "groupSuport": "N1",
+      "createdAt": "2025-06-13T18:42:41.986Z",
+      "createdBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "requester": null,
+      "startedAt": ""
+    },
+    {
+      "id": "402c",
+      "reason": "Avaliação de tratativa de evento",
+      "description": "Verificar atuação deste evento",
+      "expiredAt": 100,
+      "status": {
+        "title": "",
+        "status": "PENDENTE",
+        "description": ""
+      },
+      "groupSuport": "N2",
+      "createdAt": "2025-06-13T19:13:12.266Z",
+      "createdBy": {
+        "id": "4",
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
       },
       "assignedTo": null,
       "requester": null,
@@ -2485,6 +2535,20 @@
       "author": "Jonathan Santos",
       "message": "teste atribuindo ao jonathan",
       "date": "2025-06-13T17:36:30.696Z"
+    },
+    {
+      "id": "3ca7",
+      "ticketId": "5656",
+      "author": "Jonathan Santos",
+      "message": "teste de atrivuição 5",
+      "date": "2025-06-13T19:11:55.729Z"
+    },
+    {
+      "id": "c4cc",
+      "ticketId": "a6fe",
+      "author": "Caroline De Melo Cardoso",
+      "message": "comentário de um superior",
+      "date": "2025-06-13T19:13:34.802Z"
     }
   ],
   "ticketAudit": [
@@ -2591,6 +2655,97 @@
       "message": "um novo Comentário",
       "description": "Comentário adicionado por Jonathan Santos, ao ticket: a6fe",
       "date": "2025-06-13T17:36:30.709Z"
+    },
+    {
+      "id": "4605",
+      "ticketId": "5656",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Jonathan Santos.",
+      "date": "2025-06-13T18:42:41.999Z"
+    },
+    {
+      "id": "cef6",
+      "ticketId": "16cf",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência 16cf atribuída a Jonathan Santos.",
+      "date": "2025-06-13T18:43:06.928Z"
+    },
+    {
+      "id": "5aa4",
+      "ticketId": "5656",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência 5656 atribuída a Jonathan Santos.",
+      "date": "2025-06-13T19:11:55.714Z"
+    },
+    {
+      "id": "d916",
+      "ticketId": "5656",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Jonathan Santos, ao ticket: 5656",
+      "date": "2025-06-13T19:11:55.746Z"
+    },
+    {
+      "id": "7342",
+      "ticketId": "402c",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "4",
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Caroline De Melo Cardoso.",
+      "date": "2025-06-13T19:13:12.282Z"
+    },
+    {
+      "id": "3c7a",
+      "ticketId": "a6fe",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "4",
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Caroline De Melo Cardoso, ao ticket: a6fe",
+      "date": "2025-06-13T19:13:34.818Z"
+    },
+    {
+      "id": "5c0f",
+      "ticketId": "a6fe",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "4",
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
+      },
+      "message": "Atualização de status do ticket",
+      "description": "Ocorrência a6fe atualizada para \"PENDENTE EXPIRADO\" por Caroline De Melo Cardoso.",
+      "date": "2025-06-13T19:14:10.338Z"
     }
   ]
 }

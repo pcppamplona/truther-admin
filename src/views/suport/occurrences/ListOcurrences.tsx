@@ -17,14 +17,16 @@ import {
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { useTickets } from "@/services/Tickets/useTickets";
-import { TicketData } from "@/interfaces/ocurrences-data";
+import {
+  groupHierarchy,
+  GroupSuport,
+  TicketData,
+} from "@/interfaces/ocurrences-data";
 import { useNavigate } from "react-router-dom";
 import { dateFormat, timeFormat } from "@/lib/formatters";
 import { CreateOcurrence } from "./components/CreateOcurrence";
 import { useAuth } from "@/store/auth";
 import { getColorRGBA, statusColors } from "./components/utilsOcurrences";
-
-const groupHierarchy = ["N1", "N2", "N3", "PRODUTO", "MKT", "ADMIN"] as const;
 
 export default function ListOcurrences() {
   const navigate = useNavigate();
@@ -37,9 +39,11 @@ export default function ListOcurrences() {
   const [filter, setFilter] = useState("Todas");
 
   const accessibleGroups = userGroupLevel
-    ? groupHierarchy.slice(0, groupHierarchy.indexOf(userGroupLevel) + 1)
+    ? (Object.keys(groupHierarchy) as GroupSuport[]).filter(
+        (group) => groupHierarchy[group] <= groupHierarchy[userGroupLevel]
+      )
     : [];
-
+    
   const filteredTickets = Tickets?.filter((ticket) => {
     const matchesSearch = (ticket.reason ?? "")
       .toLowerCase()
@@ -52,10 +56,9 @@ export default function ListOcurrences() {
         return ticket.assignedTo?.id === userId;
       }
 
-      if (groupHierarchy.includes(filter as any)) {
+      if (filter in groupHierarchy) {
         return ticket.groupSuport === filter;
       }
-
       return true;
     })();
 

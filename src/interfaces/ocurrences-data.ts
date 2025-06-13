@@ -14,6 +14,14 @@ export interface TicketData {
 }
 
 export type GroupSuport = "N1" | "N2" | "N3" | "PRODUTO" | "MKT" | "ADMIN" ;
+export const groupHierarchy: Record<GroupSuport, number> = {
+  N1: 1,
+  N2: 2,
+  N3: 3,
+  PRODUTO: 4,
+  MKT: 5,
+  ADMIN: 6,
+};
 
 export interface TicketStatus {
   title: string;
