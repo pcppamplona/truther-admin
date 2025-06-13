@@ -41,7 +41,6 @@ export interface Requester {
   phone: string;
 }
 
-
 export interface TicketComment {
   id?: string;
   ticketId: string;
@@ -53,7 +52,7 @@ export interface TicketComment {
 export interface TicketAudit {
   id?: string | number;
   ticketId: number;
-  action: "Adicionou" | "Atribuíu" | "Atualizou" | "Finalizou";
+  action: "Adicionou" | "Atribuiu" | "Atualizou" | "Finalizou";
   performedBy: UserSuport;
   message: string;
   description: string;

@@ -33,7 +33,7 @@
       "uuid": "23a64a43-8b22-459f-b8bc-cff756dd72a2",
       "name": "Gustavo Lopes",
       "username": "gustavo_lopes@smartpay.com.vc",
-      "password": "$2b$10$NOYsWcbp40QyFuIaNVztsuJfPv34tytQomdkx7oA/YDk13.1Nmtl.",
+      "password": "1234567",
       "active": true,
       "createdAt": "2024-01-02T19:16:53.508Z",
       "updateAt": "2025-01-30T23:38:09.740Z",
@@ -2393,28 +2393,7 @@
   ],
   "tickets": [
     {
-      "id": "02b7",
-      "reason": "N3 KYC ERROR",
-      "description": "Verificar se o nível anterior não conseguiria resolver",
-      "expiredAt": 2,
-      "status": {
-        "title": "",
-        "status": "PENDENTE",
-        "description": ""
-      },
-      "groupSuport": "N1",
-      "createdAt": "2025-06-11T16:09:56.292Z",
-      "createdBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "assignedTo": null,
-      "requester": null,
-      "startedAt": ""
-    },
-    {
-      "id": "bd83",
+      "id": "ce58",
       "reason": "Erro de KYC",
       "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
       "expiredAt": 4,
@@ -2424,10 +2403,60 @@
         "description": ""
       },
       "groupSuport": "N1",
-      "createdAt": "2025-06-11T16:10:04.476Z",
+      "createdAt": "2025-06-13T15:12:07.162Z",
       "createdBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "requester": null,
+      "startedAt": ""
+    },
+    {
+      "id": "a6fe",
+      "reason": "Erro de KYC",
+      "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
+      "expiredAt": 4,
+      "status": {
+        "title": "",
+        "status": "PENDENTE",
+        "description": ""
+      },
+      "groupSuport": "N1",
+      "createdAt": "2025-06-13T15:13:04.354Z",
+      "createdBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
         "id": "20",
         "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "requester": null,
+      "startedAt": ""
+    },
+    {
+      "id": "16cf",
+      "reason": "Retorno de KYC ERROR pro anterior",
+      "description": "Entrar em contato com o cliente para avisar o procedimento",
+      "expiredAt": 1,
+      "status": {
+        "title": "",
+        "status": "PENDENTE",
+        "description": ""
+      },
+      "groupSuport": "N1",
+      "createdAt": "2025-06-13T15:13:12.329Z",
+      "createdBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
         "groupSuport": "N1"
       },
       "assignedTo": null,
@@ -2435,33 +2464,133 @@
       "startedAt": ""
     }
   ],
-  "ticketComments": [],
-  "ticketAudit": [
+  "ticketComments": [
     {
-      "id": "a0db",
-      "ticketId": "02b7",
-      "action": "Adicionou",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "groupSuport": "N1"
-      },
-      "message": "um novo Ticket",
-      "description": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-11T16:09:56.307Z"
+      "id": "c209",
+      "ticketId": "ce58",
+      "author": "Gustavo Lopes",
+      "message": "teste comentário atribuido",
+      "date": "2025-06-13T15:12:32.456Z"
     },
     {
-      "id": "b981",
-      "ticketId": "bd83",
+      "id": "39ef",
+      "ticketId": "ce58",
+      "author": "Gustavo Lopes",
+      "message": "teste comentário normal",
+      "date": "2025-06-13T15:12:48.922Z"
+    },
+    {
+      "id": "f6ae",
+      "ticketId": "a6fe",
+      "author": "Jonathan Santos",
+      "message": "teste atribuindo ao jonathan",
+      "date": "2025-06-13T17:36:30.696Z"
+    }
+  ],
+  "ticketAudit": [
+    {
+      "id": "1ef5",
+      "ticketId": "ce58",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Gustavo Lopes.",
+      "date": "2025-06-13T15:12:07.179Z"
+    },
+    {
+      "id": "d63a",
+      "ticketId": "ce58",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência ce58 atribuída a Gustavo Lopes.",
+      "date": "2025-06-13T15:12:32.442Z"
+    },
+    {
+      "id": "ec73",
+      "ticketId": "ce58",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Gustavo Lopes, ao ticket: ce58",
+      "date": "2025-06-13T15:12:32.469Z"
+    },
+    {
+      "id": "c24c",
+      "ticketId": "ce58",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Gustavo Lopes, ao ticket: ce58",
+      "date": "2025-06-13T15:12:48.938Z"
+    },
+    {
+      "id": "ba20",
+      "ticketId": "a6fe",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Gustavo Lopes.",
+      "date": "2025-06-13T15:13:04.374Z"
+    },
+    {
+      "id": "9771",
+      "ticketId": "16cf",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Gustavo Lopes.",
+      "date": "2025-06-13T15:13:12.344Z"
+    },
+    {
+      "id": "f9ca",
+      "ticketId": "a6fe",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência a6fe atribuída a Jonathan Santos.",
+      "date": "2025-06-13T17:36:30.682Z"
+    },
+    {
+      "id": "2a50",
+      "ticketId": "a6fe",
       "action": "Adicionou",
       "performedBy": {
         "id": "20",
         "name": "Jonathan Santos",
         "groupSuport": "N1"
       },
-      "message": "um novo Ticket",
-      "description": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-11T16:10:04.492Z"
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Jonathan Santos, ao ticket: a6fe",
+      "date": "2025-06-13T17:36:30.709Z"
     }
   ]
 }
