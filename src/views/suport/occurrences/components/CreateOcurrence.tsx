@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import {
   Select,
@@ -24,12 +24,12 @@ import {
 import { useAuth } from "@/store/auth";
 import { ChevronRight, CircleX, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getTicketInfoByTitle } from "./utilsOcurrences";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserInfoDocument } from "@/services/clients/useUserinfo";
 import { MaskInput } from "@/components/ui/maskInput";
 import { UserInfoData } from "@/interfaces/userinfo-data";
 import { documentFormat, getInitials } from "@/lib/formatters";
+import { getTicketInfoByTitle } from "./utilsOcurrences";
 
 export function CreateOcurrence() {
   const { user } = useAuth();
@@ -71,7 +71,7 @@ export function CreateOcurrence() {
     const payload: TicketData = {
       reason: ticketData.reason || "",
       description: ticketData.description || "",
-      expiredAt: ticketData.expiredAt,
+      expiredAt: ticketData.expiredAt ?? 0,
       status: {
         title: ticketData.status?.title || "",
         status: "PENDENTE",
@@ -151,10 +151,15 @@ export function CreateOcurrence() {
             <>
               <Select
                 onValueChange={(value) => {
-                  const info = getTicketInfoByTitle(value);
+                  const ticketInfo = getTicketInfoByTitle(value);
+                  handleChange("status", {
+                    title: value,
+                    status: "PENDENTE",
+                    description: ticketInfo.description,
+                  });
                   handleChange("reason", value);
-                  handleChange("description", info.description);
-                  handleChange("expiredAt", info.expiredAt);
+                  handleChange("description", ticketInfo.description);
+                  handleChange("expiredAt", ticketInfo.expiredAt);
                 }}
               >
                 <SelectTrigger className="w-full">
@@ -178,7 +183,15 @@ export function CreateOcurrence() {
               <Textarea
                 placeholder="Descrição"
                 value={ticketData.description || ""}
-                onChange={(e) => handleChange("description", e.target.value)}
+                onChange={(e) => {
+                  handleChange("description", e.target.value);
+                  handleChange("status", {
+                    ...ticketData.status,
+                    description: e.target.value,
+                    title: ticketData.status?.title || "",
+                    status: "PENDENTE",
+                  });
+                }}
               />
             </>
           )}

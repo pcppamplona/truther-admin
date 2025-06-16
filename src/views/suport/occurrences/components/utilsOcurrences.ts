@@ -8,22 +8,22 @@ type Status =
   | "AGUARDANDO RESPOSTA DO CLIENTE";
 
 export const statusColors: Record<Status, string> = {
-  "PENDENTE": "#FFA500",                 
-  "PENDENTE EXPIRADO": "#F97316",        
-  "EM ANDAMENTO": "#0000FF",            
-  "EM ANDAMENTO EXPIRADO": "#2563EB",     
-  "FINALIZADO": "#008000",                 
-  "FINALIZADO EXPIRADO": "#E11D48",    
+  PENDENTE: "#FFA500",
+  "PENDENTE EXPIRADO": "#F97316",
+  "EM ANDAMENTO": "#0000FF",
+  "EM ANDAMENTO EXPIRADO": "#2563EB",
+  FINALIZADO: "#008000",
+  "FINALIZADO EXPIRADO": "#E11D48",
   "AGUARDANDO RESPOSTA DO CLIENTE": "#CCCC00",
 };
 
 type Action = "Adicionou" | "Atribuiu" | "Atualizou" | "Finalizou";
 
 export const auditActionColors: Record<Action, string> = {
-  "Adicionou": "#22c55e",       
-  "Atribuiu": "#3b82f6",    
-  "Atualizou": "#eab308",    
-  "Finalizou": "#ef4444", 
+  Adicionou: "#22c55e",
+  Atribuiu: "#3b82f6",
+  Atualizou: "#eab308",
+  Finalizou: "#ef4444",
 };
 
 export function hexToRGBA(hex: string, alpha: number): string {
@@ -47,28 +47,11 @@ export function getTicketInfoByTitle(title: string): {
   expiredAt: number;
 } {
   const mapping: Record<string, { description: string; expiredAt: number }> = {
-    "Erro de KYC": {
-      description: "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
-      expiredAt: 4,
-    },
-    "N3 KYC ERROR": {
-      description: "Verificar se o nível anterior não conseguiria resolver",
-      expiredAt: 2,
-    },
-    "Retorno de KYC ERROR pro anterior": {
-      description: "Entrar em contato com o cliente para avisar o procedimento",
-      expiredAt: 1,
-    },
-    "Avaliação de tratativa de evento": {
-      description: "Verificar atuação deste evento",
-      expiredAt: 100,
-    },
-    "EMAIL AJUDA UNIVERSITARIOS": {
-      description:
-        "Querido Cliente sua demanda já está em análise com nosso grupo de pessoas qualificadas (ou não) do N3 aguarde atualizações",
-      expiredAt: 0,
-    },
+    "Erro de KYC": { description: "Verificar se o usuário é novo\nVerificar motivo de reject do KYC", expiredAt: 4 },
+    "N3 KYC ERROR": { description: "Verificar se o nível anterior não conseguiria resolver", expiredAt: 2 },
+    "Retorno de KYC ERROR pro anterior": { description: "Entrar em contato com o cliente para avisar o procedimento", expiredAt: 1 },
+    "Avaliação de tratativa de evento": { description: "Verificar atuação deste evento", expiredAt: 100 },
+    "EMAIL AJUDA UNIVERSITARIOS": { description: "...", expiredAt: 0 },
   };
-
   return mapping[title] || { description: "", expiredAt: 0 };
 }

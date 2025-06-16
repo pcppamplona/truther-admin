@@ -2,7 +2,7 @@ export interface TicketData {
   id?: number;
   reason: string;
   description: string;
-  expiredAt?: string;
+  expiredAt?: number;
   status: TicketStatus;
   groupSuport: GroupSuport; 
   createdAt: string;
@@ -50,8 +50,8 @@ export interface Requester {
 }
 
 export interface TicketComment {
-  id?: string;
-  ticketId: string;
+  id?: string | number;
+  ticketId: string | number;
   author: string;
   message: string;
   date: string;
@@ -59,7 +59,7 @@ export interface TicketComment {
 
 export interface TicketAudit {
   id?: string | number;
-  ticketId: number;
+  ticketId: string | number;
   action: "Adicionou" | "Atribuiu" | "Atualizou" | "Finalizou";
   performedBy: UserSuport;
   message: string;

@@ -42,6 +42,7 @@ export const updateTicket = async (
 export async function useCreateTicketComment(
   CreateTicketComment: TicketComment
 ): Promise<TicketComment | null> {
+  console.log("Chamo o hook do useCreateTicketComment ")
   try {
     const newTicketComment: TicketComment = await api
       .post("ticketComments", { json: CreateTicketComment })
