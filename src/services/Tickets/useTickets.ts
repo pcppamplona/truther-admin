@@ -111,6 +111,7 @@ export const useTicketAuditId = (ticketId: number) => {
 export async function useCreateTicketAudit(
   CreateTicketAuditData: TicketAudit
 ): Promise<TicketAudit | null> {
+  console.log("Chamo pra cria a audit>>", CreateTicketAuditData)
   try {
     const newTicketAudit: TicketAudit = await api
       .post("ticketAudit", { json: CreateTicketAuditData })

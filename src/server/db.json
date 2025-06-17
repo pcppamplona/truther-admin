@@ -2449,7 +2449,7 @@
       "expiredAt": 1,
       "status": {
         "title": "",
-        "status": "PENDENTE",
+        "status": "FINALIZADO",
         "description": ""
       },
       "groupSuport": "N1",
@@ -2474,7 +2474,7 @@
       "expiredAt": 100,
       "status": {
         "title": "",
-        "status": "PENDENTE",
+        "status": "FINALIZADO",
         "description": ""
       },
       "groupSuport": "N1",
@@ -2510,6 +2510,52 @@
         "groupSuport": "N2"
       },
       "assignedTo": null,
+      "requester": null,
+      "startedAt": ""
+    },
+    {
+      "id": "6dad",
+      "reason": "EMAIL AJUDA UNIVERSITARIOS",
+      "description": "...",
+      "expiredAt": 0,
+      "status": {
+        "title": "EMAIL AJUDA UNIVERSITARIOS",
+        "status": "PENDENTE",
+        "description": "..."
+      },
+      "groupSuport": "N2",
+      "createdAt": "2025-06-17T15:43:34.507Z",
+      "createdBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "assignedTo": null,
+      "requester": null,
+      "startedAt": ""
+    },
+    {
+      "id": "4df4",
+      "reason": "Erro de KYC",
+      "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
+      "expiredAt": 4,
+      "status": {
+        "title": "Erro de KYC",
+        "status": "PENDENTE",
+        "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC"
+      },
+      "groupSuport": "N2",
+      "createdAt": "2025-06-17T15:47:24.170Z",
+      "createdBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "4",
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
+      },
       "requester": null,
       "startedAt": ""
     }
@@ -2746,6 +2792,58 @@
       "message": "Atualização de status do ticket",
       "description": "Ocorrência a6fe atualizada para \"PENDENTE EXPIRADO\" por Caroline De Melo Cardoso.",
       "date": "2025-06-13T19:14:10.338Z"
+    },
+    {
+      "id": "9efa",
+      "ticketId": "5656",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "Atualização de status do ticket",
+      "description": "Ocorrência 5656 finalizada por Jonathan Santos. Motivo: Necessária ação superior",
+      "date": "2025-06-17T15:43:34.370Z"
+    },
+    {
+      "id": "0cee",
+      "ticketId": "16cf",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "Atualização de status do ticket",
+      "description": "Ocorrência 16cf finalizada por Jonathan Santos. Motivo: Necessária ação superior",
+      "date": "2025-06-17T15:47:23.968Z"
+    },
+    {
+      "id": "fe2a",
+      "ticketId": "4df4",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Jonathan Santos.",
+      "date": "2025-06-17T15:47:24.191Z"
+    },
+    {
+      "id": "4c01",
+      "ticketId": "4df4",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "4",
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência 4df4 atribuída a Caroline De Melo Cardoso.",
+      "date": "2025-06-17T15:49:46.613Z"
     }
   ]
 }
