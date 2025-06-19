@@ -290,11 +290,6 @@ export function TicketStatusDropdown({
                   <SelectValue placeholder="Selecione o motivo do novo ticket" />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.keys(getTicketInfoByTitle("")).map((reason) => (
-                    <SelectItem key={reason} value={reason}>
-                      {reason}
-                    </SelectItem>
-                  ))}
                   {[
                     "Erro de KYC",
                     "N3 KYC ERROR",

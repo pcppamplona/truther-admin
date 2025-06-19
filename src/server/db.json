@@ -2558,6 +2558,192 @@
       },
       "requester": null,
       "startedAt": ""
+    },
+    {
+      "id": "c06a",
+      "reason": "Erro de KYC",
+      "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
+      "expiredAt": 4,
+      "status": {
+        "title": "Erro de KYC",
+        "status": "FINALIZADO",
+        "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC"
+      },
+      "groupSuport": "N1",
+      "createdAt": "2025-06-17T18:16:58.091Z",
+      "createdBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "requester": {
+        "id": "6748",
+        "name": "Marcos Vinicius Leite Da Silva",
+        "document": "10152803742",
+        "phone": "21971524446"
+      },
+      "startedAt": ""
+    },
+    {
+      "id": "17b0",
+      "reason": "Erro de KYC",
+      "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
+      "expiredAt": 4,
+      "status": {
+        "title": "Erro de KYC",
+        "status": "PENDENTE",
+        "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC"
+      },
+      "groupSuport": "N2",
+      "createdAt": "2025-06-17T18:19:10.641Z",
+      "createdBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "4",
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
+      },
+      "requester": {
+        "id": "6748",
+        "name": "Marcos Vinicius Leite Da Silva",
+        "document": "10152803742",
+        "phone": "21971524446"
+      },
+      "startedAt": ""
+    },
+    {
+      "id": "1058",
+      "reason": "Retorno de KYC ERROR pro anterior",
+      "description": "Entrar em contato com o cliente para avisar o procedimento",
+      "expiredAt": 1,
+      "status": {
+        "title": "Retorno de KYC ERROR pro anterior",
+        "status": "PENDENTE",
+        "description": "Entrar em contato com o cliente para avisar o procedimento"
+      },
+      "groupSuport": "N1",
+      "createdAt": "2025-06-17T18:26:38.811Z",
+      "createdBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "requester": {
+        "id": "6748",
+        "name": "Marcos Vinicius Leite Da Silva",
+        "document": "10152803742",
+        "phone": "21971524446"
+      },
+      "startedAt": ""
+    },
+    {
+      "id": "132",
+      "reason": "Erro de KYC",
+      "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
+      "expiredAt": 4,
+      "status": {
+        "title": "Erro de KYC",
+        "status": "PENDENTE",
+        "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC"
+      },
+      "groupSuport": "N1",
+      "createdAt": "2025-06-17T18:27:20.524Z",
+      "createdBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "requester": null,
+      "startedAt": ""
+    },
+    {
+      "id": "5945",
+      "reason": "N3 KYC ERROR",
+      "description": "Verificar se o nível anterior não conseguiria resolver",
+      "expiredAt": 2,
+      "status": {
+        "title": "N3 KYC ERROR",
+        "status": "FINALIZADO",
+        "description": "Verificar se o nível anterior não conseguiria resolver"
+      },
+      "groupSuport": "N1",
+      "createdAt": "2025-06-17T18:28:01.260Z",
+      "createdBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "requester": null,
+      "startedAt": ""
+    },
+    {
+      "id": "5931",
+      "reason": "Erro de KYC",
+      "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
+      "expiredAt": 4,
+      "status": {
+        "title": "Erro de KYC",
+        "status": "FINALIZADO",
+        "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC"
+      },
+      "groupSuport": "N1",
+      "createdAt": "2025-06-18T20:21:08.993Z",
+      "createdBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "assignedTo": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "requester": null,
+      "startedAt": ""
+    },
+    {
+      "id": "d26a",
+      "reason": "N3 KYC ERROR",
+      "description": "Verificar se o nível anterior não conseguiria resolver",
+      "expiredAt": 2,
+      "status": {
+        "title": "N3 KYC ERROR",
+        "status": "PENDENTE",
+        "description": "Verificar se o nível anterior não conseguiria resolver"
+      },
+      "groupSuport": "N2",
+      "createdAt": "2025-06-18T20:35:34.116Z",
+      "createdBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "assignedTo": null,
+      "requester": null,
+      "startedAt": ""
     }
   ],
   "ticketComments": [
@@ -2595,6 +2781,48 @@
       "author": "Caroline De Melo Cardoso",
       "message": "comentário de um superior",
       "date": "2025-06-13T19:13:34.802Z"
+    },
+    {
+      "id": "e20a",
+      "ticketId": "c06a",
+      "author": "Gustavo Lopes",
+      "message": "testando",
+      "date": "2025-06-17T18:17:46.283Z"
+    },
+    {
+      "id": "3ae9",
+      "ticketId": "17b0",
+      "author": "Caroline De Melo Cardoso",
+      "message": "sdad",
+      "date": "2025-06-17T18:22:57.732Z"
+    },
+    {
+      "id": "ec83",
+      "ticketId": "132",
+      "author": "Gustavo Lopes",
+      "message": "ddsadda",
+      "date": "2025-06-17T18:27:48.274Z"
+    },
+    {
+      "id": "0b0b",
+      "ticketId": "5945",
+      "author": "Gustavo Lopes",
+      "message": "dasdsad",
+      "date": "2025-06-17T18:28:12.752Z"
+    },
+    {
+      "id": "eb5a",
+      "ticketId": "5931",
+      "author": "Jonathan Santos",
+      "message": "teste comentário",
+      "date": "2025-06-18T20:21:58.339Z"
+    },
+    {
+      "id": "7834",
+      "ticketId": "5931",
+      "author": "Jonathan Santos",
+      "message": "dfsdfdsfds",
+      "date": "2025-06-18T20:22:14.313Z"
     }
   ],
   "ticketAudit": [
@@ -2844,6 +3072,318 @@
       "message": "um ticket",
       "description": "Ocorrência 4df4 atribuída a Caroline De Melo Cardoso.",
       "date": "2025-06-17T15:49:46.613Z"
+    },
+    {
+      "id": "c319",
+      "ticketId": "c06a",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Gustavo Lopes.",
+      "date": "2025-06-17T18:16:58.107Z"
+    },
+    {
+      "id": "4627",
+      "ticketId": "c06a",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência c06a atribuída a Gustavo Lopes.",
+      "date": "2025-06-17T18:17:18.411Z"
+    },
+    {
+      "id": "72f3",
+      "ticketId": "c06a",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "Atualização de status do ticket",
+      "description": "Ocorrência c06a finalizada por Gustavo Lopes. Motivo: não informado",
+      "date": "2025-06-17T18:17:36.529Z"
+    },
+    {
+      "id": "d193",
+      "ticketId": "c06a",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "Atualização de status do ticket",
+      "description": "Ocorrência c06a finalizada por Gustavo Lopes. Motivo: não informado",
+      "date": "2025-06-17T18:17:38.606Z"
+    },
+    {
+      "id": "8eeb",
+      "ticketId": "c06a",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Gustavo Lopes, ao ticket: c06a",
+      "date": "2025-06-17T18:17:46.300Z"
+    },
+    {
+      "id": "7db9",
+      "ticketId": "17b0",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Gustavo Lopes.",
+      "date": "2025-06-17T18:19:10.659Z"
+    },
+    {
+      "id": "aab4",
+      "ticketId": "17b0",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "4",
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência 17b0 atribuída a Caroline De Melo Cardoso.",
+      "date": "2025-06-17T18:21:04.083Z"
+    },
+    {
+      "id": "63f8",
+      "ticketId": "17b0",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "4",
+        "name": "Caroline De Melo Cardoso",
+        "groupSuport": "N2"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Caroline De Melo Cardoso, ao ticket: 17b0",
+      "date": "2025-06-17T18:22:57.749Z"
+    },
+    {
+      "id": "4d7b",
+      "ticketId": "1058",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Gustavo Lopes.",
+      "date": "2025-06-17T18:26:38.827Z"
+    },
+    {
+      "id": "05d5",
+      "ticketId": "1058",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência 1058 atribuída a Gustavo Lopes.",
+      "date": "2025-06-17T18:26:53.523Z"
+    },
+    {
+      "id": "bc8a",
+      "ticketId": "132",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Gustavo Lopes.",
+      "date": "2025-06-17T18:27:20.540Z"
+    },
+    {
+      "id": "178f",
+      "ticketId": "132",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência 132 atribuída a Gustavo Lopes.",
+      "date": "2025-06-17T18:27:48.259Z"
+    },
+    {
+      "id": "086b",
+      "ticketId": "132",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Gustavo Lopes, ao ticket: 132",
+      "date": "2025-06-17T18:27:48.288Z"
+    },
+    {
+      "id": "8c9b",
+      "ticketId": "5945",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Ticket",
+      "description": "Ticket criado por Gustavo Lopes.",
+      "date": "2025-06-17T18:28:01.276Z"
+    },
+    {
+      "id": "cfb5",
+      "ticketId": "5945",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência 5945 atribuída a Gustavo Lopes.",
+      "date": "2025-06-17T18:28:12.739Z"
+    },
+    {
+      "id": "b001",
+      "ticketId": "5945",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Gustavo Lopes, ao ticket: 5945",
+      "date": "2025-06-17T18:28:12.765Z"
+    },
+    {
+      "id": "2b36",
+      "ticketId": "5945",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "Atualização de status do ticket",
+      "description": "Ocorrência 5945 finalizada por Gustavo Lopes. Motivo: Problema resolvido",
+      "date": "2025-06-17T19:12:26.766Z"
+    },
+    {
+      "id": "4953",
+      "ticketId": "5945",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "Atualização de status do ticket",
+      "description": "Ocorrência 5945 finalizada por Gustavo Lopes. Motivo: não informado",
+      "date": "2025-06-17T19:12:37.985Z"
+    },
+    {
+      "id": "03de",
+      "ticketId": "5945",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "5",
+        "name": "Gustavo Lopes",
+        "groupSuport": "N1"
+      },
+      "message": "Atualização de status do ticket",
+      "description": "Ocorrência 5945 finalizada por Gustavo Lopes. Motivo: Solicitação cancelada",
+      "date": "2025-06-17T19:12:44.267Z"
+    },
+    {
+      "id": "1083",
+      "ticketId": "5931",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "um ticket",
+      "description": "Ocorrência 5931 atribuída a Jonathan Santos.",
+      "date": "2025-06-18T20:21:58.221Z"
+    },
+    {
+      "id": "8968",
+      "ticketId": "5931",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Jonathan Santos, ao ticket: 5931",
+      "date": "2025-06-18T20:21:58.354Z"
+    },
+    {
+      "id": "a6d0",
+      "ticketId": "5931",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Jonathan Santos, ao ticket: 5931",
+      "date": "2025-06-18T20:22:14.323Z"
+    },
+    {
+      "id": "eca8",
+      "ticketId": "5931",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "Atualização de status do ticket",
+      "description": "Ocorrência 5931 finalizada por Jonathan Santos. Motivo: não informado",
+      "date": "2025-06-18T20:22:17.441Z"
+    },
+    {
+      "id": "f4ba",
+      "ticketId": "5931",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "groupSuport": "N1"
+      },
+      "message": "Atualização de status do ticket",
+      "description": "Ocorrência 5931 finalizada por Jonathan Santos. Motivo: Necessária ação superior",
+      "date": "2025-06-18T20:35:33.982Z"
     }
   ]
 }

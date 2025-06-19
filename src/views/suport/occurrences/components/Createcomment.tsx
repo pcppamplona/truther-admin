@@ -72,7 +72,7 @@ export default function CreateComment({ ticket }: CommentProps) {
     }
     
     await useCreateTicketComment({
-      ticketId: String(ticket.id),
+      ticketId: ticket.id,
       author: user.name,
       message: message.trim(),
       date: new Date().toISOString(),
