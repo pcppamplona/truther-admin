@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -15,38 +16,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  GroupSuport,
-  TicketAudit,
-  TicketData,
-} from "@/interfaces/ocurrences-data";
-import {
   updateTicket,
   useCreateTicket,
   useCreateTicketAudit,
 } from "@/services/Tickets/useTickets";
 import { useAuth } from "@/store/auth";
-import { useState, useEffect } from "react";
-import { getTicketInfoByTitle } from "./utilsOcurrences";
-
-const STATUS_OPTIONS = [
-  "PENDENTE",
-  "PENDENTE EXPIRADO",
-  "EM ANDAMENTO",
-  "EM ANDAMENTO EXPIRADO",
-  "FINALIZADO",
-  "FINALIZADO EXPIRADO",
-  "AGUARDANDO RESPOSTA DO CLIENTE",
-] as const;
-
-const FINALIZATION_REASONS = [
-  "Problema resolvido",
-  "Solicitação cancelada",
-  "Mudança de turno",
-  "Necessária ação superior",
-] as const;
-
-type TicketStatus = (typeof STATUS_OPTIONS)[number];
-type FinalizationReason = (typeof FINALIZATION_REASONS)[number];
+import {
+  FinalizationReply,
+  Group,
+  Status,
+  TicketAudit,
+  TicketData,
+} from "@/interfaces/ticket-data";
+import { getReplayTicketReasons } from "@/services/Tickets/useReasons";
 
 interface TicketStatusDropdownProps {
   ticket: TicketData;
@@ -60,29 +42,48 @@ export function TicketStatusDropdown({
   getColorRGBA,
 }: TicketStatusDropdownProps) {
   const { user } = useAuth();
-  const [currentStatus, setCurrentStatus] = useState<TicketStatus>(
-    ticket.status.status as TicketStatus
+  const [currentStatus, setCurrentStatus] = useState<Status>(
+    ticket.status as Status
   );
   const [isUpdating, setIsUpdating] = useState(false);
-  const [pendingStatus, setPendingStatus] = useState<TicketStatus | null>(null);
+  const [pendingStatus, setPendingStatus] = useState<Status | null>(null);
   const [showFinalizationDialog, setShowFinalizationDialog] = useState(false);
-  const [selectedReason, setSelectedReason] = useState<FinalizationReason | "">(
-    ""
+  const [selectedReasonId, setSelectedReasonId] = useState<number | null>(null);
+  const [newGroup, setNewGroup] = useState<Group | "">("");
+  const [newTicketReasonId, setNewTicketReasonId] = useState<number | null>(
+    null
   );
-  const [newTicketReason, setNewTicketReason] = useState<string>("");
-  const [newGroup, setNewGroup] = useState<GroupSuport | "">("");
+  const [availableReasons, setAvailableReasons] = useState<FinalizationReply[]>(
+    []
+  );
   const [description, setDescription] = useState<string>("");
 
   useEffect(() => {
-    if (newTicketReason) {
-      const info = getTicketInfoByTitle(newTicketReason);
-      setDescription(info.description);
+    const fetchReasons = async () => {
+      if (ticket.reason?.id) {
+        const reasons = await getReplayTicketReasons(ticket.reason.id);
+        setAvailableReasons(reasons);
+      }
+    };
+    fetchReasons();
+  }, [ticket.reason?.id]);
+
+  useEffect(() => {
+    if (newTicketReasonId != null) {
+      const selected = availableReasons.find((r) => r.id === newTicketReasonId);
+      setDescription(selected?.reply ?? "");
     } else {
       setDescription("");
     }
-  }, [newTicketReason]);
+  }, [newTicketReasonId, availableReasons]);
 
-  const handleChange = (newStatus: TicketStatus) => {
+  const selectedReason = availableReasons.find(
+    (r) => r.id === selectedReasonId
+  );
+
+  const needsNewTicket = selectedReason?.actionType === "new_event";
+
+  const handleChange = (newStatus: Status) => {
     if (newStatus === currentStatus || isUpdating) return;
 
     if (newStatus === "FINALIZADO" || newStatus === "FINALIZADO EXPIRADO") {
@@ -93,12 +94,10 @@ export function TicketStatusDropdown({
     }
   };
 
-  const updateStatus = async (newStatus: TicketStatus, reason?: string) => {
+  const updateStatus = async (newStatus: Status) => {
     setIsUpdating(true);
     try {
-      await updateTicket(ticket.id!, {
-        status: { ...ticket.status, status: newStatus },
-      });
+      await updateTicket(ticket.id!, { status: newStatus });
 
       setCurrentStatus(newStatus);
 
@@ -108,21 +107,16 @@ export function TicketStatusDropdown({
         performedBy: {
           id: user?.id ?? 0,
           name: user?.name ?? "",
-          groupSuport: user!.groupLevel,
+          group: user!.groupLevel,
         },
-        message: `Atualização de status do ticket`,
-        description: `Ocorrência ${ticket.id} finalizada por ${
-          user?.name
-        }. Motivo: ${reason || "não informado"}`,
+        message: "Atualização de status do ticket",
+        description: `Ocorrência ${ticket.id} atualizada para ${newStatus} por ${user?.name}.`,
         date: new Date().toISOString(),
       };
 
       await useCreateTicketAudit(auditPayload);
 
-      if (
-        reason &&
-        (reason === "Mudança de turno" || reason === "Necessária ação superior")
-      ) {
+      if (needsNewTicket) {
         await createNewTicket();
       }
     } catch (err) {
@@ -134,30 +128,23 @@ export function TicketStatusDropdown({
   };
 
   const createNewTicket = async () => {
-    if (!newTicketReason || !newGroup) return;
+    if (!newTicketReasonId || !newGroup) return;
 
-    const ticketInfo = getTicketInfoByTitle(newTicketReason);
+    const selected = availableReasons.find((r) => r.id === newTicketReasonId);
+    if (!selected) return;
 
     const payload: TicketData = {
-      reason: newTicketReason,
-      description: description || ticketInfo.description,
-      expiredAt: ticketInfo.expiredAt,
-      status: {
-        title: newTicketReason,
-        status: "PENDENTE",
-        description: description || ticketInfo.description,
-      },
-      groupSuport: newGroup,
-      createdAt: new Date().toISOString(),
       createdBy: {
         id: user?.id ?? 0,
         name: user?.name ?? "",
-        groupSuport: user!.groupLevel,
+        group: user!.groupLevel,
       },
       assignedTo: null,
-      lastInteractedBy: undefined,
-      requester: ticket.requester || null,
-      startedAt: "",
+      // reason: selected,
+      reason: ticket.reason,
+      status: "PENDENTE",
+      createdAt: new Date().toISOString(),
+      client: ticket.client,
     };
 
     try {
@@ -170,9 +157,9 @@ export function TicketStatusDropdown({
           performedBy: {
             id: user?.id ?? 0,
             name: user?.name ?? "",
-            groupSuport: user!.groupLevel,
+            group: user!.groupLevel,
           },
-          message: `um novo Ticket`,
+          message: "um novo Ticket",
           description: `Ticket criado por ${
             user?.name || "usuário desconhecido"
           }.`,
@@ -180,7 +167,6 @@ export function TicketStatusDropdown({
         };
 
         await useCreateTicketAudit(auditPayload);
-        console.log("Auditoria de criação registrada.");
       }
     } catch (error) {
       console.error("Erro ao criar novo ticket:", error);
@@ -188,22 +174,18 @@ export function TicketStatusDropdown({
   };
 
   const handleFinalize = () => {
-    if (!selectedReason) return;
-    if (
-      selectedReason === "Mudança de turno" ||
-      selectedReason === "Necessária ação superior"
-    ) {
-      if (!newTicketReason || !newGroup) return;
-    }
+    if (!selectedReasonId) return;
+    if (needsNewTicket && (!newTicketReasonId || !newGroup)) return;
     if (pendingStatus) {
-      updateStatus(pendingStatus, selectedReason);
+      // updateStatus(pendingStatus, selectedReason?.reply);
+      updateStatus(pendingStatus);
     }
   };
 
   const resetForm = () => {
     setShowFinalizationDialog(false);
-    setSelectedReason("");
-    setNewTicketReason("");
+    setSelectedReasonId(null);
+    setNewTicketReasonId(null);
     setNewGroup("");
     setDescription("");
     setPendingStatus(null);
@@ -211,6 +193,16 @@ export function TicketStatusDropdown({
 
   const bgColor = getColorRGBA?.(currentStatus, statusColors, 0.2) ?? "#eee";
   const textColor = getColorRGBA?.(currentStatus, statusColors, 0.9) ?? "#000";
+
+  const STATUS_OPTIONS: Status[] = [
+    "PENDENTE",
+    "PENDENTE EXPIRADO",
+    "EM ANDAMENTO",
+    "EM ANDAMENTO EXPIRADO",
+    "FINALIZADO",
+    "FINALIZADO EXPIRADO",
+    "AGUARDANDO RESPOSTA DO CLIENTE",
+  ];
 
   return (
     <>
@@ -244,29 +236,32 @@ export function TicketStatusDropdown({
           </DialogHeader>
 
           <Select
-            value={selectedReason}
-            onValueChange={(value) =>
-              setSelectedReason(value as FinalizationReason)
-            }
+            value={selectedReasonId?.toString() ?? ""}
+            onValueChange={(value) => setSelectedReasonId(Number(value))}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Selecione o motivo" />
             </SelectTrigger>
             <SelectContent>
-              {FINALIZATION_REASONS.map((reason) => (
-                <SelectItem key={reason} value={reason}>
-                  {reason}
-                </SelectItem>
-              ))}
+              {availableReasons.length === 0 && (
+                <p className="text-sm text-muted-foreground mt-2">
+                  Nenhum motivo disponível para este ticket.
+                </p>
+              )}
+              {availableReasons.length > 0 &&
+                availableReasons.map((reason) => (
+                  <SelectItem key={reason.id} value={reason.id.toString()}>
+                    {reason.reply}
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
 
-          {(selectedReason === "Mudança de turno" ||
-            selectedReason === "Necessária ação superior") && (
+          {needsNewTicket && (
             <>
               <Select
                 value={newGroup}
-                onValueChange={(value) => setNewGroup(value as GroupSuport)}
+                onValueChange={(value) => setNewGroup(value as Group)}
               >
                 <SelectTrigger className="w-full mt-2">
                   <SelectValue placeholder="Selecione o grupo" />
@@ -283,22 +278,16 @@ export function TicketStatusDropdown({
               </Select>
 
               <Select
-                value={newTicketReason}
-                onValueChange={(value) => setNewTicketReason(value)}
+                value={newTicketReasonId?.toString() ?? ""}
+                onValueChange={(value) => setNewTicketReasonId(Number(value))}
               >
                 <SelectTrigger className="w-full mt-2">
                   <SelectValue placeholder="Selecione o motivo do novo ticket" />
                 </SelectTrigger>
                 <SelectContent>
-                  {[
-                    "Erro de KYC",
-                    "N3 KYC ERROR",
-                    "Retorno de KYC ERROR pro anterior",
-                    "Avaliação de tratativa de evento",
-                    "EMAIL AJUDA UNIVERSITARIOS",
-                  ].map((reason) => (
-                    <SelectItem key={reason} value={reason}>
-                      {reason}
+                  {availableReasons.map((reason) => (
+                    <SelectItem key={reason.id} value={reason.id.toString()}>
+                      {reason.reply}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -318,10 +307,8 @@ export function TicketStatusDropdown({
               onClick={handleFinalize}
               disabled={
                 isUpdating ||
-                !selectedReason ||
-                ((selectedReason === "Mudança de turno" ||
-                  selectedReason === "Necessária ação superior") &&
-                  (!newTicketReason || !newGroup))
+                !selectedReasonId ||
+                (needsNewTicket && (!newTicketReasonId || !newGroup))
               }
             >
               Confirmar

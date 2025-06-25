@@ -1,6 +1,7 @@
-import { TicketAudit, TicketComment, TicketData } from "@/interfaces/ocurrences-data";
+
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../api";
+import { TicketAudit, TicketComment, TicketData } from "@/interfaces/ticket-data";
 
 export const useTickets = () => {
   return useQuery({

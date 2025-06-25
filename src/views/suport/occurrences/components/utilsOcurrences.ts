@@ -1,11 +1,4 @@
-type Status =
-  | "PENDENTE"
-  | "PENDENTE EXPIRADO"
-  | "EM ANDAMENTO"
-  | "EM ANDAMENTO EXPIRADO"
-  | "FINALIZADO"
-  | "FINALIZADO EXPIRADO"
-  | "AGUARDANDO RESPOSTA DO CLIENTE";
+import { Status } from "@/interfaces/ticket-data";
 
 export const statusColors: Record<Status, string> = {
   PENDENTE: "#FFA500",
@@ -40,20 +33,4 @@ export function getColorRGBA<T extends string>(
 ): string {
   const hex = colorMap[key];
   return hexToRGBA(hex, alpha);
-}
-
-const ticketInfoMapping: Record<string, { description: string; expiredAt: number }> = {
-  "Erro de KYC": { description: "Verificar se o usuário é novo\nVerificar motivo de reject do KYC", expiredAt: 4 },
-  "N3 KYC ERROR": { description: "Verificar se o nível anterior não conseguiria resolver", expiredAt: 2 },
-  "Retorno de KYC ERROR pro anterior": { description: "Entrar em contato com o cliente para avisar o procedimento", expiredAt: 1 },
-  "Avaliação de tratativa de evento": { description: "Verificar atuação deste evento", expiredAt: 100 },
-  "EMAIL AJUDA UNIVERSITARIOS": { description: "...", expiredAt: 0 },
-};
-
-export function getTicketInfoByTitle(title: string): { description: string; expiredAt: number } {
-  return ticketInfoMapping[title] || { description: "", expiredAt: 0 };
-}
-
-export function getTicketInfoTitles(): string[] {
-  return Object.keys(ticketInfoMapping);
 }

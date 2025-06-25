@@ -7,13 +7,7 @@ import {
   useTicketComments,
   useTickets,
 } from "@/services/Tickets/useTickets";
-import { groupHierarchy, TicketData } from "@/interfaces/ocurrences-data";
-import {
-  dateFormat,
-  documentFormat,
-  phoneFormat,
-  timeFormat,
-} from "@/lib/formatters";
+import { dateFormat, timeFormat } from "@/lib/formatters";
 import { FolderOpenDot, GitMerge, MessageCircleMore, User } from "lucide-react";
 import CreateComment from "./components/Createcomment";
 import {
@@ -24,6 +18,7 @@ import {
 import { TicketStatusDropdown } from "./components/TicketStatusDropdown";
 import { AssignToMeDialog } from "./components/AssignToMeDialog";
 import { useAuth } from "@/store/auth";
+import { Group, groupHierarchy, TicketData } from "@/interfaces/ticket-data";
 
 export default function OcurrenceDetails() {
   const location = useLocation();
@@ -33,7 +28,7 @@ export default function OcurrenceDetails() {
   const { data: audits } = useTicketAuditId(ticketId);
   const { data: commentsData } = useTicketComments(ticketId);
   const { data: tickets } = useTickets();
-  
+
   const ticket: TicketData | undefined = tickets?.find(
     (t) => t.id === ticketId
   );
@@ -45,10 +40,17 @@ export default function OcurrenceDetails() {
   const canComment = (() => {
     const assigned = ticket.assignedTo;
     if (!assigned) return true;
-    if (assigned.id === user?.id) return true;
 
-    const userLevel = groupHierarchy[user?.groupLevel!];
-    const assignedLevel = groupHierarchy[assigned.groupSuport];
+    if (typeof assigned !== "string" && assigned.id === user?.id) {
+      return true;
+    }
+
+    const userLevel = groupHierarchy[user?.groupLevel as Group];
+    const assignedLevel =
+      typeof assigned === "string"
+        ? groupHierarchy[assigned as Group]
+        : groupHierarchy[assigned.group as Group];
+
     return userLevel > assignedLevel;
   })();
 
@@ -58,10 +60,11 @@ export default function OcurrenceDetails() {
         { label: "Suporte", href: "/clients" },
         { label: "Ocorrências", href: "/ocurrences" },
       ]}
-      current={"Detalhes da Ocorrência"}
+      current="Detalhes da Ocorrência"
     >
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Card - Informações */}
           <Card className="h-full max-h-[500px] flex flex-col">
             <CardHeader>
               <CardTitle className="flex flex-row items-center gap-2">
@@ -73,22 +76,20 @@ export default function OcurrenceDetails() {
               <Info label="ID" value={ticket.id} />
               <div>
                 <p className="text-sm text-muted-foreground">Status</p>
-
                 <TicketStatusDropdown
                   ticket={ticket}
                   statusColors={statusColors}
                   getColorRGBA={getColorRGBA}
                 />
               </div>
-              <Info label="Motivo" value={ticket.reason} />
 
+              <Info label="Motivo" value={ticket.reason.reason} />
               <Info
                 label="Tempo de expiração"
-                value={ticket.expiredAt + " horas"}
+                value={`${ticket.reason.expiredAt} horas`}
               />
-              <Info label="Descrição" value={ticket.description} />
-              <Info label="Grupo" value={ticket.groupSuport} />
-
+              <Info label="Descrição" value={ticket.reason.description} />
+              {/* <Info label="Receptor" value={ticket.reason.recipient} /> */}
               <Info
                 label="Data de Criação"
                 value={dateFormat(ticket.createdAt)}
@@ -97,7 +98,12 @@ export default function OcurrenceDetails() {
               <div className="flex flex-row gap-4 items-center">
                 <Info
                   label="Responsável"
-                  value={ticket.assignedTo?.name ?? "Não atribuído"}
+                  value={
+                    typeof ticket.assignedTo === "object" &&
+                    ticket.assignedTo !== null
+                      ? ticket.assignedTo.name
+                      : ticket.assignedTo ?? "Não atribuído"
+                  }
                 />
 
                 <AssignToMeDialog ticket={ticket} />
@@ -105,6 +111,7 @@ export default function OcurrenceDetails() {
             </CardContent>
           </Card>
 
+          {/* Card - Auditoria */}
           <Card className="h-full max-h-[500px] flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -144,7 +151,6 @@ export default function OcurrenceDetails() {
                   <p className="text-xs text-muted-foreground">
                     {dateFormat(audit.date)} às {timeFormat(audit.date)}
                   </p>
-
                   {index < audits.length - 1 && (
                     <div className="my-4 border-t border-muted" />
                   )}
@@ -153,34 +159,30 @@ export default function OcurrenceDetails() {
             </CardContent>
           </Card>
 
+          {/* Card - Dados Remetente */}
           <Card>
             <CardHeader>
               <CardTitle className="flex flex-row items-center gap-2">
-                <User /> Dados Remetente
+                <User /> Dados do Solicitante
               </CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {ticket.requester != null ? (
+              {ticket.createdBy ? (
                 <>
-                  <Info label="ID" value={ticket.requester.id} />
-                  <Info label="Nome" value={ticket.requester.name} />
-                  <Info
-                    label="Documento"
-                    value={documentFormat(ticket.requester.document)}
-                  />
-                  <Info
-                    label="Telefone"
-                    value={phoneFormat(ticket.requester.phone)}
-                  />
+                  <Info label="ID" value={ticket.client?.id} />
+                  <Info label="Nome" value={ticket.client?.name} />
+                  <Info label="Grupo" value={ticket.client?.document} />
+                  <Info label="Grupo" value={ticket.client?.phone} />
                 </>
               ) : (
                 <div className="col-span-2 text-muted-foreground italic">
-                  Remetente não atribuído
+                  Solicitante não disponível
                 </div>
               )}
             </CardContent>
           </Card>
 
+          {/* Card - Comentários */}
           <Card className="h-full max-h-[300px] flex flex-col">
             <CardHeader>
               <CardTitle className="flex flex-row items-center justify-between gap-2">
@@ -199,7 +201,6 @@ export default function OcurrenceDetails() {
                     </p>
                     <p className="text-sm font-semibold">{comment.author}</p>
                     <p className="text-sm">{comment.message}</p>
-
                     {index < commentsData.length - 1 && (
                       <div className="my-4 border-t border-muted" />
                     )}

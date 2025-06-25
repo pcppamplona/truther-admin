@@ -13,3 +13,17 @@ export const useUsers = () => {
     refetchOnMount: true,
   });
 };
+
+
+export const useUserName = (userName: string) => {
+  return useQuery({
+    queryKey: ["users-username", userName],
+    queryFn: async (): Promise<AuthData> => {
+      const response = await api.get(`authentication/${userName}`);
+      return await response.json<AuthData>();
+    },
+    enabled: !!userName,
+    staleTime: Number.POSITIVE_INFINITY,
+    refetchOnMount: true,
+  });
+};

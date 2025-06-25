@@ -17,9 +17,9 @@ import { Bookmark, BookmarkCheck } from "lucide-react";
 import {
   TicketData,
   TicketAudit,
-  GroupSuport,
   groupHierarchy,
-} from "@/interfaces/ocurrences-data";
+  Group,
+} from "@/interfaces/ticket-data";
 import { useAuth } from "@/store/auth";
 import {
   updateTicket,
@@ -35,10 +35,10 @@ export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
   const { user } = useAuth();
 
   const isAssignedToUser = ticket.assignedTo?.id === user?.id;
-  const currentLevel = ticket.assignedTo?.groupSuport as
-    | GroupSuport
+  const currentLevel = ticket.assignedTo?.group as
+    | Group
     | undefined;
-  const userLevel = user?.groupLevel as GroupSuport | undefined;
+  const userLevel = user?.groupLevel as Group | undefined;
 
   const isAlreadyAssigned = Boolean(ticket.assignedTo);
   const hasPermission =
@@ -55,7 +55,7 @@ export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
         assignedTo: {
           id: user.id,
           name: user.name,
-          groupSuport: user.groupLevel,
+          group: user.groupLevel,
         },
       });
 
@@ -65,7 +65,7 @@ export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
         performedBy: {
           id: user.id,
           name: user.name,
-          groupSuport: user.groupLevel,
+          group: user.groupLevel,
         },
         message: "um ticket",
         description: `Ocorrência ${ticket.id} atribuída a ${user.name}.`,
