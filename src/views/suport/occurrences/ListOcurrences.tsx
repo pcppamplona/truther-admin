@@ -22,11 +22,7 @@ import { dateFormat, timeFormat } from "@/lib/formatters";
 import { useAuth } from "@/store/auth";
 import { getColorRGBA, statusColors } from "./components/utilsOcurrences";
 import { CreateTicket } from "./components/CreateTicket";
-import {
-  Group,
-  groupHierarchy,
-  TicketData,
-} from "@/interfaces/ticket-data";
+import { Group, groupHierarchy, TicketData } from "@/interfaces/ticket-data";
 
 export default function ListOcurrences() {
   const navigate = useNavigate();
@@ -40,7 +36,8 @@ export default function ListOcurrences() {
 
   const accessibleGroups = userGroupLevel
     ? (Object.keys(groupHierarchy) as Group[]).filter(
-        (group) => groupHierarchy[group] <= groupHierarchy[userGroupLevel as Group]
+        (group) =>
+          groupHierarchy[group] <= groupHierarchy[userGroupLevel as Group]
       )
     : [];
 
@@ -49,23 +46,47 @@ export default function ListOcurrences() {
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
 
+    // let recipientGroup: Group | null = null;
+
+    // if (ticket.reason.typeRecipient === "GROUP") {
+    //   recipientGroup = ticket.reason.recipient as Group;
+    // } else if (ticket.reason.typeRecipient === "USER") {
+    //   // Destinatário é usuário, não tem grupo
+    //   recipientGroup = null;
+    // } else if (ticket.reason.typeRecipient === "ALL") {
+    //   recipientGroup = ticket.reason.recipient as Group;
+    // }
+
     let recipientGroup: Group | null = null;
 
     if (ticket.reason.typeRecipient === "GROUP") {
       recipientGroup = ticket.reason.recipient as Group;
     } else if (ticket.reason.typeRecipient === "USER") {
-      // Destinatário é usuário, não tem grupo
-      recipientGroup = null;
+      recipientGroup = null; // acesso controlado por user id
     } else if (ticket.reason.typeRecipient === "ALL") {
-      recipientGroup = ticket.reason.recipient as Group;
+      // Pode ser tanto Group quanto User
+      if (typeof ticket.reason.recipient === "string") {
+        recipientGroup = ticket.reason.recipient as Group;
+      } else if (
+        typeof ticket.reason.recipient === "object" &&
+        ticket.reason.recipient.group
+      ) {
+        recipientGroup = ticket.reason.recipient.group as Group;
+      }
     }
 
     const isGroupAccessible =
-      recipientGroup !== null ? accessibleGroups.includes(recipientGroup) : true;
+      recipientGroup !== null
+        ? accessibleGroups.includes(recipientGroup)
+        : true;
 
     const matchesFilter = (() => {
       if (filter === "Meus Tickets") {
-        return ticket.assignedTo !== null && typeof ticket.assignedTo !== "string" && ticket.assignedTo.id === userId;
+        return (
+          ticket.assignedTo !== null &&
+          typeof ticket.assignedTo !== "string" &&
+          ticket.assignedTo.id === userId
+        );
       }
 
       if ((filter as Group) in groupHierarchy) {
@@ -79,8 +100,7 @@ export default function ListOcurrences() {
 
         if (ticket.reason.typeRecipient === "USER") {
           const assignedGroup =
-            ticket.assignedTo !== null &&
-            typeof ticket.assignedTo !== "string"
+            ticket.assignedTo !== null && typeof ticket.assignedTo !== "string"
               ? ticket.assignedTo.group
               : null;
           return assignedGroup === filter;
@@ -89,6 +109,43 @@ export default function ListOcurrences() {
 
       return true;
     })();
+
+    // const matchesFilter = (() => {
+    //   if (filter === "Meus Tickets") {
+    //     return (
+    //       ticket.assignedTo !== null &&
+    //       typeof ticket.assignedTo !== "string" &&
+    //       ticket.assignedTo.id === userId
+    //     );
+    //   }
+
+    //   if ((filter as Group) in groupHierarchy) {
+    //     if (ticket.reason.typeRecipient === "GROUP") {
+    //       return ticket.reason.recipient === filter;
+    //     }
+
+    //     if (ticket.reason.typeRecipient === "ALL") {
+    //       if (typeof ticket.reason.recipient === "string") {
+    //         return ticket.reason.recipient === filter;
+    //       } else if (
+    //         typeof ticket.reason.recipient === "object" &&
+    //         ticket.reason.recipient.group
+    //       ) {
+    //         return ticket.reason.recipient.group === filter;
+    //       }
+    //     }
+
+    //     if (ticket.reason.typeRecipient === "USER") {
+    //       const assignedGroup =
+    //         ticket.assignedTo !== null && typeof ticket.assignedTo !== "string"
+    //           ? ticket.assignedTo.group
+    //           : null;
+    //       return assignedGroup === filter;
+    //     }
+    //   }
+
+    //   return true;
+    // })();
 
     return matchesSearch && isGroupAccessible && matchesFilter;
   });
@@ -172,7 +229,8 @@ export default function ListOcurrences() {
                     : "Não atribuído"}
                 </TableCell>
                 <TableCell>
-                  {dateFormat(ticket.createdAt)} às {timeFormat(ticket.createdAt)}
+                  {dateFormat(ticket.createdAt)} às{" "}
+                  {timeFormat(ticket.createdAt)}
                 </TableCell>
                 <TableCell>{ticket.reason.expiredAt} horas</TableCell>
               </TableRow>

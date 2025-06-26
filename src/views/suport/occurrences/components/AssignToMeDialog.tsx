@@ -59,6 +59,12 @@ export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
         },
       });
 
+      if (ticket.status === "PENDENTE") {
+      await updateTicket(ticket.id!, {
+        status: "EM ANDAMENTO",
+      });
+    }
+
       const auditPayload: TicketAudit = {
         ticketId: ticket.id!,
         action: "Atribuiu",

@@ -17,7 +17,7 @@ import {
   useCreateTicketAudit,
   useCreateTicketComment,
 } from "@/services/Tickets/useTickets";
-import { TicketData } from "@/interfaces/ocurrences-data";
+import { TicketData } from "@/interfaces/ticket-data";
 
 export interface CommentProps {
   ticket: TicketData;
@@ -49,11 +49,11 @@ export default function CreateComment({ ticket }: CommentProps) {
     if (!user || !ticket.id || !message.trim()) return;
 
     if (assignIfNeeded) {
-      await updateTicket(ticket.id, {
+      const updated = await updateTicket(ticket.id, {
         assignedTo: {
           id: user.id,
           name: user.name,
-          groupSuport: user.groupLevel,
+          group: user.groupLevel,
         },
       });
 
@@ -63,14 +63,70 @@ export default function CreateComment({ ticket }: CommentProps) {
         performedBy: {
           id: user.id,
           name: user.name,
-          groupSuport: user.groupLevel,
+          group: user.groupLevel,
         },
         message: "um ticket",
         description: `Ocorrência ${ticket.id} atribuída a ${user.name}.`,
         date: new Date().toISOString(),
       });
+
+      if (updated.status === "PENDENTE") {
+        await updateTicket(ticket.id, { status: "EM ANDAMENTO" });
+
+        await useCreateTicketAudit({
+          ticketId: ticket.id,
+          action: "Atualizou",
+          performedBy: {
+            id: user.id,
+            name: user.name,
+            group: user.groupLevel,
+          },
+          message: "o status do ticket",
+          description: `Status da ocorrência ${ticket.id} alterado para EM ANDAMENTO por ${user.name}.`,
+          date: new Date().toISOString(),
+        });
+      }
     }
-    
+    if (assignIfNeeded) {
+      const updated = await updateTicket(ticket.id, {
+        assignedTo: {
+          id: user.id,
+          name: user.name,
+          group: user.groupLevel,
+        },
+      });
+
+      await useCreateTicketAudit({
+        ticketId: ticket.id,
+        action: "Atribuiu",
+        performedBy: {
+          id: user.id,
+          name: user.name,
+          group: user.groupLevel,
+        },
+        message: "um ticket",
+        description: `Ocorrência ${ticket.id} atribuída a ${user.name}.`,
+        date: new Date().toISOString(),
+      });
+
+      if (updated.status === "PENDENTE") {
+        await updateTicket(ticket.id, { status: "EM ANDAMENTO" });
+
+        await useCreateTicketAudit({
+          ticketId: ticket.id,
+          action: "Atualizou",
+          performedBy: {
+            id: user.id,
+            name: user.name,
+            group: user.groupLevel,
+          },
+          message: "o status do ticket",
+          description: `Status da ocorrência ${ticket.id} alterado para EM ANDAMENTO por ${user.name}.`,
+          date: new Date().toISOString(),
+        });
+      }
+    }
+
     await useCreateTicketComment({
       ticketId: ticket.id,
       author: user.name,
@@ -84,7 +140,7 @@ export default function CreateComment({ ticket }: CommentProps) {
       performedBy: {
         id: user.id,
         name: user.name,
-        groupSuport: user.groupLevel,
+        group: user.groupLevel,
       },
       message: "um novo Comentário",
       description: `Comentário adicionado por ${user.name}, ao ticket: ${ticket.id}`,
@@ -95,6 +151,57 @@ export default function CreateComment({ ticket }: CommentProps) {
     setOpen(false);
     setConfirming(false);
   };
+
+  // const handleCreateComment = async (assignIfNeeded = false) => {
+  //   if (!user || !ticket.id || !message.trim()) return;
+
+  //   if (assignIfNeeded) {
+  //     await updateTicket(ticket.id, {
+  //       assignedTo: {
+  //         id: user.id,
+  //         name: user.name,
+  //         group: user.groupLevel,
+  //       },
+  //     });
+
+  //     await useCreateTicketAudit({
+  //       ticketId: ticket.id,
+  //       action: "Atribuiu",
+  //       performedBy: {
+  //         id: user.id,
+  //         name: user.name,
+  //         group: user.groupLevel,
+  //       },
+  //       message: "um ticket",
+  //       description: `Ocorrência ${ticket.id} atribuída a ${user.name}.`,
+  //       date: new Date().toISOString(),
+  //     });
+  //   }
+
+  //   await useCreateTicketComment({
+  //     ticketId: ticket.id,
+  //     author: user.name,
+  //     message: message.trim(),
+  //     date: new Date().toISOString(),
+  //   });
+
+  //   await useCreateTicketAudit({
+  //     ticketId: ticket.id,
+  //     action: "Adicionou",
+  //     performedBy: {
+  //       id: user.id,
+  //       name: user.name,
+  //       group: user.groupLevel,
+  //     },
+  //     message: "um novo Comentário",
+  //     description: `Comentário adicionado por ${user.name}, ao ticket: ${ticket.id}`,
+  //     date: new Date().toISOString(),
+  //   });
+
+  //   setMessage("");
+  //   setOpen(false);
+  //   setConfirming(false);
+  // };
 
   return (
     <>

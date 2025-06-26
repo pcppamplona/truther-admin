@@ -13,17 +13,26 @@ import CreateComment from "./components/Createcomment";
 import {
   auditActionColors,
   getColorRGBA,
-  statusColors,
+  // statusColors,
 } from "./components/utilsOcurrences";
-import { TicketStatusDropdown } from "./components/TicketStatusDropdown";
 import { AssignToMeDialog } from "./components/AssignToMeDialog";
 import { useAuth } from "@/store/auth";
 import { Group, groupHierarchy, TicketData } from "@/interfaces/ticket-data";
+import { FinalizeTicketDialog } from "./components/FinalizeTicketDialog";
+import { useState } from "react";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 
 export default function OcurrenceDetails() {
   const location = useLocation();
   const ticketId = location.state?.id;
   const { user } = useAuth();
+  const [open, setOpen] = useState(false);
 
   const { data: audits } = useTicketAuditId(ticketId);
   const { data: commentsData } = useTicketComments(ticketId);
@@ -33,17 +42,17 @@ export default function OcurrenceDetails() {
     (t) => t.id === ticketId
   );
 
-  if (!ticket) {
-    return <p>Ocorrência não encontrada.</p>;
-  }
+  if (!ticket) return <p>Ocorrência não encontrada.</p>;
 
   const canComment = (() => {
+    if (
+      ticket.status === "FINALIZADO" ||
+      ticket.status === "FINALIZADO EXPIRADO"
+    ) return false;
+
     const assigned = ticket.assignedTo;
     if (!assigned) return true;
-
-    if (typeof assigned !== "string" && assigned.id === user?.id) {
-      return true;
-    }
+    if (typeof assigned !== "string" && assigned.id === user?.id) return true;
 
     const userLevel = groupHierarchy[user?.groupLevel as Group];
     const assignedLevel =
@@ -76,11 +85,8 @@ export default function OcurrenceDetails() {
               <Info label="ID" value={ticket.id} />
               <div>
                 <p className="text-sm text-muted-foreground">Status</p>
-                <TicketStatusDropdown
-                  ticket={ticket}
-                  statusColors={statusColors}
-                  getColorRGBA={getColorRGBA}
-                />
+                <FinalizeTicketDialog open={open} onOpenChange={setOpen} ticket={ticket} />
+                
               </div>
 
               <Info label="Motivo" value={ticket.reason.reason} />
@@ -89,7 +95,6 @@ export default function OcurrenceDetails() {
                 value={`${ticket.reason.expiredAt} horas`}
               />
               <Info label="Descrição" value={ticket.reason.description} />
-              {/* <Info label="Receptor" value={ticket.reason.recipient} /> */}
               <Info
                 label="Data de Criação"
                 value={dateFormat(ticket.createdAt)}
@@ -99,13 +104,11 @@ export default function OcurrenceDetails() {
                 <Info
                   label="Responsável"
                   value={
-                    typeof ticket.assignedTo === "object" &&
-                    ticket.assignedTo !== null
-                      ? ticket.assignedTo.name
+                    typeof ticket.assignedTo === "object"
+                      ? ticket.assignedTo?.name
                       : ticket.assignedTo ?? "Não atribuído"
                   }
                 />
-
                 <AssignToMeDialog ticket={ticket} />
               </div>
             </CardContent>
@@ -122,7 +125,7 @@ export default function OcurrenceDetails() {
             <CardContent className="flex-1 overflow-y-auto pb-2">
               {audits?.map((audit, index) => (
                 <div key={audit.id}>
-                  <p className="text-sm">
+                  <p className="text-sm mt-1">
                     <span className="font-semibold">
                       {audit.performedBy.name}
                     </span>{" "}
@@ -215,6 +218,7 @@ export default function OcurrenceDetails() {
           </Card>
         </div>
       </div>
+
     </SidebarLayout>
   );
 }

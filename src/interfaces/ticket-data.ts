@@ -79,5 +79,5 @@ export type FinalizationReply = {
   id: number;
   reasonId: number;
   reply: string;
-  actionType: "none" | "new_event";
+  actionType: "none" | "new_event"| "send_email";
 };

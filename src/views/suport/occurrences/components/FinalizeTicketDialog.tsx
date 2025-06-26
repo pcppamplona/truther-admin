@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Dialog,
   DialogContent,
   DialogFooter,
@@ -14,13 +7,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import {
-  updateTicket,
-  useCreateTicket,
-  useCreateTicketAudit,
-} from "@/services/Tickets/useTickets";
-import { useAuth } from "@/store/auth";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
   FinalizationReply,
   Group,
@@ -29,18 +23,21 @@ import {
   TicketData,
 } from "@/interfaces/ticket-data";
 import { getReplayTicketReasons } from "@/services/Tickets/useReasons";
+import { useAuth } from "@/store/auth";
+import {
+  updateTicket,
+  useCreateTicket,
+  useCreateTicketAudit,
+} from "@/services/Tickets/useTickets";
+import { getColorRGBA, statusColors } from "./utilsOcurrences";
 
-interface TicketStatusDropdownProps {
+interface Props {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   ticket: TicketData;
-  statusColors: Record<string, string>;
-  getColorRGBA: (status: string, colors: any, opacity: number) => string;
 }
 
-export function TicketStatusDropdown({
-  ticket,
-  statusColors,
-  getColorRGBA,
-}: TicketStatusDropdownProps) {
+export function FinalizeTicketDialog({ ticket }: Props) {
   const { user } = useAuth();
   const [currentStatus, setCurrentStatus] = useState<Status>(
     ticket.status as Status
@@ -194,16 +191,6 @@ export function TicketStatusDropdown({
   const bgColor = getColorRGBA?.(currentStatus, statusColors, 0.2) ?? "#eee";
   const textColor = getColorRGBA?.(currentStatus, statusColors, 0.9) ?? "#000";
 
-  const STATUS_OPTIONS: Status[] = [
-    "PENDENTE",
-    "PENDENTE EXPIRADO",
-    "EM ANDAMENTO",
-    "EM ANDAMENTO EXPIRADO",
-    "FINALIZADO",
-    "FINALIZADO EXPIRADO",
-    "AGUARDANDO RESPOSTA DO CLIENTE",
-  ];
-
   return (
     <>
       <Select
@@ -212,17 +199,21 @@ export function TicketStatusDropdown({
         disabled={isUpdating}
       >
         <SelectTrigger
-          className="w-fit h-2 text-sm font-semibold lowercase rounded-sm cursor-pointer border-none"
+          className="w-fit h-2 text-sm font-semibold lowercase rounded-sm border-none"
           style={{ backgroundColor: bgColor, color: textColor }}
         >
-          <SelectValue />
+          <SelectValue placeholder={ticket.status} />
         </SelectTrigger>
         <SelectContent>
-          {STATUS_OPTIONS.map((status) => (
-            <SelectItem key={status} value={status}>
-              {status}
-            </SelectItem>
-          ))}
+          <SelectItem value={ticket.status} disabled>
+            {ticket.status}
+          </SelectItem>
+          {ticket.status !== "FINALIZADO" &&
+            ticket.status !== "FINALIZADO EXPIRADO" && (
+              <SelectItem value="FINALIZADO" className="text-red-600">
+                FINALIZAR TICKET
+              </SelectItem>
+            )}
         </SelectContent>
       </Select>
 
@@ -316,6 +307,91 @@ export function TicketStatusDropdown({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* <Dialog open={open} onOpenChange={onOpenChange}> */}
+       {/* <Dialog
+        open={showFinalizationDialog}
+        onOpenChange={setShowFinalizationDialog}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Resposta da Finalização</DialogTitle>
+          </DialogHeader>
+
+          <Select
+            value={selectedReasonId?.toString() ?? ""}
+            onValueChange={(value) => setSelectedReasonId(Number(value))}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Selecione a resposta pertinente" />
+            </SelectTrigger>
+            <SelectContent>
+              {availableReasons.map((reason) => (
+                <SelectItem key={reason.id} value={reason.id.toString()}>
+                  {reason.reply}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {needsNewTicket && (
+            <>
+              <Select
+                value={newGroup}
+                onValueChange={(value) => setNewGroup(value as Group)}
+              >
+                <SelectTrigger className="w-full mt-2">
+                  <SelectValue placeholder="Grupo para novo ticket" />
+                </SelectTrigger>
+                <SelectContent>
+                  {["N1", "N2", "N3", "PRODUTO", "MKT", "ADMIN"].map(
+                    (group) => (
+                      <SelectItem key={group} value={group}>
+                        {group}
+                      </SelectItem>
+                    )
+                  )}
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={newTicketReasonId?.toString() ?? ""}
+                onValueChange={(value) => setNewTicketReasonId(Number(value))}
+              >
+                <SelectTrigger className="w-full mt-2">
+                  <SelectValue placeholder="Motivo do novo ticket" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableReasons.map((reason) => (
+                    <SelectItem key={reason.id} value={reason.id.toString()}>
+                      {reason.reply}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Textarea
+                className="mt-2"
+                placeholder="Descrição"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </>
+          )}
+
+          <DialogFooter>
+            <Button
+              onClick={handleFinalize}
+              disabled={
+                !selectedReasonId ||
+                (needsNewTicket && (!newTicketReasonId || !newGroup))
+              }
+            >
+              Confirmar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog> */}
     </>
   );
 }
