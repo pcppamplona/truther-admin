@@ -1651,7 +1651,7 @@
       "address": "Rua Cora Coralina",
       "number": "0001",
       "country": "BR",
-      "wallet": "0x2e4C624675F6fBBaB235498841CDA84b7B6C3bC6",
+      "wallet": "0x1234624675F6fBBaB235498841CDA84b7B6C3bC6",
       "createdAt": "2025-05-26T17:33:53.591Z",
       "updateAt": "2025-05-26T17:36:58.882Z",
       "email": "celsoribeirosilva@hotmail.com",
@@ -2391,257 +2391,6 @@
       "userId": null
     }
   ],
-  "tickets": [
-    {
-      "id": "1",
-      "createdBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "client": null,
-      "assignedTo": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "reason": {
-        "id": 1,
-        "categoryId": "1",
-        "type": "KYC reprovado",
-        "reason": "Erro de KYC",
-        "expiredAt": "4",
-        "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
-        "typeRecipient": "GROUP",
-        "recipient": "N1"
-      },
-      "status": "FINALIZADO",
-      "createdAt": "2025-06-26T01:51:58.257Z"
-    },
-    {
-      "id": "3723",
-      "createdBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "client": null,
-      "assignedTo": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "reason": {
-        "id": 1,
-        "categoryId": "1",
-        "type": "KYC reprovado",
-        "reason": "Erro de KYC",
-        "expiredAt": "4",
-        "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
-        "typeRecipient": "GROUP",
-        "recipient": "N1"
-      },
-      "status": "FINALIZADO",
-      "createdAt": "2025-06-26T01:54:20.144Z"
-    },
-    {
-      "id": "f940",
-      "createdBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "client": null,
-      "assignedTo": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "reason": {
-        "id": 2,
-        "categoryId": "1",
-        "type": "User perdeu Seed",
-        "reason": "N3 KYC ERROR",
-        "expiredAt": "2",
-        "description": "Verificar se o nível anterior não conseguiria resolver",
-        "typeRecipient": "ALL",
-        "recipient": {
-          "id": "20",
-          "name": "Jonathan Santos",
-          "group": "N1"
-        }
-      },
-      "status": "PENDENTE",
-      "createdAt": "2025-06-26T04:27:03.281Z"
-    },
-    {
-      "id": "d0ee",
-      "createdBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "client": null,
-      "assignedTo": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "reason": {
-        "id": 2,
-        "categoryId": "1",
-        "type": "User perdeu Seed",
-        "reason": "N3 KYC ERROR",
-        "expiredAt": "2",
-        "description": "Verificar se o nível anterior não conseguiria resolver",
-        "typeRecipient": "ALL",
-        "recipient": {
-          "id": "20",
-          "name": "Jonathan Santos",
-          "group": "N1"
-        }
-      },
-      "status": "PENDENTE",
-      "createdAt": "2025-06-26T04:28:00.153Z"
-    },
-    {
-      "id": "951b",
-      "createdBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "client": null,
-      "assignedTo": null,
-      "reason": {
-        "id": 2,
-        "categoryId": "1",
-        "type": "User perdeu Seed",
-        "reason": "N3 KYC ERROR",
-        "expiredAt": "2",
-        "description": "Verificar se o nível anterior não conseguiria resolver",
-        "typeRecipient": "ALL",
-        "recipient": "N2"
-      },
-      "status": "PENDENTE",
-      "createdAt": "2025-06-26T05:33:26.224Z"
-    }
-  ],
-  "ticketComments": [
-    {
-      "id": "7b79",
-      "ticketId": "1",
-      "author": "Jonathan Santos",
-      "message": "dsdd",
-      "date": "2025-06-26T01:53:47.473Z"
-    }
-  ],
-  "ticketAudit": [
-    {
-      "id": "f985",
-      "ticketId": "1",
-      "action": "Adicionou",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "message": "Novo ticket criado",
-      "description": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-26T01:51:58.269Z"
-    },
-    {
-      "id": "addc",
-      "ticketId": "1",
-      "action": "Atribuiu",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "message": "um ticket",
-      "description": "Ocorrência 1 atribuída a Jonathan Santos.",
-      "date": "2025-06-26T01:53:18.525Z"
-    },
-    {
-      "id": "d0c0",
-      "ticketId": "1",
-      "action": "Adicionou",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "message": "um novo Comentário",
-      "description": "Comentário adicionado por Jonathan Santos, ao ticket: 1",
-      "date": "2025-06-26T01:53:47.483Z"
-    },
-    {
-      "id": "1160",
-      "ticketId": "3723",
-      "action": "Adicionou",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "message": "Novo ticket criado",
-      "description": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-26T01:54:20.155Z"
-    },
-    {
-      "id": "d7a2",
-      "ticketId": "3723",
-      "action": "Atualizou",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "message": "Atualização de status do ticket",
-      "description": "Ocorrência 3723 atualizada para FINALIZADO por Jonathan Santos.",
-      "date": "2025-06-26T04:26:38.400Z"
-    },
-    {
-      "id": "fc35",
-      "ticketId": "f940",
-      "action": "Adicionou",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "message": "Novo ticket criado",
-      "description": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-26T04:27:03.295Z"
-    },
-    {
-      "id": "0724",
-      "ticketId": "d0ee",
-      "action": "Adicionou",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "message": "Novo ticket criado",
-      "description": "Ticket criado por Jonathan Santos.",
-      "date": "2025-06-26T04:28:00.166Z"
-    },
-    {
-      "id": "5f46",
-      "ticketId": "1",
-      "action": "Atualizou",
-      "performedBy": {
-        "id": "5",
-        "name": "Gustavo Lopes",
-        "group": "N1"
-      },
-      "message": "Atualização de status do ticket",
-      "description": "Ocorrência 1 atualizada para FINALIZADO por Gustavo Lopes.",
-      "date": "2025-06-26T05:40:01.609Z"
-    }
-  ],
   "ticketReasons": [
     {
       "id": "1",
@@ -2674,24 +2423,102 @@
       "recipient": "USER"
     }
   ],
-  "replayTicketReasons": [
+  "replyReasons": [
     {
       "id": "1",
       "reasonId": 1,
       "reply": "KYC corrigido",
-      "actionType": "none"
+      "actionType": "none",
+      "comment": false
     },
     {
       "id": "2",
       "reasonId": 1,
       "reply": "Impossível solucionar",
-      "actionType": "none"
+      "actionType": "none",
+      "comment": false
     },
     {
       "id": "3",
       "reasonId": 1,
       "reply": "Solicitar deleção de KYC",
-      "actionType": "new_event"
+      "actionType": "new_event",
+      "comment": true
+    }
+  ],
+  "ticketComments": [],
+  "ticketAudit": [
+    {
+      "id": "4321",
+      "ticketId": "1234",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "message": "um Novo ticket!",
+      "description": "Ticket 1234 criado por Jonathan Santos.",
+      "date": "2025-06-27T14:42:19.684Z"
+    },
+    {
+      "id": "37f4",
+      "ticketId": "1234",
+      "action": "Atribuiu",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "message": "um Ticket",
+      "description": "Ocorrência 1234 atribuída a Jonathan Santos.",
+      "date": "2025-06-27T20:01:15.029Z"
+    },
+    {
+      "id": "d568",
+      "ticketId": "1234",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "message": "um Ticket",
+      "description": "Ocorrência 1234 marcada como FINALIZADO por Jonathan Santos.",
+      "date": "2025-06-27T20:01:15.029Z"
+    }
+  ],
+  "tickets": [
+    {
+      "id": "1234",
+      "createdBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "client": {
+        "id": "6745",
+        "name": "Ralder Willian Teixeira",
+        "document": "07651590902",
+        "phone": "11962079261"
+      },
+      "assignedTo": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "reason": {
+        "id": 1,
+        "categoryId": "1",
+        "type": "KYC reprovado",
+        "reason": "Erro de KYC",
+        "expiredAt": "4",
+        "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
+        "typeRecipient": "GROUP",
+        "recipient": "N1"
+      },
+      "status": "FINALIZADO",
+      "createdAt": "2025-06-27T14:42:19.672Z"
     }
   ]
 }

@@ -13,26 +13,17 @@ import CreateComment from "./components/Createcomment";
 import {
   auditActionColors,
   getColorRGBA,
-  // statusColors,
 } from "./components/utilsOcurrences";
 import { AssignToMeDialog } from "./components/AssignToMeDialog";
 import { useAuth } from "@/store/auth";
 import { Group, groupHierarchy, TicketData } from "@/interfaces/ticket-data";
 import { FinalizeTicketDialog } from "./components/FinalizeTicketDialog";
-import { useState } from "react";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
+
 
 export default function OcurrenceDetails() {
   const location = useLocation();
   const ticketId = location.state?.id;
   const { user } = useAuth();
-  const [open, setOpen] = useState(false);
 
   const { data: audits } = useTicketAuditId(ticketId);
   const { data: commentsData } = useTicketComments(ticketId);
@@ -85,7 +76,7 @@ export default function OcurrenceDetails() {
               <Info label="ID" value={ticket.id} />
               <div>
                 <p className="text-sm text-muted-foreground">Status</p>
-                <FinalizeTicketDialog open={open} onOpenChange={setOpen} ticket={ticket} />
+                <FinalizeTicketDialog ticket={ticket} />
                 
               </div>
 
@@ -125,6 +116,9 @@ export default function OcurrenceDetails() {
             <CardContent className="flex-1 overflow-y-auto pb-2">
               {audits?.map((audit, index) => (
                 <div key={audit.id}>
+                   <p className="text-xs text-muted-foreground">
+                    {dateFormat(audit.date)} às {timeFormat(audit.date)}
+                  </p>
                   <p className="text-sm mt-1">
                     <span className="font-semibold">
                       {audit.performedBy.name}
@@ -149,11 +143,9 @@ export default function OcurrenceDetails() {
                     {audit.message}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {audit.description}
+                    - {audit.description}
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    {dateFormat(audit.date)} às {timeFormat(audit.date)}
-                  </p>
+                 
                   {index < audits.length - 1 && (
                     <div className="my-4 border-t border-muted" />
                   )}
@@ -170,7 +162,7 @@ export default function OcurrenceDetails() {
               </CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {ticket.createdBy ? (
+              {ticket.client ? (
                 <>
                   <Info label="ID" value={ticket.client?.id} />
                   <Info label="Nome" value={ticket.client?.name} />
@@ -178,9 +170,9 @@ export default function OcurrenceDetails() {
                   <Info label="Grupo" value={ticket.client?.phone} />
                 </>
               ) : (
-                <div className="col-span-2 text-muted-foreground italic">
-                  Solicitante não disponível
-                </div>
+                <p className="text-sm text-muted-foreground italic">
+                  Solicitante não informado.
+                </p>
               )}
             </CardContent>
           </Card>

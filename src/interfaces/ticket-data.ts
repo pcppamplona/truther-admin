@@ -80,4 +80,5 @@ export type FinalizationReply = {
   reasonId: number;
   reply: string;
   actionType: "none" | "new_event"| "send_email";
+  comment: Boolean
 };

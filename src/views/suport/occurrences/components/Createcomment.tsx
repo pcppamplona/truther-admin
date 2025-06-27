@@ -152,57 +152,6 @@ export default function CreateComment({ ticket }: CommentProps) {
     setConfirming(false);
   };
 
-  // const handleCreateComment = async (assignIfNeeded = false) => {
-  //   if (!user || !ticket.id || !message.trim()) return;
-
-  //   if (assignIfNeeded) {
-  //     await updateTicket(ticket.id, {
-  //       assignedTo: {
-  //         id: user.id,
-  //         name: user.name,
-  //         group: user.groupLevel,
-  //       },
-  //     });
-
-  //     await useCreateTicketAudit({
-  //       ticketId: ticket.id,
-  //       action: "Atribuiu",
-  //       performedBy: {
-  //         id: user.id,
-  //         name: user.name,
-  //         group: user.groupLevel,
-  //       },
-  //       message: "um ticket",
-  //       description: `Ocorrência ${ticket.id} atribuída a ${user.name}.`,
-  //       date: new Date().toISOString(),
-  //     });
-  //   }
-
-  //   await useCreateTicketComment({
-  //     ticketId: ticket.id,
-  //     author: user.name,
-  //     message: message.trim(),
-  //     date: new Date().toISOString(),
-  //   });
-
-  //   await useCreateTicketAudit({
-  //     ticketId: ticket.id,
-  //     action: "Adicionou",
-  //     performedBy: {
-  //       id: user.id,
-  //       name: user.name,
-  //       group: user.groupLevel,
-  //     },
-  //     message: "um novo Comentário",
-  //     description: `Comentário adicionado por ${user.name}, ao ticket: ${ticket.id}`,
-  //     date: new Date().toISOString(),
-  //   });
-
-  //   setMessage("");
-  //   setOpen(false);
-  //   setConfirming(false);
-  // };
-
   return (
     <>
       <Dialog

@@ -18,8 +18,8 @@ export async function getReasonsByCategory(categoryId: number): Promise<Reason[]
   return res;
 }
 
-export async function getReplayTicketReasons(reasonId: number): Promise<FinalizationReply[]> {
-  const res = await api.get("replayTicketReasons", {
+export async function getReplyReason(reasonId: number): Promise<FinalizationReply[]> {
+  const res = await api.get("replyReasons", {
     searchParams: { reasonId: reasonId.toString() },
   }).json<FinalizationReply[]>();
   return res;

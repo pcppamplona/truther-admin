@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/store/auth";
-import { ChevronRight, CircleX, Plus } from "lucide-react";
+import { ChevronRight, CircleX, Plus, Ticket } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MaskInput } from "@/components/ui/maskInput";
 import { UserInfoData } from "@/interfaces/userinfo-data";
@@ -123,8 +123,8 @@ export function CreateTicket() {
             name: user.name,
             group: user.groupLevel,
           },
-          message: `Novo ticket criado`,
-          description: `Ticket criado por ${user.name}.`,
+          message: `um Novo ticket!`,
+          description: `Ticket ${newTicket.id} criado por ${user.name}.`,
           date: new Date().toISOString(),
         };
         await useCreateTicketAudit(auditPayload);
@@ -536,7 +536,6 @@ export function CreateTicket() {
           {step < 3 ? (
             <Button
               onClick={() => {
-                console.log("Ticket Data no passo:", ticketData);
                 handleNext();
               }}
               disabled={!ticketData.reason}
