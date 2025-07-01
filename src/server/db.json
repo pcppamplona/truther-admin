@@ -2428,29 +2428,61 @@
       "id": "1",
       "reasonId": 1,
       "reply": "KYC corrigido",
-      "actionType": "none",
       "comment": false
     },
     {
       "id": "2",
       "reasonId": 1,
       "reply": "Impossível solucionar",
-      "actionType": "none",
       "comment": false
     },
     {
       "id": "3",
       "reasonId": 1,
       "reply": "Solicitar deleção de KYC",
-      "actionType": "new_event",
       "comment": true
     }
   ],
-  "ticketComments": [],
+  "replyActions": [
+    {
+      "id": 1,
+      "replyId": 3,
+      "type": "new_event",
+      "data": {
+        "reasonId": 2
+      }
+    },
+    {
+      "id": 2,
+      "replyId": 3,
+      "type": "send_email",
+      "data": {
+        "email": "cliente@exemplo.com",
+        "title": "Seu processo de KYC",
+        "body": "Prezado cliente, seu processo de KYC foi atualizado."
+      }
+    }
+  ],
+  "ticketComments": [
+    {
+      "id": "daec",
+      "ticketId": "c0af",
+      "author": "Jonathan Santos",
+      "message": "teste",
+      "date": "2025-07-01T04:41:56.026Z"
+    },
+    {
+      "id": "da95",
+      "ticketId": "691b",
+      "author": "Jonathan Santos",
+      "message": "teste de atrivuidção e comentário",
+      "date": "2025-07-01T04:43:10.306Z"
+    }
+  ],
   "ticketAudit": [
     {
-      "id": "4321",
-      "ticketId": "1234",
+      "id": "071d",
+      "ticketId": "123",
       "action": "Adicionou",
       "performedBy": {
         "id": "20",
@@ -2458,49 +2490,205 @@
         "group": "N1"
       },
       "message": "um Novo ticket!",
-      "description": "Ticket 1234 criado por Jonathan Santos.",
-      "date": "2025-06-27T14:42:19.684Z"
+      "description": "Ticket 123 criado por Jonathan Santos.",
+      "date": "2025-07-01T04:18:57.102Z"
     },
     {
-      "id": "37f4",
-      "ticketId": "1234",
-      "action": "Atribuiu",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "message": "um Ticket",
-      "description": "Ocorrência 1234 atribuída a Jonathan Santos.",
-      "date": "2025-06-27T20:01:15.029Z"
-    },
-    {
-      "id": "d568",
-      "ticketId": "1234",
+      "id": "da90",
+      "ticketId": "123",
       "action": "Atualizou",
       "performedBy": {
         "id": "20",
         "name": "Jonathan Santos",
         "group": "N1"
       },
-      "message": "um Ticket",
-      "description": "Ocorrência 1234 marcada como FINALIZADO por Jonathan Santos.",
-      "date": "2025-06-27T20:01:15.029Z"
+      "message": "Criou novo evento",
+      "description": "Criado novo evento vinculado à finalização de 123",
+      "date": "2025-07-01T04:40:19.905Z"
+    },
+    {
+      "id": "63c3",
+      "ticketId": "123",
+      "action": "Finalizou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "message": "Finalizou o Ticket",
+      "description": "Ticket 123 finalizado por Jonathan Santos",
+      "date": "2025-07-01T04:40:19.905Z"
+    },
+    {
+      "id": "9a3a",
+      "ticketId": "c0af",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado ao ticket c0af",
+      "date": "2025-07-01T04:41:56.026Z"
+    },
+    {
+      "id": "2b4b",
+      "ticketId": "c0af",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "message": "Criou novo evento",
+      "description": "Criado novo evento vinculado à finalização de c0af",
+      "date": "2025-07-01T04:41:56.026Z"
+    },
+    {
+      "id": "eb24",
+      "ticketId": "691b",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "message": "um Novo ticket!",
+      "description": "Ticket 691b criado por Jonathan Santos.",
+      "date": "2025-07-01T04:42:43.026Z"
+    },
+    {
+      "id": "8493",
+      "ticketId": "691b",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado ao ticket 691b",
+      "date": "2025-07-01T04:43:10.306Z"
+    },
+    {
+      "id": "4921",
+      "ticketId": "691b",
+      "action": "Atualizou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "message": "Criou novo evento",
+      "description": "Criado novo evento vinculado à finalização de 691b",
+      "date": "2025-07-01T04:43:10.306Z"
+    },
+    {
+      "id": "edbe",
+      "ticketId": "691b",
+      "action": "Finalizou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "message": "Finalizou o Ticket",
+      "description": "Ticket 691b finalizado por Jonathan Santos",
+      "date": "2025-07-01T04:43:10.306Z"
     }
   ],
   "tickets": [
     {
-      "id": "1234",
+      "id": "123",
+      "createdBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "client": null,
+      "assignedTo": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "reason": {
+        "id": 1,
+        "categoryId": "1",
+        "type": "KYC reprovado",
+        "reason": "Erro de KYC",
+        "expiredAt": "4",
+        "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
+        "typeRecipient": "GROUP",
+        "recipient": "N1"
+      },
+      "status": "FINALIZADO",
+      "createdAt": "2025-07-01T04:18:57.091Z"
+    },
+    {
+      "id": "c0af",
+      "createdBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "client": null,
+      "assignedTo": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "reason": {
+        "id": "1",
+        "categoryId": "1",
+        "type": "KYC reprovado",
+        "reason": "Erro de KYC",
+        "expiredAt": "4",
+        "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
+        "typeRecipient": "GROUP",
+        "recipient": "N1"
+      },
+      "status": "FINALIZADO",
+      "createdAt": "2025-07-01T04:40:19.905Z"
+    },
+    {
+      "id": "a1d5",
+      "createdBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "client": null,
+      "assignedTo": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "reason": {
+        "id": "1",
+        "categoryId": "1",
+        "type": "KYC reprovado",
+        "reason": "Erro de KYC",
+        "expiredAt": "4",
+        "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
+        "typeRecipient": "GROUP",
+        "recipient": "N1"
+      },
+      "status": "PENDENTE",
+      "createdAt": "2025-07-01T04:41:56.026Z"
+    },
+    {
+      "id": "691b",
       "createdBy": {
         "id": "20",
         "name": "Jonathan Santos",
         "group": "N1"
       },
       "client": {
-        "id": "6745",
-        "name": "Ralder Willian Teixeira",
-        "document": "07651590902",
-        "phone": "11962079261"
+        "id": "6749",
+        "name": "Matheus Aurelius Da Silva",
+        "document": "53327376883",
+        "phone": "11937123456"
       },
       "assignedTo": {
         "id": "20",
@@ -2518,7 +2706,38 @@
         "recipient": "N1"
       },
       "status": "FINALIZADO",
-      "createdAt": "2025-06-27T14:42:19.672Z"
+      "createdAt": "2025-07-01T04:42:43.015Z"
+    },
+    {
+      "id": "d953",
+      "createdBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "client": {
+        "id": "6749",
+        "name": "Matheus Aurelius Da Silva",
+        "document": "53327376883",
+        "phone": "11937123456"
+      },
+      "assignedTo": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "reason": {
+        "id": "1",
+        "categoryId": "1",
+        "type": "KYC reprovado",
+        "reason": "Erro de KYC",
+        "expiredAt": "4",
+        "description": "Verificar se o usuário é novo\nVerificar motivo de reject do KYC",
+        "typeRecipient": "GROUP",
+        "recipient": "N1"
+      },
+      "status": "PENDENTE",
+      "createdAt": "2025-07-01T04:43:10.306Z"
     }
   ]
 }

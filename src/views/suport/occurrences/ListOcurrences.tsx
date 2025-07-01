@@ -69,9 +69,9 @@ export default function ListOcurrences() {
         recipientGroup = ticket.reason.recipient as Group;
       } else if (
         typeof ticket.reason.recipient === "object" &&
-        ticket.reason.recipient.group
+        ticket.reason.recipient
       ) {
-        recipientGroup = ticket.reason.recipient.group as Group;
+        recipientGroup = ticket.reason.recipient as Group;
       }
     }
 

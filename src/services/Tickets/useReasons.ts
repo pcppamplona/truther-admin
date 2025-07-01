@@ -1,4 +1,4 @@
-import { FinalizationReply, Reason } from "@/interfaces/ticket-data";
+import { FinalizationReply, Reason, ReplyAction } from "@/interfaces/ticket-data";
 import { api } from "../api";
 
 export async function getTicketCategories() {
@@ -18,9 +18,30 @@ export async function getReasonsByCategory(categoryId: number): Promise<Reason[]
   return res;
 }
 
+export async function getReasonById(reasonId: number): Promise<Reason> {
+  const res = await api.get("ticketReasons", {
+    searchParams: { reasonId: reasonId.toString() },
+  }).json<Reason[]>();
+
+  if (!res || res.length === 0) {
+    throw new Error(`Nenhum motivo encontrado para ID ${reasonId}`);
+  }
+
+  return res[0];
+}
+
+
 export async function getReplyReason(reasonId: number): Promise<FinalizationReply[]> {
   const res = await api.get("replyReasons", {
     searchParams: { reasonId: reasonId.toString() },
   }).json<FinalizationReply[]>();
+  return res;
+}
+
+
+export async function getReplyActions(replyId: number): Promise<ReplyAction[]> {
+  const res = await api.get("replyActions", {
+    searchParams: { reasonId: replyId.toString() },
+  }).json<ReplyAction[]>();
   return res;
 }
