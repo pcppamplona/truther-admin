@@ -29,7 +29,6 @@ export default function ListOcurrences() {
   const { user } = useAuth();
   const userId = user?.id;
   const userGroupLevel = user?.groupLevel;
-
   const { data: Tickets } = useTickets();
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("Todas");
@@ -40,22 +39,10 @@ export default function ListOcurrences() {
           groupHierarchy[group] <= groupHierarchy[userGroupLevel as Group]
       )
     : [];
-
   const filteredTickets = Tickets?.filter((ticket) => {
     const matchesSearch = (ticket.reason.reason ?? "")
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
-
-    // let recipientGroup: Group | null = null;
-
-    // if (ticket.reason.typeRecipient === "GROUP") {
-    //   recipientGroup = ticket.reason.recipient as Group;
-    // } else if (ticket.reason.typeRecipient === "USER") {
-    //   // Destinatário é usuário, não tem grupo
-    //   recipientGroup = null;
-    // } else if (ticket.reason.typeRecipient === "ALL") {
-    //   recipientGroup = ticket.reason.recipient as Group;
-    // }
 
     let recipientGroup: Group | null = null;
 
@@ -109,43 +96,6 @@ export default function ListOcurrences() {
 
       return true;
     })();
-
-    // const matchesFilter = (() => {
-    //   if (filter === "Meus Tickets") {
-    //     return (
-    //       ticket.assignedTo !== null &&
-    //       typeof ticket.assignedTo !== "string" &&
-    //       ticket.assignedTo.id === userId
-    //     );
-    //   }
-
-    //   if ((filter as Group) in groupHierarchy) {
-    //     if (ticket.reason.typeRecipient === "GROUP") {
-    //       return ticket.reason.recipient === filter;
-    //     }
-
-    //     if (ticket.reason.typeRecipient === "ALL") {
-    //       if (typeof ticket.reason.recipient === "string") {
-    //         return ticket.reason.recipient === filter;
-    //       } else if (
-    //         typeof ticket.reason.recipient === "object" &&
-    //         ticket.reason.recipient.group
-    //       ) {
-    //         return ticket.reason.recipient.group === filter;
-    //       }
-    //     }
-
-    //     if (ticket.reason.typeRecipient === "USER") {
-    //       const assignedGroup =
-    //         ticket.assignedTo !== null && typeof ticket.assignedTo !== "string"
-    //           ? ticket.assignedTo.group
-    //           : null;
-    //       return assignedGroup === filter;
-    //     }
-    //   }
-
-    //   return true;
-    // })();
 
     return matchesSearch && isGroupAccessible && matchesFilter;
   });

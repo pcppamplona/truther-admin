@@ -1,10 +1,10 @@
 import { UserInfoData } from "@/interfaces/userinfo-data";
-import { api } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import { api } from "../api";
 
 
 export const getUserInfoByUserId = async (user_id: number) => {
-  const response = await api.get('userinfo', {
+  const response = await api.get('user-info', {
     searchParams: { user_id: user_id.toString() },
   });
   return await response.json();
@@ -23,7 +23,7 @@ export const useAllUserinfo = () => {
   return useQuery({
     queryKey: ["userinfo-all"],
     queryFn: async (): Promise<UserInfoData[]> => {
-      const response = await api.get("userinfo");
+      const response = await api.get("user-info");
       return await response.json<UserInfoData[]>();
     },
     staleTime: Number.POSITIVE_INFINITY,
@@ -35,7 +35,7 @@ export const useUserInfoDocument = (document: string) => {
   return useQuery({
     queryKey: ["userinfo-document", document],
     queryFn: async (): Promise<UserInfoData[]> => {
-      const response = await api.get("userinfo", {
+      const response = await api.get("user-info/document", {
         searchParams: { document: String(document) },
       });
       return await response.json<UserInfoData[]>();

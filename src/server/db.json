@@ -2428,29 +2428,54 @@
       "id": "1",
       "reasonId": 1,
       "reply": "KYC corrigido",
-      "actionType": "none",
       "comment": false
     },
     {
       "id": "2",
       "reasonId": 1,
       "reply": "Impossível solucionar",
-      "actionType": "none",
       "comment": false
     },
     {
       "id": "3",
       "reasonId": 1,
       "reply": "Solicitar deleção de KYC",
-      "actionType": "new_event",
       "comment": true
     }
   ],
-  "ticketComments": [],
+  "replyActions": [
+    {
+      "id": 1,
+      "replyId": 3,
+      "type": "new_event",
+      "data": {
+        "reasonId": 2
+      }
+    },
+    {
+      "id": 2,
+      "replyId": 3,
+      "type": "send_email",
+      "data": {
+        "email": "cliente@exemplo.com",
+        "title": "Seu processo de KYC",
+        "body": "Prezado cliente, seu processo de KYC foi atualizado."
+      }
+    }
+  ],
+  "ticketComments": [
+    {
+      "id": "58f0",
+      "ticketId": "dba4",
+      "author": "Jonathan Santos",
+      "message": "teste",
+      "date": "2025-07-01T01:47:36.286Z"
+    }
+  ],
   "ticketAudit": [
     {
-      "id": "4321",
-      "ticketId": "1234",
+      "id": "d543",
+      "ticketId": "dba4",
       "action": "Adicionou",
       "performedBy": {
         "id": "20",
@@ -2458,55 +2483,38 @@
         "group": "N1"
       },
       "message": "um Novo ticket!",
-      "description": "Ticket 1234 criado por Jonathan Santos.",
-      "date": "2025-06-27T14:42:19.684Z"
+      "description": "Ticket dba4 criado por Jonathan Santos.",
+      "date": "2025-07-01T01:47:19.029Z"
     },
     {
-      "id": "37f4",
-      "ticketId": "1234",
-      "action": "Atribuiu",
+      "id": "948f",
+      "ticketId": "dba4",
+      "action": "Adicionou",
       "performedBy": {
         "id": "20",
         "name": "Jonathan Santos",
         "group": "N1"
       },
-      "message": "um Ticket",
-      "description": "Ocorrência 1234 atribuída a Jonathan Santos.",
-      "date": "2025-06-27T20:01:15.029Z"
-    },
-    {
-      "id": "d568",
-      "ticketId": "1234",
-      "action": "Atualizou",
-      "performedBy": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
-      "message": "um Ticket",
-      "description": "Ocorrência 1234 marcada como FINALIZADO por Jonathan Santos.",
-      "date": "2025-06-27T20:01:15.029Z"
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado ao ticket dba4",
+      "date": "2025-07-01T01:47:36.286Z"
     }
   ],
   "tickets": [
     {
-      "id": "1234",
+      "id": "dba4",
       "createdBy": {
         "id": "20",
         "name": "Jonathan Santos",
         "group": "N1"
       },
       "client": {
-        "id": "6745",
-        "name": "Ralder Willian Teixeira",
-        "document": "07651590902",
-        "phone": "11962079261"
+        "id": "6749",
+        "name": "Matheus Aurelius Da Silva",
+        "document": "53327376883",
+        "phone": "11937123456"
       },
-      "assignedTo": {
-        "id": "20",
-        "name": "Jonathan Santos",
-        "group": "N1"
-      },
+      "assignedTo": null,
       "reason": {
         "id": 1,
         "categoryId": "1",
@@ -2517,8 +2525,8 @@
         "typeRecipient": "GROUP",
         "recipient": "N1"
       },
-      "status": "FINALIZADO",
-      "createdAt": "2025-06-27T14:42:19.672Z"
+      "status": "PENDENTE",
+      "createdAt": "2025-07-01T01:47:19.012Z"
     }
   ]
 }

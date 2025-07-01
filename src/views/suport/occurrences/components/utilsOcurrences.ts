@@ -14,8 +14,8 @@ type Action = "Adicionou" | "Atribuiu" | "Atualizou" | "Finalizou";
 
 export const auditActionColors: Record<Action, string> = {
   Adicionou: "#22c55e",
-  Atribuiu: "#3b82f6",
-  Atualizou: "#eab308",
+  Atribuiu: "#eab308",
+  Atualizou: "#3b82f6",
   Finalizou: "#ef4444",
 };
 

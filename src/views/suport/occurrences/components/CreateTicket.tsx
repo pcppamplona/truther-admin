@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/store/auth";
-import { ChevronRight, CircleX, Plus, Ticket } from "lucide-react";
+import { ChevronRight, CircleX, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MaskInput } from "@/components/ui/maskInput";
 import { UserInfoData } from "@/interfaces/userinfo-data";
@@ -275,7 +275,7 @@ export function CreateTicket() {
                     !selectedUser &&
                     Array.isArray(userInfoData) &&
                     userInfoData.length > 0 && (
-                      <div className="bg-muted border rounded-md">
+                      <div className="bg-muted border rounded-md space-y-2 max-h-64 overflow-y-auto">
                         {userInfoData.map((user) => (
                           <div
                             key={user.id}

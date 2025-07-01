@@ -6,14 +6,25 @@ import {
   TicketComment,
   TicketData,
 } from "@/interfaces/ticket-data";
-import { useAuth } from "@/store/auth";
+// import { useAuth } from "@/store/auth";
 
+// export const useTickets = () => {
+//   return useQuery({
+//     queryKey: ["tickets"],
+//     queryFn: async (): Promise<TicketData[]> => {
+//       const response = await api.get("tickets");
+//       return await response.json<TicketData[]>();
+//     },
+//     staleTime: Number.POSITIVE_INFINITY,
+//     refetchOnMount: true,
+//   });
+// };
 export const useTickets = () => {
   return useQuery({
     queryKey: ["tickets"],
     queryFn: async (): Promise<TicketData[]> => {
-      const response = await api.get("tickets");
-      return await response.json<TicketData[]>();
+      const response = await api.get("tickets").json<{ data: TicketData[] }>();
+      return response.data; // extrai apenas o array
     },
     staleTime: Number.POSITIVE_INFINITY,
     refetchOnMount: true,
@@ -66,7 +77,8 @@ export function useTicketComments(ticketId: string) {
     queryKey: ["ticketComments", ticketId],
     queryFn: async () => {
       const comments = await api
-        .get(`ticketComments?ticketId=${ticketId}`)
+        // .get(`ticketComments?ticketId=${ticketId}`)
+        .get(`tickets/${ticketId}/comments`)
         .json<TicketComment[]>();
       return comments;
     },
@@ -78,6 +90,7 @@ export async function useCreateTicket(
   CreateTicket: TicketData
 ): Promise<TicketData | null> {
   try {
+    console.log("Payload enviado:", CreateTicket);
     const newTicket: TicketData = await api
       .post("tickets", { json: CreateTicket })
       .json();
@@ -88,23 +101,23 @@ export async function useCreateTicket(
   }
 }
 
-export const useTicketAudit = () => {
-  return useQuery({
-    queryKey: ["ticket-audit"],
-    queryFn: async (): Promise<TicketAudit[]> => {
-      const response = await api.get("ticketAudit");
-      return await response.json<TicketAudit[]>();
-    },
-    staleTime: Number.POSITIVE_INFINITY,
-    refetchOnMount: true,
-  });
-};
+// export const useTicketAudit = () => {
+//   return useQuery({
+//     queryKey: ["ticket-audit"],
+//     queryFn: async (): Promise<TicketAudit[]> => {
+//       const response = await api.get("ticketAudit");
+//       return await response.json<TicketAudit[]>();
+//     },
+//     staleTime: Number.POSITIVE_INFINITY,
+//     refetchOnMount: true,
+//   });
+// };
 
 export const useTicketAuditId = (ticketId: number) => {
   return useQuery({
     queryKey: ["ticket-audit-id", ticketId],
     queryFn: async (): Promise<TicketAudit[]> => {
-      const response = await api.get("ticketAudit", {
+      const response = await api.get(`tickets/${ticketId}/audit`, {
         searchParams: { ticketId: String(ticketId) },
       });
       return await response.json<TicketAudit[]>();
@@ -130,102 +143,102 @@ export async function useCreateTicketAudit(
   }
 }
 
-interface FinalizeTicketFlowParams {
-  ticket: TicketData;
-  reply: FinalizationReply | null;
-  commentText?: string;
-}
+// interface FinalizeTicketFlowParams {
+//   ticket: TicketData;
+//   reply: FinalizationReply | null;
+//   commentText?: string;
+// }
 
-export function useFinalizeTicketFlow() {
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
+// export function useFinalizeTicketFlow() {
+//   const { user } = useAuth();
+//   const queryClient = useQueryClient();
 
-  const finalize = useMutation({
-    mutationFn: async ({
-      ticket,
-      reply,
-      commentText,
-    }: FinalizeTicketFlowParams) => {
+//   const finalize = useMutation({
+//     mutationFn: async ({
+//       ticket,
+//       reply,
+//       commentText,
+//     }: FinalizeTicketFlowParams) => {
 
-      const now = new Date().toISOString();
+//       const now = new Date().toISOString();
 
-      // 1️⃣ Adiciona comentário se necessário
-      if (reply.comment && commentText) {
-        const commentPayload: TicketComment = {
-          ticketId: ticket.id!,
-          author: user?.name!!,
-          message: commentText,
-          date: now,
-        };
-        await useCreateTicketComment(commentPayload);
+//       // 1️⃣ Adiciona comentário se necessário
+//       if (reply?.comment && commentText) {
+//         const commentPayload: TicketComment = {
+//           ticketId: ticket.id,
+//           author: user?.name!!,
+//           message: commentText,
+//           date: now,
+//         };
+//         await useCreateTicketComment(commentPayload);
 
-        await useCreateTicketAudit({
-          ticketId: ticket.id!,
-          action: "Adicionou",
-          performedBy: {
-            id: user?.id!!,
-            name: user?.name!!,
-            group: user?.groupLevel,
-          },
-          message: "um novo Comentário",
-          description: `Comentário adicionado por ${user?.name}, ao ticket: ${ticket.id}`,
-          date: now,
-        });
-      }
+//         await useCreateTicketAudit({
+//           ticketId: ticket.id!,
+//           action: "Adicionou",
+//           performedBy: {
+//             id: user?.id!!,
+//             name: user?.name!!,
+//             group: user?.groupLevel,
+//           },
+//           message: "um novo Comentário",
+//           description: `Comentário adicionado por ${user?.name}, ao ticket: ${ticket.id}`,
+//           date: now,
+//         });
+//       }
 
-      // 2️⃣ Prepara payload de atualização do ticket
-      const updatePayload: Partial<TicketData> = {
-        status: "FINALIZADO",
-      };
+//       // 2️⃣ Prepara payload de atualização do ticket
+//       const updatePayload: Partial<TicketData> = {
+//         status: "FINALIZADO",
+//       };
 
-      const needsAssignment = !ticket.assignedTo;
+//       const needsAssignment = !ticket.assignedTo;
 
-      if (needsAssignment) {
-        updatePayload.assignedTo = {
-          id: user?.id!!,
-          name: user?.name!!,
-          group: user?.groupLevel,
-        };
-      }
+//       if (needsAssignment) {
+//         updatePayload.assignedTo = {
+//           id: user?.id!!,
+//           name: user?.name!!,
+//           group: user?.groupLevel,
+//         };
+//       }
 
-      // 3️⃣ Atualiza ticket com todos os dados necessários
-      await updateTicket(ticket.id!, updatePayload);
+//       // 3️⃣ Atualiza ticket com todos os dados necessários
+//       await updateTicket(ticket.id!, updatePayload);
 
-      // 4️⃣ Auditorias de atribuição (se aplicável)
-      if (needsAssignment) {
-        await useCreateTicketAudit({
-          ticketId: ticket.id!,
-          action: "Atribuiu",
-          performedBy: {
-            id: user?.id!!,
-            name: user?.name!!,
-            group: user?.groupLevel,
-          },
-          message: "um Ticket",
-          description: `Ocorrência ${ticket.id} atribuída a ${user?.name}.`,
-          date: now,
-        });
-      }
+//       // 4️⃣ Auditorias de atribuição (se aplicável)
+//       if (needsAssignment) {
+//         await useCreateTicketAudit({
+//           ticketId: ticket.id!,
+//           action: "Atribuiu",
+//           performedBy: {
+//             id: user?.id!!,
+//             name: user?.name!!,
+//             group: user?.groupLevel,
+//           },
+//           message: "um Ticket",
+//           description: `Ocorrência ${ticket.id} atribuída a ${user?.name}.`,
+//           date: now,
+//         });
+//       }
 
-      // 5️⃣ Auditoria de finalização
-      await useCreateTicketAudit({
-        ticketId: ticket.id!,
-        action: "Atualizou",
-        performedBy: {
-          id: user?.id!!,
-          name: user?.name!!,
-          group: user?.groupLevel,
-        },
-        message: "um Ticket",
-        description: `Ocorrência ${ticket.id} marcada como FINALIZADO por ${user?.name}.`,
-        date: now,
-      });
+//       // 5️⃣ Auditoria de finalização
+//       await useCreateTicketAudit({
+//         ticketId: ticket.id!,
+//         action: "Atualizou",
+//         performedBy: {
+//           id: user?.id!!,
+//           name: user?.name!!,
+//           group: user?.groupLevel,
+//         },
+//         message: "um Ticket",
+//         description: `Ocorrência ${ticket.id} marcada como FINALIZADO por ${user?.name}.`,
+//         date: now,
+//       });
 
-      // 6️⃣ Refetch dos dados
-      await queryClient.invalidateQueries({ queryKey: ["tickets"] });
-      await queryClient.invalidateQueries({ queryKey: ["ticket-id", ticket.id] });
-    },
-  });
+//       // 6️⃣ Refetch dos dados
+//       await queryClient.invalidateQueries({ queryKey: ["tickets"] });
+//       await queryClient.invalidateQueries({ queryKey: ["ticket-id", ticket.id] });
+//     },
+//   });
 
-  return finalize;
-}
+//   return finalize;
+// }

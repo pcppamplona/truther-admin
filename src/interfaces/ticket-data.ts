@@ -56,8 +56,8 @@ export type Status =
   
 //commentário
 export interface TicketComment {
-  id?: string | number;
-  ticketId: string | number;
+  id?: number;
+  ticketId: number;
   author: string;
   message: string;
   date: string;
@@ -65,8 +65,8 @@ export interface TicketComment {
 
 //auditorias
 export interface TicketAudit {
-  id?: string | number;
-  ticketId: string | number;
+  id?: number;
+  ticketId: number;
   action: "Adicionou" | "Atribuiu" | "Atualizou" | "Finalizou";
   performedBy: User;
   message: string;
@@ -79,6 +79,20 @@ export type FinalizationReply = {
   id: number;
   reasonId: number;
   reply: string;
-  actionType: "none" | "new_event"| "send_email";
+  // actionType: "none" | "new_event"| "send_email";
   comment: Boolean
 };
+
+export interface ReplyAction {
+  id: number;
+  replyId: number;
+  type: "new_event" | "send_email";
+  data: {
+    reasonId?: number;
+    groupId?: string;
+    userId?: number;
+    email?: string;
+    title?: string;
+    body?: string;
+  };
+}

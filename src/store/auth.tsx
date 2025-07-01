@@ -1,5 +1,5 @@
 import { AuthData } from "@/interfaces/auth-data";
-import { api } from "@/lib/utils";
+import { api } from "@/services/api";
 import { useState } from "react";
 import { create } from "zustand";
 

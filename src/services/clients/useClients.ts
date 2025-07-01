@@ -1,6 +1,6 @@
-import { ClientsData } from "@/interfaces/clients-data";
-import { api } from "@/lib/utils";
+import { ClientsData } from "@/interfaces/clients-data";;
 import { useQuery } from "@tanstack/react-query";
+import { api } from "../api";
 
 export const useClients = () => {
   return useQuery({
