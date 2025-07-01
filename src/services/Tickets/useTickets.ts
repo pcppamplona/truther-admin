@@ -150,7 +150,7 @@ export function useFinalizeTicketFlow() {
       const now = new Date().toISOString();
 
       // 1️⃣ Adiciona comentário se necessário
-      if (reply.comment && commentText) {
+      if (reply?.comment && commentText) {
         const commentPayload: TicketComment = {
           ticketId: ticket.id!,
           author: user?.name!!,

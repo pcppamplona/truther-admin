@@ -56,9 +56,12 @@ export function useFinalizeTicket() {
       }
 
       // 2️⃣ Executa ReplyActions
-      console.log("[FinalizeTicket] Buscando ReplyActions...");
+      console.log("===========================")
+      console.log("[FinalizeTicket] Buscando ReplyActions | ID do reply:", reply.id);
+      
       const actions = await getReplyActions(reply.id);
       console.log("[FinalizeTicket] ReplyActions encontrados:", actions);
+      console.log("===========================")
 
       for (const action of actions) {
         if (action.type === "new_event") {

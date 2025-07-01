@@ -41,7 +41,7 @@ export async function getReplyReason(reasonId: number): Promise<FinalizationRepl
 
 export async function getReplyActions(replyId: number): Promise<ReplyAction[]> {
   const res = await api.get("replyActions", {
-    searchParams: { reasonId: replyId.toString() },
+    searchParams: { replyId: replyId.toString() },
   }).json<ReplyAction[]>();
   return res;
 }

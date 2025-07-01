@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/store/auth";
-import { ChevronRight, CircleX, Plus, Ticket } from "lucide-react";
+import { ChevronRight, CircleX, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MaskInput } from "@/components/ui/maskInput";
 import { UserInfoData } from "@/interfaces/userinfo-data";
