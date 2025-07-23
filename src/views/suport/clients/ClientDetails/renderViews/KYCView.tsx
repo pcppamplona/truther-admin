@@ -106,9 +106,10 @@ export function KYCView({ client, userInfo }: ClientInfoProps) {
             <div className="space-y-2 sm:col-span-2">
               <p>Selfie</p>
               <ModalImage
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2_oO4KOIumgPrZL2XNvR7Krj5qHEfyRy1pQ&s"
-                alt="Selfie"
-              />
+  src={"/selfie.png"}
+  alt="Selfie"
+  
+/>
             </div>
             <div className="space-y-2">
               <p>Documento - Frente</p>
