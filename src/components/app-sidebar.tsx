@@ -51,7 +51,7 @@ export function AppSidebar(/* { ...props }: React.ComponentProps<typeof Sidebar>
           {
             title: "Ocorrências",
             url: "ocurrences",
-            matchUrls: ["clients", "ocurrenceDetails"],
+            matchUrls: ["ocurrences", "ocurrenceDetails"],
           },
           {
             title: "Reportes",
