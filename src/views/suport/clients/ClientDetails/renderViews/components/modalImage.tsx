@@ -16,7 +16,8 @@ export function ModalImage({ src, alt }: ModalImageProps) {
           <img
             src={src}
             alt={alt}
-            className="rounded border border-border w-full max-h-70"
+            // className="rounded border border-border w-full max-h-70 object-contain" 
+              className="rounded border border-border max-h-[280px] object-contain"
           />
           <div className="absolute top-2 right-2 bg-white rounded-full p-1 shadow group-hover:scale-110 transition-transform">
             <Maximize size={16} color="black"/>

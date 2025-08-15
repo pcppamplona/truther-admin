@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-import { useAuth } from "@/store/auth";
-import { useState } from "react";
+import { useAuthStore } from "@/store/auth";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
@@ -13,24 +13,26 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const usernameRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
-  const { authenticate, loading, error, user } = useAuth();
+  const { login, loading, token, error } = useAuthStore();
   const navigate = useNavigate();
 
-const handleSubmit = async (event: React.FormEvent) => {
-  event.preventDefault();
-  console.log(username, password)
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
 
-  await authenticate(username, password);
+    const username = usernameRef.current?.value || "";
+    const password = passwordRef.current?.value || "";
 
-  if (user) {
-    navigate("/dashboard");
-  } else {
-    toast.error("Usuário ou senha inválidos.");
-  }
-};
+    await login(username, password);
+
+    if (token) {
+      navigate("/dashboard");
+    } else {
+      toast.error("Usuário ou senha inválidos.");
+    }
+  };
 
   return (
     <form
@@ -52,8 +54,7 @@ const handleSubmit = async (event: React.FormEvent) => {
             id="username"
             type="email"
             placeholder="exemplo@dominio.com"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            ref={usernameRef}
             required
           />
         </div>
@@ -68,13 +69,7 @@ const handleSubmit = async (event: React.FormEvent) => {
               Esqueceu sua senha?
             </a>
           </div>
-          <Input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <Input id="password" type="password" ref={passwordRef} required />
         </div>
 
         {error && <p className="text-red-500 text-sm">{error}</p>}

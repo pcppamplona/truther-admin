@@ -1,58 +1,68 @@
-import { AuthData } from "@/interfaces/auth-data";
-import { api } from "@/lib/utils";
-import { useState } from "react";
 import { create } from "zustand";
+import { api } from "@/services/api";
 
-const getStoredUser = (): AuthData | null => {
-  const storedUser = localStorage.getItem("authUser");
-  return storedUser ? JSON.parse(storedUser) : null;
-};
+interface User {
+  id: number;
+  uuid: string;
+  name: string;
+  username: string;
+  active: boolean;
+  typeAuth: string;
+  groupLevel: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
-const useAuthStore = create<{
-  user: AuthData | null;
-  login: (userData: AuthData) => void;
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  error: string | null;
+  login: (username: string, password: string) => Promise<void>;
+  fetchMe: () => Promise<void>;
   logout: () => void;
-}>((set) => ({
-  user: getStoredUser(),
-  login: (userData) => {
-    localStorage.setItem("authUser", JSON.stringify(userData));
-    set({ user: userData });
-  },
-  logout: () => {
-    localStorage.removeItem("authUser");
-    set({ user: null });
-  },
-}));
+}
 
-export function useAuth() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const { user, login, logout } = useAuthStore();
+export const useAuthStore = create<AuthState>((set) => ({
+  
+  user: null,
+  token: localStorage.getItem("authToken"),
+  loading: false,
+  error: null,
 
-  const authenticate = async (username: string, password: string) => {
-    setLoading(true);
-    setError(null);
+  login: async (username, password) => {
+    set({ loading: true, error: null });
 
     try {
-      const response = await api.get("authentication");
-      const data: AuthData[] = await response.json();
+      const { data } = await api.post("/authenticate", { username, password });
+      
+      localStorage.setItem("authToken", data.token);
+      set({ token: data.token });
 
-      // Busca um usuário com username e password que batem exatamente
-      const foundUser = data.find(
-        (u) => u.username === username && u.password === password
-      );
+      await useAuthStore.getState().fetchMe();
 
-      if (foundUser) {
-        login(foundUser);
-      } else {
-        setError("Usuário ou senha inválidos");
-      }
-    } catch (err) {
-      setError("Erro ao autenticar usuário");
+      return data; 
+    } catch (error: any) {
+      const message = error?.response?.data?.message || "Usuário ou senha inválidos";
+      set({ error: message });
+      throw new Error(message);
     } finally {
-      setLoading(false);
+      set({ loading: false });
     }
-  };
+  },
 
-  return { user, loading, error, authenticate, logout };
-}
+  fetchMe: async () => {
+    try {
+      const { data } = await api.get("/me");
+      set({ user: data });
+    } catch {
+      set({ error: "Falha ao carregar usuário", user: null, token: null });
+      localStorage.removeItem("authToken");
+    }
+  },
+
+  logout: () => {
+    localStorage.removeItem("authToken");
+    set({ user: null, token: null });
+  },
+}));

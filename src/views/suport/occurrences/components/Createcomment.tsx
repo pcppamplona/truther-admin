@@ -11,13 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus } from "lucide-react";
-import { useAuth } from "@/store/auth";
+import { useAuthStore } from "@/store/auth";
 import {
   updateTicket,
   useCreateTicketAudit,
   useCreateTicketComment,
 } from "@/services/Tickets/useTickets";
-import { TicketData } from "@/interfaces/ocurrences-data";
+import { TicketData } from "@/interfaces/ticket-data";
 
 export interface CommentProps {
   ticket: TicketData;
@@ -27,7 +27,7 @@ export default function CreateComment({ ticket }: CommentProps) {
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
   const [confirming, setConfirming] = useState(false);
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   const handleSubmit = async () => {
     if (!message.trim() || !ticket.id || !user) {
@@ -49,11 +49,11 @@ export default function CreateComment({ ticket }: CommentProps) {
     if (!user || !ticket.id || !message.trim()) return;
 
     if (assignIfNeeded) {
-      await updateTicket(ticket.id, {
+      const updated = await updateTicket(ticket.id, {
         assignedTo: {
           id: user.id,
           name: user.name,
-          groupSuport: user.groupLevel,
+          group: user.groupLevel,
         },
       });
 
@@ -63,16 +63,72 @@ export default function CreateComment({ ticket }: CommentProps) {
         performedBy: {
           id: user.id,
           name: user.name,
-          groupSuport: user.groupLevel,
+          group: user.groupLevel,
         },
         message: "um ticket",
         description: `Ocorrência ${ticket.id} atribuída a ${user.name}.`,
         date: new Date().toISOString(),
       });
+
+      if (updated.status === "PENDENTE") {
+        await updateTicket(ticket.id, { status: "EM ANDAMENTO" });
+
+        await useCreateTicketAudit({
+          ticketId: ticket.id,
+          action: "Atualizou",
+          performedBy: {
+            id: user.id,
+            name: user.name,
+            group: user.groupLevel,
+          },
+          message: "o status do ticket",
+          description: `Status da ocorrência ${ticket.id} alterado para EM ANDAMENTO por ${user.name}.`,
+          date: new Date().toISOString(),
+        });
+      }
     }
-    
+    if (assignIfNeeded) {
+      const updated = await updateTicket(ticket.id, {
+        assignedTo: {
+          id: user.id,
+          name: user.name,
+          group: user.groupLevel,
+        },
+      });
+
+      await useCreateTicketAudit({
+        ticketId: ticket.id,
+        action: "Atribuiu",
+        performedBy: {
+          id: user.id,
+          name: user.name,
+          group: user.groupLevel,
+        },
+        message: "um ticket",
+        description: `Ocorrência ${ticket.id} atribuída a ${user.name}.`,
+        date: new Date().toISOString(),
+      });
+
+      if (updated.status === "PENDENTE") {
+        await updateTicket(ticket.id, { status: "EM ANDAMENTO" });
+
+        await useCreateTicketAudit({
+          ticketId: ticket.id,
+          action: "Atualizou",
+          performedBy: {
+            id: user.id,
+            name: user.name,
+            group: user.groupLevel,
+          },
+          message: "o status do ticket",
+          description: `Status da ocorrência ${ticket.id} alterado para EM ANDAMENTO por ${user.name}.`,
+          date: new Date().toISOString(),
+        });
+      }
+    }
+
     await useCreateTicketComment({
-      ticketId: String(ticket.id),
+      ticketId: ticket.id,
       author: user.name,
       message: message.trim(),
       date: new Date().toISOString(),
@@ -84,7 +140,7 @@ export default function CreateComment({ ticket }: CommentProps) {
       performedBy: {
         id: user.id,
         name: user.name,
-        groupSuport: user.groupLevel,
+        group: user.groupLevel,
       },
       message: "um novo Comentário",
       description: `Comentário adicionado por ${user.name}, ao ticket: ${ticket.id}`,

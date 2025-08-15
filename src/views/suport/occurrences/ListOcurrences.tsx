@@ -17,18 +17,16 @@ import {
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { useTickets } from "@/services/Tickets/useTickets";
-import { TicketData } from "@/interfaces/ocurrences-data";
 import { useNavigate } from "react-router-dom";
 import { dateFormat, timeFormat } from "@/lib/formatters";
-import { CreateOcurrence } from "./components/CreateOcurrence";
-import { useAuth } from "@/store/auth";
+import { useAuthStore } from "@/store/auth";
 import { getColorRGBA, statusColors } from "./components/utilsOcurrences";
-
-const groupHierarchy = ["N1", "N2", "N3", "PRODUTO", "MKT", "ADMIN"] as const;
+import { CreateTicket } from "./components/CreateTicket";
+import { Group, groupHierarchy, TicketData } from "@/interfaces/ticket-data";
 
 export default function ListOcurrences() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuthStore();
   const userId = user?.id;
   const userGroupLevel = user?.groupLevel;
 
@@ -37,27 +35,117 @@ export default function ListOcurrences() {
   const [filter, setFilter] = useState("Todas");
 
   const accessibleGroups = userGroupLevel
-    ? groupHierarchy.slice(0, groupHierarchy.indexOf(userGroupLevel) + 1)
+    ? (Object.keys(groupHierarchy) as Group[]).filter(
+        (group) =>
+          groupHierarchy[group] <= groupHierarchy[userGroupLevel as Group]
+      )
     : [];
 
   const filteredTickets = Tickets?.filter((ticket) => {
-    const matchesSearch = (ticket.reason ?? "")
+    const matchesSearch = (ticket.reason.reason ?? "")
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
 
-    const isGroupAccessible = accessibleGroups.includes(ticket.groupSuport);
+    // let recipientGroup: Group | null = null;
+
+    // if (ticket.reason.typeRecipient === "GROUP") {
+    //   recipientGroup = ticket.reason.recipient as Group;
+    // } else if (ticket.reason.typeRecipient === "USER") {
+    //   // Destinatário é usuário, não tem grupo
+    //   recipientGroup = null;
+    // } else if (ticket.reason.typeRecipient === "ALL") {
+    //   recipientGroup = ticket.reason.recipient as Group;
+    // }
+
+    let recipientGroup: Group | null = null;
+
+    if (ticket.reason.typeRecipient === "GROUP") {
+      recipientGroup = ticket.reason.recipient as Group;
+    } else if (ticket.reason.typeRecipient === "USER") {
+      recipientGroup = null; // acesso controlado por user id
+    } else if (ticket.reason.typeRecipient === "ALL") {
+      // Pode ser tanto Group quanto User
+      if (typeof ticket.reason.recipient === "string") {
+        recipientGroup = ticket.reason.recipient as Group;
+      } else if (
+        typeof ticket.reason.recipient === "object" &&
+        ticket.reason.recipient
+      ) {
+        recipientGroup = ticket.reason.recipient as Group;
+      }
+    }
+
+    const isGroupAccessible =
+      recipientGroup !== null
+        ? accessibleGroups.includes(recipientGroup)
+        : true;
 
     const matchesFilter = (() => {
-      if (filter === "Minhas Ocorrências") {
-        return ticket.assignedTo?.id === userId;
+      if (filter === "Meus Tickets") {
+        return (
+          ticket.assignedTo !== null &&
+          typeof ticket.assignedTo !== "string" &&
+          ticket.assignedTo.id === userId
+        );
       }
 
-      if (groupHierarchy.includes(filter as any)) {
-        return ticket.groupSuport === filter;
+      if ((filter as Group) in groupHierarchy) {
+        if (ticket.reason.typeRecipient === "GROUP") {
+          return ticket.reason.recipient === filter;
+        }
+
+        if (ticket.reason.typeRecipient === "ALL") {
+          return ticket.reason.recipient === filter;
+        }
+
+        if (ticket.reason.typeRecipient === "USER") {
+          const assignedGroup =
+            ticket.assignedTo !== null && typeof ticket.assignedTo !== "string"
+              ? ticket.assignedTo.group
+              : null;
+          return assignedGroup === filter;
+        }
       }
 
       return true;
     })();
+
+    // const matchesFilter = (() => {
+    //   if (filter === "Meus Tickets") {
+    //     return (
+    //       ticket.assignedTo !== null &&
+    //       typeof ticket.assignedTo !== "string" &&
+    //       ticket.assignedTo.id === userId
+    //     );
+    //   }
+
+    //   if ((filter as Group) in groupHierarchy) {
+    //     if (ticket.reason.typeRecipient === "GROUP") {
+    //       return ticket.reason.recipient === filter;
+    //     }
+
+    //     if (ticket.reason.typeRecipient === "ALL") {
+    //       if (typeof ticket.reason.recipient === "string") {
+    //         return ticket.reason.recipient === filter;
+    //       } else if (
+    //         typeof ticket.reason.recipient === "object" &&
+    //         ticket.reason.recipient.group
+    //       ) {
+    //         return ticket.reason.recipient.group === filter;
+    //       }
+    //     }
+
+    //     if (ticket.reason.typeRecipient === "USER") {
+    //       const assignedGroup =
+    //         ticket.assignedTo !== null && typeof ticket.assignedTo !== "string"
+    //           ? ticket.assignedTo.group
+    //           : null;
+    //       return assignedGroup === filter;
+    //     }
+    //   }
+
+    //   return true;
+    // })();
 
     return matchesSearch && isGroupAccessible && matchesFilter;
   });
@@ -90,9 +178,7 @@ export default function ListOcurrences() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todas">Todas</SelectItem>
-              <SelectItem value="Minhas Ocorrências">
-                Minhas Ocorrências
-              </SelectItem>
+              <SelectItem value="Meus Tickets">Meus Tickets</SelectItem>
               {accessibleGroups.map((group) => (
                 <SelectItem key={group} value={group}>
                   Grupo {group}
@@ -100,70 +186,53 @@ export default function ListOcurrences() {
               ))}
             </SelectContent>
           </Select>
-
-          <CreateOcurrence />
+          <CreateTicket />
         </div>
       </CardHeader>
+
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="font-semibold text-gray-500">ID</TableHead>
-              <TableHead className="font-semibold text-gray-500">
-                Título
-              </TableHead>
-              <TableHead className="font-semibold text-gray-500">
-                Status
-              </TableHead>
-              <TableHead className="font-semibold text-gray-500">
-                Responsável
-              </TableHead>
-              <TableHead className="font-semibold text-gray-500">
-                Grupo
-              </TableHead>
-              <TableHead className="font-semibold text-gray-500">
-                Data
-              </TableHead>
-              <TableHead className="font-semibold text-gray-500">
-                Tempo de expiração
-              </TableHead>
+              <TableHead>ID</TableHead>
+              <TableHead>Título</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Responsável</TableHead>
+              <TableHead>Data</TableHead>
+              <TableHead>Expiração</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredTickets?.map((ticket) => (
               <TableRow key={ticket.id} onClick={() => handleRowClick(ticket)}>
                 <TableCell>{ticket.id}</TableCell>
-                <TableCell>{ticket.reason}</TableCell>
+                <TableCell>{ticket.reason.reason}</TableCell>
                 <TableCell>
                   <div
                     className="px-3 py-1 rounded-lg text-sm font-semibold lowercase"
                     style={{
                       backgroundColor: getColorRGBA(
-                        ticket.status.status,
+                        ticket.status,
                         statusColors,
                         0.2
                       ),
-                      color: getColorRGBA(
-                        ticket.status.status,
-                        statusColors,
-                        0.9
-                      ),
+                      color: getColorRGBA(ticket.status, statusColors, 0.9),
                       width: "fit-content",
                     }}
                   >
-                    {ticket.status.status}
+                    {ticket.status}
                   </div>
                 </TableCell>
                 <TableCell>
-                  {ticket.assignedTo?.name ?? "Não atribuído"}
+                  {ticket.assignedTo && typeof ticket.assignedTo !== "string"
+                    ? ticket.assignedTo.name
+                    : "Não atribuído"}
                 </TableCell>
-
-                <TableCell>{ticket.groupSuport}</TableCell>
                 <TableCell>
                   {dateFormat(ticket.createdAt)} às{" "}
                   {timeFormat(ticket.createdAt)}
                 </TableCell>
-                <TableCell>{ticket.expiredAt} horas</TableCell>
+                <TableCell>{ticket.reason.expiredAt} horas</TableCell>
               </TableRow>
             ))}
           </TableBody>

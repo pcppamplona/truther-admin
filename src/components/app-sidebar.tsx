@@ -11,11 +11,12 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { useAuth } from "@/store/auth";
+import { useAuthStore } from "@/store/auth";
 import { Presentation, BotMessageSquare, House, DollarSign, User } from "lucide-react";
 
-export function AppSidebar(/* { ...props }: React.ComponentProps<typeof Sidebar> */) {
-  const { user } = useAuth();
+export function AppSidebar() {
+
+   const user = useAuthStore((state) => state.user);
 
   const data = {
     user: {
@@ -51,7 +52,7 @@ export function AppSidebar(/* { ...props }: React.ComponentProps<typeof Sidebar>
           {
             title: "Ocorrências",
             url: "ocurrences",
-            matchUrls: ["clients", "ocurrenceDetails"],
+            matchUrls: ["ocurrences", "ocurrenceDetails"],
           },
           {
             title: "Reportes",

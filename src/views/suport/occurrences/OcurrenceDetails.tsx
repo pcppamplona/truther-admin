@@ -7,56 +7,50 @@ import {
   useTicketComments,
   useTickets,
 } from "@/services/Tickets/useTickets";
-import { TicketData } from "@/interfaces/ocurrences-data";
-import {
-  dateFormat,
-  documentFormat,
-  phoneFormat,
-  timeFormat,
-} from "@/lib/formatters";
+import { dateFormat, timeFormat } from "@/lib/formatters";
 import { FolderOpenDot, GitMerge, MessageCircleMore, User } from "lucide-react";
 import CreateComment from "./components/Createcomment";
 import {
   auditActionColors,
   getColorRGBA,
-  statusColors,
 } from "./components/utilsOcurrences";
-import { TicketStatusDropdown } from "./components/TicketStatusDropdown";
 import { AssignToMeDialog } from "./components/AssignToMeDialog";
-import { useAuth } from "@/store/auth";
+import { useAuthStore } from "@/store/auth";
+import { Group, groupHierarchy, TicketData } from "@/interfaces/ticket-data";
+import { FinalizeTicketDialog } from "./components/FinalizeTicketDialog";
 
-const groupHierarchy = {
-  N1: 1,
-  N2: 2,
-  N3: 3,
-  PRODUTO: 4,
-  MKT: 5,
-  ADMIN: 6,
-};
 
 export default function OcurrenceDetails() {
   const location = useLocation();
   const ticketId = location.state?.id;
-  const { user } = useAuth();
+  const { user } = useAuthStore();
+
   const { data: audits } = useTicketAuditId(ticketId);
-  console.log("auditos do ticket:", ticketId, ">", audits)
   const { data: commentsData } = useTicketComments(ticketId);
   const { data: tickets } = useTickets();
+
   const ticket: TicketData | undefined = tickets?.find(
     (t) => t.id === ticketId
   );
 
-  if (!ticket) {
-    return <p>Ocorrência não encontrada.</p>;
-  }
+  if (!ticket) return <p>Ocorrência não encontrada.</p>;
 
   const canComment = (() => {
+    if (
+      ticket.status === "FINALIZADO" ||
+      ticket.status === "FINALIZADO EXPIRADO"
+    ) return false;
+
     const assigned = ticket.assignedTo;
     if (!assigned) return true;
-    if (assigned.id === user?.id) return true;
+    if (typeof assigned !== "string" && assigned.id === user?.id) return true;
 
-    const userLevel = groupHierarchy[user?.groupLevel!];
-    const assignedLevel = groupHierarchy[assigned.groupSuport];
+    const userLevel = groupHierarchy[user?.groupLevel as Group];
+    const assignedLevel =
+      typeof assigned === "string"
+        ? groupHierarchy[assigned as Group]
+        : groupHierarchy[assigned.group as Group];
+
     return userLevel > assignedLevel;
   })();
 
@@ -66,10 +60,11 @@ export default function OcurrenceDetails() {
         { label: "Suporte", href: "/clients" },
         { label: "Ocorrências", href: "/ocurrences" },
       ]}
-      current={"Detalhes da Ocorrência"}
+      current="Detalhes da Ocorrência"
     >
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Card - Informações */}
           <Card className="h-full max-h-[500px] flex flex-col">
             <CardHeader>
               <CardTitle className="flex flex-row items-center gap-2">
@@ -81,22 +76,16 @@ export default function OcurrenceDetails() {
               <Info label="ID" value={ticket.id} />
               <div>
                 <p className="text-sm text-muted-foreground">Status</p>
-
-                <TicketStatusDropdown
-                  ticket={ticket}
-                  statusColors={statusColors}
-                  getColorRGBA={getColorRGBA}
-                />
+                <FinalizeTicketDialog ticket={ticket} />
+                
               </div>
-              <Info label="Motivo" value={ticket.reason} />
 
+              <Info label="Motivo" value={ticket.reason.reason} />
               <Info
                 label="Tempo de expiração"
-                value={ticket.expiredAt + " horas"}
+                value={`${ticket.reason.expiredAt} horas`}
               />
-              <Info label="Descrição" value={ticket.description} />
-              <Info label="Grupo" value={ticket.groupSuport} />
-
+              <Info label="Descrição" value={ticket.reason.description} />
               <Info
                 label="Data de Criação"
                 value={dateFormat(ticket.createdAt)}
@@ -105,14 +94,18 @@ export default function OcurrenceDetails() {
               <div className="flex flex-row gap-4 items-center">
                 <Info
                   label="Responsável"
-                  value={ticket.assignedTo?.name ?? "Não atribuído"}
+                  value={
+                    typeof ticket.assignedTo === "object"
+                      ? ticket.assignedTo?.name
+                      : ticket.assignedTo ?? "Não atribuído"
+                  }
                 />
-
                 <AssignToMeDialog ticket={ticket} />
               </div>
             </CardContent>
           </Card>
 
+          {/* Card - Auditoria */}
           <Card className="h-full max-h-[500px] flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -123,7 +116,10 @@ export default function OcurrenceDetails() {
             <CardContent className="flex-1 overflow-y-auto pb-2">
               {audits?.map((audit, index) => (
                 <div key={audit.id}>
-                  <p className="text-sm">
+                   <p className="text-xs text-muted-foreground">
+                    {dateFormat(audit.date)} às {timeFormat(audit.date)}
+                  </p>
+                  <p className="text-sm mt-1">
                     <span className="font-semibold">
                       {audit.performedBy.name}
                     </span>{" "}
@@ -147,12 +143,9 @@ export default function OcurrenceDetails() {
                     {audit.message}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {audit.description}
+                    - {audit.description}
                   </p>
-                  <p className="text-xs text-muted-foreground">
-                    {dateFormat(audit.date)} às {timeFormat(audit.date)}
-                  </p>
-
+                 
                   {index < audits.length - 1 && (
                     <div className="my-4 border-t border-muted" />
                   )}
@@ -161,34 +154,30 @@ export default function OcurrenceDetails() {
             </CardContent>
           </Card>
 
+          {/* Card - Dados Remetente */}
           <Card>
             <CardHeader>
               <CardTitle className="flex flex-row items-center gap-2">
-                <User /> Dados Remetente
+                <User /> Dados do Solicitante
               </CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {ticket.requester != null ? (
+              {ticket.client ? (
                 <>
-                  <Info label="ID" value={ticket.requester.id} />
-                  <Info label="Nome" value={ticket.requester.name} />
-                  <Info
-                    label="Documento"
-                    value={documentFormat(ticket.requester.document)}
-                  />
-                  <Info
-                    label="Telefone"
-                    value={phoneFormat(ticket.requester.phone)}
-                  />
+                  <Info label="ID" value={ticket.client?.id} />
+                  <Info label="Nome" value={ticket.client?.name} />
+                  <Info label="Grupo" value={ticket.client?.document} />
+                  <Info label="Grupo" value={ticket.client?.phone} />
                 </>
               ) : (
-                <div className="col-span-2 text-muted-foreground italic">
-                  Remetente não atribuído
-                </div>
+                <p className="text-sm text-muted-foreground italic">
+                  Solicitante não informado.
+                </p>
               )}
             </CardContent>
           </Card>
 
+          {/* Card - Comentários */}
           <Card className="h-full max-h-[300px] flex flex-col">
             <CardHeader>
               <CardTitle className="flex flex-row items-center justify-between gap-2">
@@ -207,7 +196,6 @@ export default function OcurrenceDetails() {
                     </p>
                     <p className="text-sm font-semibold">{comment.author}</p>
                     <p className="text-sm">{comment.message}</p>
-
                     {index < commentsData.length - 1 && (
                       <div className="my-4 border-t border-muted" />
                     )}
@@ -222,6 +210,7 @@ export default function OcurrenceDetails() {
           </Card>
         </div>
       </div>
+
     </SidebarLayout>
   );
 }
