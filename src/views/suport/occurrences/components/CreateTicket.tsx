@@ -17,7 +17,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/store/auth";
 import { ChevronRight, CircleX, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MaskInput } from "@/components/ui/maskInput";
@@ -40,9 +39,10 @@ import {
   getTicketCategories,
 } from "@/services/Tickets/useReasons";
 import { useUsers } from "@/services/users/useUsers";
+import { useAuthStore } from "@/store/auth";
 
 export function CreateTicket() {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
   const [ticketData, setTicketData] = useState<Partial<TicketData>>({});
   const [document, setDocument] = useState("");
   const { data: userInfoData } = useUserInfoDocument(

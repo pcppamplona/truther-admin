@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus } from "lucide-react";
-import { useAuth } from "@/store/auth";
+import { useAuthStore } from "@/store/auth";
 import {
   updateTicket,
   useCreateTicketAudit,
@@ -27,7 +27,7 @@ export default function CreateComment({ ticket }: CommentProps) {
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
   const [confirming, setConfirming] = useState(false);
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   const handleSubmit = async () => {
     if (!message.trim() || !ticket.id || !user) {

@@ -1,6 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { TicketData, FinalizationReply, TicketComment } from "@/interfaces/ticket-data";
-import { useAuth } from "@/store/auth";
+import {
+  TicketData,
+  FinalizationReply,
+  TicketComment,
+} from "@/interfaces/ticket-data";
+import { useAuthStore } from "@/store/auth";
 import {
   updateTicket,
   useCreateTicket,
@@ -17,14 +21,25 @@ interface FinalizeTicketParams {
 }
 
 export function useFinalizeTicket() {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
+
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ ticket, reply, commentText, forceAssign }: FinalizeTicketParams) => {
+    mutationFn: async ({
+      ticket,
+      reply,
+      commentText,
+      forceAssign,
+    }: FinalizeTicketParams) => {
       const now = new Date().toISOString();
 
-      console.log("[FinalizeTicket] Início do fluxo", { ticket, reply, commentText, forceAssign });
+      console.log("[FinalizeTicket] Início do fluxo", {
+        ticket,
+        reply,
+        commentText,
+        forceAssign,
+      });
 
       // 1️⃣ Comentário se necessário
       if (commentText && commentText.trim() !== "") {
@@ -52,20 +67,28 @@ export function useFinalizeTicket() {
         });
         console.log("[FinalizeTicket] Audit de comentário criado");
       } else {
-        console.log("[FinalizeTicket] Nenhum comentário necessário ou informado");
+        console.log(
+          "[FinalizeTicket] Nenhum comentário necessário ou informado"
+        );
       }
 
       // 2️⃣ Executa ReplyActions
-      console.log("===========================")
-      console.log("[FinalizeTicket] Buscando ReplyActions | ID do reply:", reply.id);
-      
+      console.log("===========================");
+      console.log(
+        "[FinalizeTicket] Buscando ReplyActions | ID do reply:",
+        reply.id
+      );
+
       const actions = await getReplyActions(reply.id);
       console.log("[FinalizeTicket] ReplyActions encontrados:", actions);
-      console.log("===========================")
+      console.log("===========================");
 
       for (const action of actions) {
         if (action.type === "new_event") {
-          console.log("[FinalizeTicket] Processando action new_event...", action);
+          console.log(
+            "[FinalizeTicket] Processando action new_event...",
+            action
+          );
           const reasonData = await getReasonById(action.data.reasonId!);
           console.log("[FinalizeTicket] Reason recuperado:", reasonData);
 
@@ -85,7 +108,9 @@ export function useFinalizeTicket() {
             status: "PENDENTE",
             createdAt: now,
           });
-          console.log("[FinalizeTicket] Novo ticket criado pelo action new_event");
+          console.log(
+            "[FinalizeTicket] Novo ticket criado pelo action new_event"
+          );
 
           await useCreateTicketAudit({
             ticketId: ticket.id!,
@@ -99,7 +124,9 @@ export function useFinalizeTicket() {
             description: `Criado novo evento vinculado à finalização de ${ticket.id}`,
             date: now,
           });
-          console.log("[FinalizeTicket] Audit de criação de novo evento criado");
+          console.log(
+            "[FinalizeTicket] Audit de criação de novo evento criado"
+          );
         }
 
         if (action.type === "send_email") {
@@ -130,7 +157,9 @@ export function useFinalizeTicket() {
         status: "FINALIZADO",
         assignedTo: willAssign,
       });
-      console.log("[FinalizeTicket] Ticket atualizado para FINALIZADO com sucesso");
+      console.log(
+        "[FinalizeTicket] Ticket atualizado para FINALIZADO com sucesso"
+      );
 
       await useCreateTicketAudit({
         ticketId: ticket.id!,
@@ -148,7 +177,9 @@ export function useFinalizeTicket() {
 
       // 4️⃣ Invalida queries para atualizar o cache
       await queryClient.invalidateQueries({ queryKey: ["tickets"] });
-      await queryClient.invalidateQueries({ queryKey: ["ticket-id", ticket.id] });
+      await queryClient.invalidateQueries({
+        queryKey: ["ticket-id", ticket.id],
+      });
       console.log("[FinalizeTicket] Cache invalidado, fluxo finalizado");
     },
   });

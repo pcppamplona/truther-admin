@@ -20,7 +20,7 @@ import {
   groupHierarchy,
   Group,
 } from "@/interfaces/ticket-data";
-import { useAuth } from "@/store/auth";
+import { useAuthStore } from "@/store/auth";
 import {
   updateTicket,
   useCreateTicketAudit,
@@ -32,7 +32,7 @@ interface AssignToMeDialogProps {
 
 export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
   const [open, setOpen] = useState(false);
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   const isAssignedToUser = ticket.assignedTo?.id === user?.id;
   const currentLevel = ticket.assignedTo?.group as

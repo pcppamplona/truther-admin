@@ -6,7 +6,7 @@ import {
   TicketComment,
   TicketData,
 } from "@/interfaces/ticket-data";
-import { useAuth } from "@/store/auth";
+import { useAuthStore } from "@/store/auth";
 
 export const useTickets = () => {
   return useQuery({
@@ -137,7 +137,8 @@ interface FinalizeTicketFlowParams {
 }
 
 export function useFinalizeTicketFlow() {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
+  
   const queryClient = useQueryClient();
 
   const finalize = useMutation({

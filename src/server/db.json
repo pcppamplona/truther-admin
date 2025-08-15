@@ -2484,6 +2484,13 @@
       "author": "Jonathan Santos",
       "message": "impossivel deletar n1",
       "date": "2025-07-25T18:33:44.443Z"
+    },
+    {
+      "id": "8a68",
+      "ticketId": "e41b",
+      "author": "Jonathan Santos",
+      "message": "sddds",
+      "date": "2025-08-06T19:49:01.341Z"
     }
   ],
   "ticketAudit": [
@@ -2616,6 +2623,32 @@
       "message": "um Novo ticket!",
       "description": "Ticket ba9f criado por Jonathan Santos.",
       "date": "2025-07-25T18:35:43.851Z"
+    },
+    {
+      "id": "0d70",
+      "ticketId": "e41b",
+      "action": "Adicionou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "message": "um novo Comentário",
+      "description": "Comentário adicionado por Jonathan Santos, ao ticket: e41b",
+      "date": "2025-08-06T19:49:01.363Z"
+    },
+    {
+      "id": "7706",
+      "ticketId": "e41b",
+      "action": "Finalizou",
+      "performedBy": {
+        "id": "20",
+        "name": "Jonathan Santos",
+        "group": "N1"
+      },
+      "message": "Finalizou o Ticket",
+      "description": "Ticket e41b finalizado por Jonathan Santos",
+      "date": "2025-08-06T19:49:16.534Z"
     }
   ],
   "tickets": [
@@ -2792,7 +2825,7 @@
         "typeRecipient": "GROUP",
         "recipient": "N1"
       },
-      "status": "PENDENTE",
+      "status": "FINALIZADO",
       "createdAt": "2025-07-25T18:33:44.443Z"
     },
     {

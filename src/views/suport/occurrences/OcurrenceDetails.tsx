@@ -15,7 +15,7 @@ import {
   getColorRGBA,
 } from "./components/utilsOcurrences";
 import { AssignToMeDialog } from "./components/AssignToMeDialog";
-import { useAuth } from "@/store/auth";
+import { useAuthStore } from "@/store/auth";
 import { Group, groupHierarchy, TicketData } from "@/interfaces/ticket-data";
 import { FinalizeTicketDialog } from "./components/FinalizeTicketDialog";
 
@@ -23,7 +23,7 @@ import { FinalizeTicketDialog } from "./components/FinalizeTicketDialog";
 export default function OcurrenceDetails() {
   const location = useLocation();
   const ticketId = location.state?.id;
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   const { data: audits } = useTicketAuditId(ticketId);
   const { data: commentsData } = useTicketComments(ticketId);

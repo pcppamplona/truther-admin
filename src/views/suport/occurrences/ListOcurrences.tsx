@@ -19,14 +19,14 @@ import { useState } from "react";
 import { useTickets } from "@/services/Tickets/useTickets";
 import { useNavigate } from "react-router-dom";
 import { dateFormat, timeFormat } from "@/lib/formatters";
-import { useAuth } from "@/store/auth";
+import { useAuthStore } from "@/store/auth";
 import { getColorRGBA, statusColors } from "./components/utilsOcurrences";
 import { CreateTicket } from "./components/CreateTicket";
 import { Group, groupHierarchy, TicketData } from "@/interfaces/ticket-data";
 
 export default function ListOcurrences() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuthStore();
   const userId = user?.id;
   const userGroupLevel = user?.groupLevel;
 
