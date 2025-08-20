@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-import { FinalizationReply, Status, TicketData } from "@/interfaces/ticket-data";
+import { FinalizationReply, Status, TicketData } from "@/interfaces/TicketData";
 import { getColorRGBA, statusColors } from "./utilsOcurrences";
 import { getReplyReason } from "@/services/Tickets/useReasons";
 import { useFinalizeTicket } from "@/services/Tickets/useFinalizeTicket";

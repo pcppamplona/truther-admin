@@ -1,4 +1,4 @@
-import { UserInfoData } from "@/interfaces/userinfo-data";
+import { UserInfoData } from "@/interfaces/UserInfoData";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 

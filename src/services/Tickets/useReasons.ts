@@ -1,4 +1,4 @@
-import { FinalizationReply, Reason, ReplyAction } from "@/interfaces/ticket-data";
+import { FinalizationReply, Reason, ReplyAction } from "@/interfaces/TicketData";
 import { api } from "../api";
 
 export async function getTicketCategories() {

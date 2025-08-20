@@ -1,4 +1,4 @@
-import { ClientsData } from "@/interfaces/clients-data";
+import { ClientsData } from "@/interfaces/ClientsData";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 

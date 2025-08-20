@@ -22,7 +22,7 @@ import { dateFormat, timeFormat } from "@/lib/formatters";
 import { useAuthStore } from "@/store/auth";
 import { getColorRGBA, statusColors } from "./components/utilsOcurrences";
 import { CreateTicket } from "./components/CreateTicket";
-import { Group, groupHierarchy, TicketData } from "@/interfaces/ticket-data";
+import { Group, groupHierarchy, TicketData } from "@/interfaces/TicketData";
 
 export default function ListOcurrences() {
   const navigate = useNavigate();

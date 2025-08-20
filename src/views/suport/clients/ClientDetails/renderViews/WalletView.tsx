@@ -1,10 +1,10 @@
 import { useWalletDoc } from "@/services/wallets/useWallets";
-import { UserInfoData } from "@/interfaces/userinfo-data";
+import { UserInfoData } from "@/interfaces/UserInfoData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPinHouse, PiggyBank, User, WalletCards } from "lucide-react";
 import { documentFormat, getFlagUrl, phoneFormat } from "@/lib/formatters";
 import { useEffect, useState } from "react";
-import { AclwalletData } from "@/interfaces/aclwallets-data";
+import { AclwalletData } from "@/interfaces/AclwalletData";
 import { Info } from "@/components/info";
 import { WalletSendGas } from "./components/walletSendGas";
 

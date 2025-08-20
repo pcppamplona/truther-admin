@@ -19,7 +19,7 @@ import {
   TicketAudit,
   groupHierarchy,
   Group,
-} from "@/interfaces/ticket-data";
+} from "@/interfaces/TicketData";
 import { useAuthStore } from "@/store/auth";
 import {
   updateTicket,

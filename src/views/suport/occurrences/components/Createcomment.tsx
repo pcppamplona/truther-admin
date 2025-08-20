@@ -17,7 +17,7 @@ import {
   useCreateTicketAudit,
   useCreateTicketComment,
 } from "@/services/Tickets/useTickets";
-import { TicketData } from "@/interfaces/ticket-data";
+import { TicketData } from "@/interfaces/TicketData";
 
 export interface CommentProps {
   ticket: TicketData;

@@ -20,7 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ChevronRight, CircleX, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MaskInput } from "@/components/ui/maskInput";
-import { UserInfoData } from "@/interfaces/userinfo-data";
+import { UserInfoData } from "@/interfaces/UserInfoData";
 import { documentFormat, getInitials } from "@/lib/formatters";
 import { useUserInfoDocument } from "@/services/clients/useUserinfo";
 import {
@@ -33,7 +33,7 @@ import {
   Group,
   groupHierarchy,
   TicketAudit,
-} from "@/interfaces/ticket-data";
+} from "@/interfaces/TicketData";
 import {
   getReasonsByCategory,
   getTicketCategories,

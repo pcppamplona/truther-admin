@@ -1,4 +1,4 @@
-import { NotificationData } from "@/interfaces/notification-data";
+import { NotificationData } from "@/interfaces/NotificationData";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 

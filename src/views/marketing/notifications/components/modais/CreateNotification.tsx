@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { NotificationData } from "@/interfaces/notification-data";
+import { NotificationData } from "@/interfaces/NotificationData";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 

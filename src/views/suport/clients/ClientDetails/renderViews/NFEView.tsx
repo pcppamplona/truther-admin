@@ -1,4 +1,4 @@
-import { ClientsData } from "@/interfaces/clients-data";
+import { ClientsData } from "@/interfaces/ClientsData";
 
 export function NFEView({ client }: { client: ClientsData }) {
   return (

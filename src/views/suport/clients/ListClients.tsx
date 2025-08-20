@@ -10,7 +10,7 @@ import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, Funnel, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { ClientsData } from "@/interfaces/clients-data";
+import { ClientsData } from "@/interfaces/ClientsData";
 
 export default function ListClients() {
   const navigate = useNavigate();

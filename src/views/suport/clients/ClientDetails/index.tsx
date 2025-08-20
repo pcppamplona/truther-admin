@@ -9,8 +9,8 @@ import UserInfo from "./renderViews/UserInfoView";
 import { KYCView } from "./renderViews/KYCView";
 import { WalletView } from "./renderViews/WalletView";
 import { NFEView } from "./renderViews/NFEView";
-import { ClientsData } from "@/interfaces/clients-data";
-import { UserInfoData } from "@/interfaces/userinfo-data";
+import { ClientsData } from "@/interfaces/ClientsData";
+import { UserInfoData } from "@/interfaces/UserInfoData";
 
 export interface ClientInfoProps {
   client: ClientsData;

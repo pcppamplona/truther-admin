@@ -16,7 +16,7 @@ import {
 } from "./components/utilsOcurrences";
 import { AssignToMeDialog } from "./components/AssignToMeDialog";
 import { useAuthStore } from "@/store/auth";
-import { Group, groupHierarchy, TicketData } from "@/interfaces/ticket-data";
+import { Group, groupHierarchy, TicketData } from "@/interfaces/TicketData";
 import { FinalizeTicketDialog } from "./components/FinalizeTicketDialog";
 
 

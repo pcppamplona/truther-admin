@@ -1,4 +1,4 @@
-import { Status } from "@/interfaces/ticket-data";
+import { Status } from "@/interfaces/TicketData";
 
 export const statusColors: Record<Status, string> = {
   PENDENTE: "#FFA500",

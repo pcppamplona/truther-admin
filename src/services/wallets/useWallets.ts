@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../api";
-import { AclwalletData } from "@/interfaces/aclwallets-data";
+import { AclwalletData } from "@/interfaces/AclwalletData";
 
 export const useWallets = () => {
   return useQuery({
