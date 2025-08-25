@@ -13,7 +13,6 @@ interface RenderPaginationProps {
   setLimit: React.Dispatch<React.SetStateAction<number>>;
 }
 
-
 export function RenderPagination({
   page,
   setPage,
@@ -53,7 +52,7 @@ export function RenderPagination({
 
       <div className="flex items-center space-x-1">
         <span className="text-foreground mr-6 font-bold">
-          {page} de {totalPages}
+          {totalPages > 0 ? `${page} de ${totalPages}` : `${page} de ...`}
         </span>
         <button
           onClick={() => goToPage(1)}

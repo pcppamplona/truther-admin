@@ -31,3 +31,10 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// interceptor for simulantion latency
+api.interceptors.request.use((config) => {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(config), 5000); // 1 s delay
+  });
+});

@@ -12,7 +12,6 @@ import {
   ArrowDownFromLine,
   ArrowUpFromLine,
   Download,
-  Funnel,
   Search,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
