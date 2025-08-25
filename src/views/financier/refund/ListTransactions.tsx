@@ -44,26 +44,26 @@ export default function ListTransactions() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell className="font-semibold text-gray-500">ID</TableCell>
-              <TableCell className="font-semibold text-gray-500">
+              <TableCell>ID</TableCell>
+              <TableCell>
                 Data
               </TableCell>
-              <TableCell className="font-semibold text-gray-500">
+              <TableCell>
                 Tipo
               </TableCell>
-              <TableCell className="font-semibold text-gray-500">
+              <TableCell>
                 Origem
               </TableCell>
-              <TableCell className="font-semibold text-gray-500">
+              <TableCell>
                 Destino
               </TableCell>
-              <TableCell className="font-semibold text-gray-500">
+              <TableCell>
                 Moeda
               </TableCell>
-              <TableCell className="font-semibold text-gray-500">
+              <TableCell>
                 Rejeitar
               </TableCell>
-              <TableCell className="font-semibold text-gray-500">
+              <TableCell>
                 Aprovar
               </TableCell>
             </TableRow>

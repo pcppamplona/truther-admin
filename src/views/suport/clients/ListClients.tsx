@@ -8,13 +8,51 @@ import {
 } from "@/components/ui/table";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import { CardHeader, CardTitle } from "@/components/ui/card";
-import { Download, Funnel, Search } from "lucide-react";
+import {
+  ArrowDownFromLine,
+  ArrowUpFromLine,
+  Download,
+  Funnel,
+  Search,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { ClientsData } from "@/interfaces/ClientsData";
+import { RenderPagination } from "@/components/RenderPagination";
+import {
+  getPaginationSettings,
+  setPaginationSettings,
+} from "@/lib/paginationStorage";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function ListClients() {
   const navigate = useNavigate();
-  const { data, isLoading } = useClients();
+  const { page: savedPage, limit: savedLimit } =
+    getPaginationSettings("clients");
+
+  const [page, setPage] = useState(savedPage);
+  const [limit, setLimit] = useState(savedLimit);
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("created_at");
+  const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
+
+  useEffect(() => {
+    setPaginationSettings("clients", page, limit);
+  }, [page, limit]);
+
+  const { data, isLoading } = useClients(
+    page,
+    limit,
+    search,
+    sortBy,
+    sortOrder
+  );
 
   const handleRowClick = (client: ClientsData) => {
     navigate("/clientDetails", { state: { clientId: client.id } });
@@ -22,52 +60,93 @@ export default function ListClients() {
   return (
     <>
       <CardHeader>
-        <CardTitle className="text-2xl font-bold tabular-nums @[650px]/card:text-2xl">
+        <CardTitle className="text-2xl font-bold mb-4">
           Todos os Clientes
-          <div className="flex items-center border border-border rounded-lg px-3 py-2 mt-4">
-            <Search size={16} className="mr-2" />
+        </CardTitle>
+
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center border border-border rounded-lg px-3 py-3 w-full max-w-lg">
+            <Search size={16} className="mr-2 text-muted-foreground" />
             <input
               type="text"
               placeholder="Pesquisar clientes"
               className="outline-none text-sm w-full"
+              value={search}
+              onChange={(e) => {
+                setPage(1);
+                setSearch(e.target.value);
+              }}
             />
           </div>
-        </CardTitle>
-        <div className="flex justify-self-end items-center space-x-4 mt-4">
-          <button className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg">
-            <Funnel size={16} className="mr-2" />
-            Filtrar
-          </button>
 
-          <button className="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg">
-            <Download size={16} className="mr-2" />
-            Baixar CSV
-          </button>
+          <div className="flex items-center gap-2">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-14 h-12"
+                    onClick={() =>
+                      setSortOrder(sortOrder === "ASC" ? "DESC" : "ASC")
+                    }
+                  >
+                    {sortOrder === "ASC" ? (
+                      <ArrowUpFromLine size={18} />
+                    ) : (
+                      <ArrowDownFromLine size={18} />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Ordenar clientes</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button className="w-14 h-12">
+                    <Download size={18} color="#fff"/>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Baixar lista em CSV</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
       </CardHeader>
+
       <div className="w-full px-4 lg:px-6">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell className="font-semibold text-gray-500">ID</TableCell>
-              <TableCell className="font-semibold text-gray-500">
+              <TableCell
+                onClick={() => {
+                  setSortBy("id");
+                  setSortOrder(sortOrder === "ASC" ? "DESC" : "ASC");
+                }}
+              >
+                ID
+              </TableCell>
+              <TableCell
+                onClick={() => {
+                  setSortBy("name");
+                  setSortOrder(sortOrder === "ASC" ? "DESC" : "ASC");
+                }}
+              >
                 Nome
               </TableCell>
-              <TableCell className="font-semibold text-gray-500">
-                uuid
-              </TableCell>
-
-              <TableCell className="font-semibold text-gray-500">
-                role
-              </TableCell>
-              <TableCell className="font-semibold text-gray-500">KYC</TableCell>
+              <TableCell>uuid</TableCell>
+              <TableCell>role</TableCell>
+              <TableCell>KYC</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
               <SkeletonTable />
             ) : (
-              data?.map((client) => (
+              data?.data?.map((client) => (
                 <TableRow
                   key={client.id}
                   onClick={() => handleRowClick(client)}
@@ -76,12 +155,11 @@ export default function ListClients() {
                   <TableCell>{client.name ?? "n/a"}</TableCell>
                   <TableCell>{client.uuid}</TableCell>
                   <TableCell>{client.role}</TableCell>
-
                   <TableCell>
                     <div className="flex items-center space-x-2">
                       <span
                         className={`w-2.5 h-2.5 rounded-full ${
-                          client.kyc_approved ? "bg-[#00E588]" : "bg-[#EA6565]"
+                          client.kyc_approved ? "bg-primary" : "bg-destructive"
                         }`}
                       />
                       <span className="font-medium">
@@ -94,6 +172,16 @@ export default function ListClients() {
             )}
           </TableBody>
         </Table>
+      </div>
+
+      <div className="flex justify-center mt-4">
+        <RenderPagination
+          page={page}
+          setPage={setPage}
+          total={Number(data?.total)}
+          limit={Number(data?.limit)}
+          setLimit={setLimit}
+        />
       </div>
     </>
   );

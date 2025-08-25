@@ -46,29 +46,29 @@ export default function Users() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableCell className="font-semibold text-gray-500">
+                  <TableCell>
                     ID
                   </TableCell>
-                  <TableCell className="font-semibold text-gray-500">
+                  <TableCell>
                     Nome
                   </TableCell>
-                  <TableCell className="font-semibold text-gray-500">
+                  <TableCell>
                     E-mail
                   </TableCell>
-                  <TableCell className="font-semibold text-gray-500">
+                  <TableCell>
                     Data Criação
                   </TableCell>
-                  <TableCell className="font-semibold text-gray-500">
+                  <TableCell>
                     Role
                   </TableCell>
-                  <TableCell className="font-semibold text-gray-500">
+                  <TableCell>
                     uuid
                   </TableCell>
-                  <TableCell className="font-semibold text-gray-500">
+                  <TableCell>
                     Remover
                   </TableCell>
 
-                  <TableCell className="font-semibold text-gray-500">
+                  <TableCell>
                     Editar
                   </TableCell>
                 </TableRow>

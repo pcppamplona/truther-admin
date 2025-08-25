@@ -1,68 +1,74 @@
 import { create } from "zustand";
 import { api } from "@/services/api";
-
-interface User {
-  id: number;
-  uuid: string;
-  name: string;
-  username: string;
-  active: boolean;
-  typeAuth: string;
-  groupLevel: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { UserData } from "@/interfaces/UserData";
 
 interface AuthState {
-  user: User | null;
+  user: UserData | null;
   token: string | null;
   loading: boolean;
   error: string | null;
-  login: (username: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<string>;
   fetchMe: () => Promise<void>;
   logout: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  
-  user: null,
-  token: localStorage.getItem("authToken"),
-  loading: false,
-  error: null,
+export const useAuthStore = create<AuthState>((set) => {
+  const token = localStorage.getItem("authToken");
 
-  login: async (username, password) => {
-    set({ loading: true, error: null });
+  if (token) {
+    (async () => {
+      try {
+        const { data } = await api.get("/me");
+        set({ user: data, token });
+      } catch {
+        localStorage.removeItem("authToken");
+        set({ user: null, token: null });
+      }
+    })();
+  }
 
-    try {
-      const { data } = await api.post("/authenticate", { username, password });
-      
-      localStorage.setItem("authToken", data.token);
-      set({ token: data.token });
+  return {
+    user: null,
+    token,
+    loading: false,
+    error: null,
 
-      await useAuthStore.getState().fetchMe();
+    login: async (username, password) => {
+      set({ loading: true, error: null });
+      try {
+        const { data } = await api.post("/authenticate", {
+          username,
+          password,
+        });
+        localStorage.setItem("authToken", data.token);
+        set({ token: data.token });
 
-      return data; 
-    } catch (error: any) {
-      const message = error?.response?.data?.message || "Usuário ou senha inválidos";
-      set({ error: message });
-      throw new Error(message);
-    } finally {
-      set({ loading: false });
-    }
-  },
+        await useAuthStore.getState().fetchMe();
 
-  fetchMe: async () => {
-    try {
-      const { data } = await api.get("/me");
-      set({ user: data });
-    } catch {
-      set({ error: "Falha ao carregar usuário", user: null, token: null });
+        return data.token;
+      } catch (error: any) {
+        const message =
+          error?.response?.data?.message || "Usuário ou senha inválidos";
+        set({ error: message });
+        throw new Error(message);
+      } finally {
+        set({ loading: false });
+      }
+    },
+
+    fetchMe: async () => {
+      try {
+        const { data } = await api.get("/me");
+        set({ user: data });
+      } catch {
+        set({ error: "Falha ao carregar usuário", user: null, token: null });
+        localStorage.removeItem("authToken");
+      }
+    },
+
+    logout: () => {
       localStorage.removeItem("authToken");
-    }
-  },
-
-  logout: () => {
-    localStorage.removeItem("authToken");
-    set({ user: null, token: null });
-  },
-}));
+      set({ user: null, token: null });
+    },
+  };
+});

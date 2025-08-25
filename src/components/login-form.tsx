@@ -16,7 +16,7 @@ export function LoginForm({
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const { login, loading, token, error } = useAuthStore();
+  const { login, loading, error } = useAuthStore();
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -25,11 +25,12 @@ export function LoginForm({
     const username = usernameRef.current?.value || "";
     const password = passwordRef.current?.value || "";
 
-    await login(username, password);
-
-    if (token) {
-      navigate("/dashboard");
-    } else {
+    try {
+      const token = await login(username, password);
+      if (token) {
+        navigate("/dashboard");
+      }
+    } catch {
       toast.error("Usuário ou senha inválidos.");
     }
   };

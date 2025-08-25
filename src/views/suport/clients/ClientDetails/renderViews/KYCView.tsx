@@ -87,7 +87,7 @@ export function KYCView({ client, userInfo }: ClientInfoProps) {
             <Info
               label="Estágio"
               value={
-                <span className={getStageClass(client)}>
+                <span className={`text-muted-foreground` + getStageClass(client)}>
                   {getStageLabel(client)}
                 </span>
               }

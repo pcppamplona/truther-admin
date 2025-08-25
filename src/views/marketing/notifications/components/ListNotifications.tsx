@@ -49,17 +49,17 @@ export default function ListNotifications() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell className="font-semibold text-gray-500">ID</TableCell>
-              <TableCell className="font-semibold text-gray-500">
+              <TableCell>ID</TableCell>
+              <TableCell>
                 Tipo
               </TableCell>
-              <TableCell className="font-semibold text-gray-500">
+              <TableCell>
                 Categoria
               </TableCell>
-              <TableCell className="font-semibold text-gray-500">
+              <TableCell>
                 Título
               </TableCell>
-              <TableCell className="font-semibold text-gray-500">
+              <TableCell>
                 Data
               </TableCell>
             </TableRow>

@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import { useState } from "react";
 
 import { CircleUserRound, FileUser, Wallet, FileText } from "lucide-react";
-import { useClients } from "@/services/clients/useClients";
+import { useClientById } from "@/services/clients/useClients"; // <- ajuste aqui
 import { useUserInfo } from "@/services/clients/useUserinfo";
 import { SidebarLayout } from "@/components/layouts/SidebarLayout";
 import UserInfo from "./renderViews/UserInfoView";
@@ -21,9 +21,7 @@ export default function ClientDetails() {
   const { state } = useLocation();
   const clientId = state?.clientId;
 
-  const { data: clients } = useClients();
-  const client = clients?.find((c) => c.id === clientId);
-
+  const { data: client, isLoading: loadingClient } = useClientById(clientId);
   const { data: userInfo } = useUserInfo(clientId);
 
   const [view, setView] = useState<"Perfil" | "KYC" | "Carteiras" | "NFE">(
@@ -31,7 +29,7 @@ export default function ClientDetails() {
   );
 
   if (!clientId) return <div>Cliente não especificado.</div>;
-  if (!client) return <div>Cliente não encontrado.</div>;
+  if (!client && !loadingClient) return <div>Cliente não encontrado.</div>;
 
   return (
     <SidebarLayout
@@ -41,7 +39,7 @@ export default function ClientDetails() {
       ]}
       current={
         <>
-          Detalhes de <strong>{client.name}</strong>
+          Detalhes de <strong>{client?.name ?? "..."}</strong>
         </>
       }
     >
@@ -74,10 +72,10 @@ export default function ClientDetails() {
         })}
       </div>
 
-      {view === "Perfil" && <UserInfo client={client} userInfo={userInfo} />}
-      {view === "KYC" && <KYCView client={client} userInfo={userInfo} />}
-      {view === "Carteiras" && <WalletView userinfo={userInfo} />}
-      {view === "NFE" && <NFEView client={client} />}
+      {view === "Perfil" && client && (<UserInfo client={client} userInfo={userInfo} />)}
+      {view === "KYC" && client && (<KYCView client={client} userInfo={userInfo} />)}
+      {view === "Carteiras" && userInfo && <WalletView userinfo={userInfo} />}
+      {view === "NFE" && client && <NFEView client={client} />}
     </SidebarLayout>
   );
 }

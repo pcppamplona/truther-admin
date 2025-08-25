@@ -95,7 +95,7 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
             <Info label="Nome da Mãe" value={userInfo?.mothersName} />
 
             <div>
-              <p className="text-[#475467]">País</p>
+              <p className="text-muted-foreground">País</p>
               <strong className="flex items-center gap-2">
                 <img
                   src={getFlagUrl(userInfo?.nationality ?? "")}
@@ -107,7 +107,7 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
             </div>
 
             <div>
-              <p className="text-[#475467]">uuid</p>
+              <p className="text-muted-foreground">uuid</p>
               <strong>{userInfo?.uuid}</strong>
             </div>
           </CardContent>
@@ -139,7 +139,7 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
               className="block"
             >
               <div className="cursor-pointer">
-                <p className="text-[#475467] flex items-center">
+                <p className="text-muted-foreground flex items-center">
                   Localização
                   <ExternalLink size={14} className="ml-2" />
                 </p>
@@ -162,22 +162,22 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableCell className="font-semibold text-gray-500">
+                <TableCell>
                   ID
                 </TableCell>
-                <TableCell className="font-semibold text-gray-500">
+                <TableCell>
                   Data
                 </TableCell>
-                <TableCell className="font-semibold text-gray-500">
+                <TableCell>
                   Tipo
                 </TableCell>
-                <TableCell className="font-semibold text-gray-500">
+                <TableCell>
                   Origem
                 </TableCell>
-                <TableCell className="font-semibold text-gray-500">
+                <TableCell>
                   Destino
                 </TableCell>
-                <TableCell className="font-semibold text-gray-500">
+                <TableCell>
                   Moeda
                 </TableCell>
               </TableRow>
