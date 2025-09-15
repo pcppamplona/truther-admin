@@ -33,8 +33,8 @@ api.interceptors.response.use(
 );
 
 // interceptor for simulantion latency
-api.interceptors.request.use((config) => {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(config), 5000); // 1 s delay
-  });
-});
+// api.interceptors.request.use((config) => {
+//   return new Promise((resolve) => {
+//     setTimeout(() => resolve(config), 5000); // 1 s delay
+//   });
+// });

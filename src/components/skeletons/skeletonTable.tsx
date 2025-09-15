@@ -21,6 +21,12 @@ export function SkeletonTable({ rows = 5 }) {
           <TableCell>
             <Skeleton className="w-16 h-4" />
           </TableCell>
+          <TableCell>
+            <Skeleton className="w-16 h-4" />
+          </TableCell>
+          <TableCell>
+            <Skeleton className="w-16 h-4" />
+          </TableCell>
         </TableRow>
       ))}
     </>

@@ -4,19 +4,21 @@ export function Info({
   label,
   value,
 }: {
-  label: string;
+  label: string | React.ReactNode;
   value?: string | number | null | React.ReactNode;
 }) {
-  // Lança erro se for objeto sem ser um React Element
   if (typeof value === "object" && !React.isValidElement(value) && value !== null) {
     console.error("Valor inválido passado para <Info />:", value);
     value = "-";
   }
 
   return (
-    <div>
+    <div className="min-w-0">
       <p className="text-sm text-muted-foreground">{label}</p>
-      <strong className="text-sm break-all">{value ?? "-"}</strong>
+
+      <div className="text-sm w-full min-w-0 break-words whitespace-pre-wrap">
+        {value ?? "-"}
+      </div>
     </div>
   );
 }
