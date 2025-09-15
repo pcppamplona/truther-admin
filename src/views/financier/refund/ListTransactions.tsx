@@ -10,6 +10,12 @@ import { Check, Download, Funnel, Search, Trash } from "lucide-react";
 import { TransactionsData } from "@/views/suport/clients/ClientDetails/renderViews/UserInfoView";
 import { dateFormat } from "@/lib/formatters";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function ListTransactions() {
   const data = TransactionsData;
@@ -17,55 +23,60 @@ export default function ListTransactions() {
   return (
     <>
       <CardHeader>
-        <CardTitle className="text-2xl font-bold tabular-nums @[650px]/card:text-2xl">
+        <CardTitle className="text-2xl font-bold mb-4">
           Reembolsos pendentes
-          <div className="flex items-center border border-border rounded-lg px-3 py-2 mt-4">
-            <Search size={16} className="mr-2" />
+        </CardTitle>
+
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center border border-border rounded-lg px-3 py-3 w-full max-w-lg">
+            <Search size={16} className="mr-2 text-muted-foreground" />
             <input
               type="text"
               placeholder="Pesquisar transação"
               className="outline-none text-sm w-full"
             />
           </div>
-        </CardTitle>
-         <div className="flex justify-self-end items-center space-x-4 mt-4">
-          <button className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg">
-            <Funnel size={16} className="mr-2" />
-            Filtrar
-          </button>
 
-          <button className="flex items-center px-4 py-2 bg-primary text-white rounded-lg">
-            <Download size={16} className="mr-2" />
-            Baixar CSV
-          </button>
+          <div className="flex items-center gap-2">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button className="w-14 h-12 bg-blue-500">
+                    <Funnel size={18} color="#fff"/>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Filtros</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button className="w-14 h-12">
+                    <Download size={18} color="#fff" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Baixar lista em CSV</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
       </CardHeader>
+      
       <div className="w-full px-4 lg:px-6">
         <Table>
           <TableHeader>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell>
-                Data
-              </TableCell>
-              <TableCell>
-                Tipo
-              </TableCell>
-              <TableCell>
-                Origem
-              </TableCell>
-              <TableCell>
-                Destino
-              </TableCell>
-              <TableCell>
-                Moeda
-              </TableCell>
-              <TableCell>
-                Rejeitar
-              </TableCell>
-              <TableCell>
-                Aprovar
-              </TableCell>
+              <TableCell>Data</TableCell>
+              <TableCell>Tipo</TableCell>
+              <TableCell>Origem</TableCell>
+              <TableCell>Destino</TableCell>
+              <TableCell>Moeda</TableCell>
+              <TableCell>Rejeitar</TableCell>
+              <TableCell>Aprovar</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -110,13 +121,11 @@ export default function ListTransactions() {
                 <TableCell>
                   <Button className="bg-destructive text-background">
                     <Trash />
-                    
                   </Button>
                 </TableCell>
                 <TableCell>
                   <Button className="text-background">
                     <Check />
-                    
                   </Button>
                 </TableCell>
               </TableRow>

@@ -1,4 +1,3 @@
-// import * as React from "react";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -12,7 +11,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/store/auth";
-import { Presentation, BotMessageSquare, House, DollarSign, User } from "lucide-react";
+import { Presentation, BotMessageSquare, House, DollarSign, User, FlagTriangleRight } from "lucide-react";
 
 export function AppSidebar() {
 
@@ -90,6 +89,11 @@ export function AppSidebar() {
         title: "Usuários",
         url: "users",
         icon: User,
+      },
+      {
+        title: "Auditoria",
+        url: "auditLog",
+        icon: FlagTriangleRight,
       },
     ],
   };

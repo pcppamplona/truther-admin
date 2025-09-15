@@ -16,6 +16,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 
 export default function ListCashout() {
   const data = TransactionsData;
@@ -23,19 +30,21 @@ export default function ListCashout() {
   return (
     <>
       <CardHeader>
-        <CardTitle className="text-2xl font-bold tabular-nums @[650px]/card:text-2xl">
-          Saques
-          <div className="flex flex-row items-center py-4 gap-x-4">
-            <div className="flex flex-1 items-center border border-border rounded-lg px-3 py-2">
-              <Search size={16} className="mr-2" />
-              <input
-                type="text"
-                placeholder="Pesquisar saque"
-                className="outline-none text-sm w-full"
-              />
-            </div>
+        <CardTitle className="text-2xl font-bold mb-4">Saques</CardTitle>
+
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center border border-border rounded-lg px-3 py-3 w-full max-w-lg">
+            <Search size={16} className="mr-2 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Pesquisar saque"
+              className="outline-none text-sm w-full"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
             <Select>
-              <SelectTrigger>
+               <SelectTrigger className="bg-red-400" size="xl">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -43,18 +52,31 @@ export default function ListCashout() {
                 <SelectItem value="Default">New</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-        </CardTitle>
-        <div className="flex justify-self-end items-center space-x-4 mt-4">
-          <button className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg">
-            <Funnel size={16} className="mr-2" />
-            Filtrar
-          </button>
 
-          <button className="flex items-center px-4 py-2 bg-primary text-white rounded-lg">
-            <Download size={16} className="mr-2" />
-            Baixar CSV
-          </button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button className="w-14 h-12 bg-blue-500">
+                    <Funnel size={18} color="#fff" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Filtros</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button className="w-14 h-12">
+                    <Download size={18} color="#fff" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Baixar lista em CSV</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
       </CardHeader>
       <div className="w-full px-4 lg:px-6">
@@ -62,21 +84,11 @@ export default function ListCashout() {
           <TableHeader>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell>
-                Data
-              </TableCell>
-              <TableCell>
-                Tipo
-              </TableCell>
-              <TableCell>
-                Origem
-              </TableCell>
-              <TableCell>
-                Destino
-              </TableCell>
-              <TableCell>
-                Moeda
-              </TableCell>
+              <TableCell>Data</TableCell>
+              <TableCell>Tipo</TableCell>
+              <TableCell>Origem</TableCell>
+              <TableCell>Destino</TableCell>
+              <TableCell>Moeda</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>

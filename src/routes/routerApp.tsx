@@ -1,3 +1,4 @@
+import AuditLog from "@/views/audit";
 import Dashboard from "@/views/dashboard";
 import Financier from "@/views/financier";
 import Cashout from "@/views/financier/cashout";
@@ -38,6 +39,7 @@ export default function RoutesApp() {
 
       <Route path="/users" element={<Users />} />
 
+      <Route path="/auditLog" element={<AuditLog />} />
     </Routes>
   );
 }

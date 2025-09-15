@@ -9,8 +9,8 @@ import {
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  ArrowDownFromLine,
-  ArrowUpFromLine,
+  ArrowDown01,
+  ArrowUp01,
   Download,
   Search,
 } from "lucide-react";
@@ -90,9 +90,9 @@ export default function ListClients() {
                     }
                   >
                     {sortOrder === "ASC" ? (
-                      <ArrowUpFromLine size={18} />
+                      <ArrowUp01 size={18} />
                     ) : (
-                      <ArrowDownFromLine size={18} />
+                      <ArrowDown01 size={18} />
                     )}
                   </Button>
                 </TooltipTrigger>
