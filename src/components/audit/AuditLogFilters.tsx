@@ -6,6 +6,7 @@ import {
   MessageSquareText,
   Search,
   Calendar as CalendarIcon,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -96,8 +97,7 @@ export function AuditLogFilters({
   const handleApply = () => {
     setSearch(drawerSearch);
     setSelectedMethod(drawerSelectedMethod);
-    
-    // Format dates to YYYY-MM-DD
+
     const formattedBeforeDate = drawerCreatedBefore 
       ? formatDateToYYYYMMDD(drawerCreatedBefore)
       : undefined;
@@ -113,12 +113,21 @@ export function AuditLogFilters({
     setIsDrawerOpen(false);
   };
 
-  // Helper function to format date to YYYY-MM-DD
   const formatDateToYYYYMMDD = (date: Date): string => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  };
+
+  const handleClearBeforeClick = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setDrawerCreatedBefore(undefined);
+  };
+  
+  const handleClearAfterClick = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setDrawerCreatedAfter(undefined);
   };
 
   return (
@@ -204,25 +213,58 @@ export function AuditLogFilters({
                     variant="outline"
                     id="created_after"
                     className="w-full justify-between font-normal"
+                    type="button"
+                    aria-label="Selecionar data - Criado depois de"
                   >
-                    {drawerCreatedAfter ? formatDateToYYYYMMDD(drawerCreatedAfter) : "Selecione a data"}
-                    <ChevronDown size={16} />
+                    <span>
+                      {drawerCreatedAfter ? formatDateToYYYYMMDD(drawerCreatedAfter) : "Selecione a data"}
+                    </span>
+                    
+                    <span className="flex items-center gap-1">
+                      {drawerCreatedAfter && (
+                        <Button
+                          type="button"
+                          size="icon"
+                          variant="ghost"
+                          aria-label="Limpar data 'Criado depois de'"
+                          onClick={handleClearAfterClick}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
+                      <CalendarIcon className="h-4 w-4 opacity-60" />
+                    </span>
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent 
                   container={drawerRef.current}
-                  className="w-auto overflow-hidden p-0" 
+                  className="w-auto p-0" 
                   align="start"
                 >
                   <Calendar
                     mode="single"
                     selected={drawerCreatedAfter}
                     captionLayout="dropdown"
-                    onSelect={(date) => {
-                      setDrawerCreatedAfter(date);
-                      setOpenAfterCalendar(false);
-                    }}
+                    onSelect={setDrawerCreatedAfter}
+                    initialFocus
                   />
+                  <div className="flex justify-end gap-2 p-2">
+                    {drawerCreatedAfter && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setDrawerCreatedAfter(undefined);
+                          setOpenAfterCalendar(false);
+                        }}
+                      >
+                        Limpar
+                      </Button>
+                    )}
+                    <Button size="sm" onClick={() => setOpenAfterCalendar(false)}>
+                      OK
+                    </Button>
+                  </div>
                 </PopoverContent>
               </Popover>
             </div>
@@ -237,25 +279,58 @@ export function AuditLogFilters({
                     variant="outline"
                     id="created_before"
                     className="w-full justify-between font-normal"
+                    type="button"
+                    aria-label="Selecionar data - Criado antes de"
                   >
-                    {drawerCreatedBefore ? formatDateToYYYYMMDD(drawerCreatedBefore) : "Selecione a data"}
-                    <ChevronDown size={16} />
+                    <span>
+                      {drawerCreatedBefore ? formatDateToYYYYMMDD(drawerCreatedBefore) : "Selecione a data"}
+                    </span>
+                    
+                    <span className="flex items-center gap-1">
+                      {drawerCreatedBefore && (
+                        <Button
+                          type="button"
+                          size="icon"
+                          variant="ghost"
+                          aria-label="Limpar data 'Criado antes de'"
+                          onClick={handleClearBeforeClick}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
+                      <CalendarIcon className="h-4 w-4 opacity-60" />
+                    </span>
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent 
                   container={drawerRef.current}
-                  className="w-auto overflow-hidden p-0" 
+                  className="w-auto p-0" 
                   align="start"
                 >
                   <Calendar
                     mode="single"
                     selected={drawerCreatedBefore}
                     captionLayout="dropdown"
-                    onSelect={(date) => {
-                      setDrawerCreatedBefore(date);
-                      setOpenBeforeCalendar(false);
-                    }}
+                    onSelect={setDrawerCreatedBefore}
+                    initialFocus
                   />
+                  <div className="flex justify-end gap-2 p-2">
+                    {drawerCreatedBefore && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setDrawerCreatedBefore(undefined);
+                          setOpenBeforeCalendar(false);
+                        }}
+                      >
+                        Limpar
+                      </Button>
+                    )}
+                    <Button size="sm" onClick={() => setOpenBeforeCalendar(false)}>
+                      OK
+                    </Button>
+                  </div>
                 </PopoverContent>
               </Popover>
             </div>
