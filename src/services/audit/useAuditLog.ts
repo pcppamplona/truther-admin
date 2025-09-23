@@ -3,9 +3,16 @@ import { PaginateData } from "@/interfaces/PaginateData";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 
-export const useAuditLog = (page: number, limit: number, search?: string, method?: methodType | "") => {
+export const useAuditLog = (
+  page: number, 
+  limit: number, 
+  search?: string, 
+  method?: methodType | "",
+  created_before?: string,
+  created_after?: string
+) => {
   return useQuery<PaginateData<AuditLog>>({
-    queryKey: ["audit-logs", page, limit, search, method],
+    queryKey: ["audit-logs", page, limit, search, method, created_before, created_after],
     queryFn: async () => {
       const params = new URLSearchParams({
         page: String(page),
@@ -14,6 +21,8 @@ export const useAuditLog = (page: number, limit: number, search?: string, method
 
       if (search) params.append("search", search);
       if (method) params.append("method", method);
+      if (created_before) params.append("created_before", created_before);
+      if (created_after) params.append("created_after", created_after);
 
       const { data } = await api.get<PaginateData<AuditLog>>(
         `/audit-logs?${params.toString()}`

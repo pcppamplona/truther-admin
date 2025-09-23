@@ -42,8 +42,17 @@ export default function ListAuditLog() {
   const [search, setSearch] = useState("");
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [selectedMethod, setSelectedMethod] = useState<methodType | "">("");
+  const [createdBefore, setCreatedBefore] = useState<string | undefined>(undefined);
+  const [createdAfter, setCreatedAfter] = useState<string | undefined>(undefined);
 
-  const { data, isLoading } = useAuditLog(page, limit, search, selectedMethod as methodType | "");
+  const { data, isLoading } = useAuditLog(
+    page, 
+    limit, 
+    search, 
+    selectedMethod as methodType | "", 
+    createdBefore, 
+    createdAfter
+  );
 
   const toggleExpand = (id: number) => {
     setExpandedId((prev) => (prev === id ? null : id));
@@ -79,6 +88,10 @@ export default function ListAuditLog() {
                 setSearch={setSearch}
                 selectedMethod={selectedMethod}
                 setSelectedMethod={setSelectedMethod}
+                createdBefore={createdBefore}
+                setCreatedBefore={setCreatedBefore}
+                createdAfter={createdAfter}
+                setCreatedAfter={setCreatedAfter}
                 setPage={setPage}
                 methodColors={methodColors}
               />
