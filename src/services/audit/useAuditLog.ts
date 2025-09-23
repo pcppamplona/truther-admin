@@ -1,11 +1,11 @@
-import { AuditLog } from "@/interfaces/AuditLogData";
+import { AuditLog, methodType } from "@/interfaces/AuditLogData";
 import { PaginateData } from "@/interfaces/PaginateData";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 
-export const useAuditLog = (page: number, limit: number, search?: string) => {
+export const useAuditLog = (page: number, limit: number, search?: string, method?: methodType | "") => {
   return useQuery<PaginateData<AuditLog>>({
-    queryKey: ["audit-logs", page, limit, search],
+    queryKey: ["audit-logs", page, limit, search, method],
     queryFn: async () => {
       const params = new URLSearchParams({
         page: String(page),
@@ -13,9 +13,10 @@ export const useAuditLog = (page: number, limit: number, search?: string) => {
       });
 
       if (search) params.append("search", search);
+      if (method) params.append("method", method);
 
       const { data } = await api.get<PaginateData<AuditLog>>(
-        `/audit-logs/paginated?${params.toString()}`
+        `/audit-logs?${params.toString()}`
       );
       return data;
     },
