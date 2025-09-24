@@ -32,6 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { methodType } from "@/interfaces/AuditLogData";
+import {useRef, useState} from "react";
 
 interface AuditLogFiltersProps {
   search: string;
@@ -58,19 +59,19 @@ export function AuditLogFilters({
   setPage,
   methodColors,
 }: AuditLogFiltersProps) {
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
-  const [drawerSearch, setDrawerSearch] = React.useState("");
-  const [drawerSelectedMethod, setDrawerSelectedMethod] = React.useState<methodType | "">(selectedMethod);
-  const [drawerCreatedBefore, setDrawerCreatedBefore] = React.useState<Date | undefined>(
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [drawerSearch, setDrawerSearch] = useState("");
+  const [drawerSelectedMethod, setDrawerSelectedMethod] = useState<methodType | "">(selectedMethod);
+  const [drawerCreatedBefore, setDrawerCreatedBefore] = useState<Date | undefined>(
     createdBefore ? new Date(createdBefore) : undefined
   );
-  const [drawerCreatedAfter, setDrawerCreatedAfter] = React.useState<Date | undefined>(
+  const [drawerCreatedAfter, setDrawerCreatedAfter] = useState<Date | undefined>(
     createdAfter ? new Date(createdAfter) : undefined
   );
-  const [openBeforeCalendar, setOpenBeforeCalendar] = React.useState(false);
-  const [openAfterCalendar, setOpenAfterCalendar] = React.useState(false);
+  const [openBeforeCalendar, setOpenBeforeCalendar] = useState(false);
+  const [openAfterCalendar, setOpenAfterCalendar] = useState(false);
 
-  const drawerRef = React.useRef<HTMLDivElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   const handleDrawerOpenChange = (open: boolean) => {
     if (open) {
