@@ -6,13 +6,15 @@ import { api } from "../api";
 export const useAuditLog = (
   page: number, 
   limit: number, 
-  search?: string, 
+  search?: string,
+  descriptionSearch?: string, 
   method?: methodType | "",
+  action?: string,
   created_before?: string,
   created_after?: string
 ) => {
   return useQuery<PaginateData<AuditLog>>({
-    queryKey: ["audit-logs", page, limit, search, method, created_before, created_after],
+    queryKey: ["audit-logs", page, limit, search, descriptionSearch, method, action, created_before, created_after],
     queryFn: async () => {
       const params = new URLSearchParams({
         page: String(page),
@@ -20,7 +22,9 @@ export const useAuditLog = (
       });
 
       if (search) params.append("search", search);
+      if (descriptionSearch) params.append("description", descriptionSearch);
       if (method) params.append("method", method);
+      if (action) params.append("action", action);
       if (created_before) params.append("created_before", created_before);
       if (created_after) params.append("created_after", created_after);
 

@@ -40,16 +40,20 @@ export default function ListAuditLog() {
   const [page, setPage] = useState(savedPage);
   const [limit, setLimit] = useState(savedLimit);
   const [search, setSearch] = useState("");
+  const [descriptionSearch, setDescriptionSearch] = useState("");
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [selectedMethod, setSelectedMethod] = useState<methodType | "">("");
+  const [selectedAction, setSelectedAction] = useState<ActionType | "">("");
   const [createdBefore, setCreatedBefore] = useState<string | undefined>(undefined);
   const [createdAfter, setCreatedAfter] = useState<string | undefined>(undefined);
 
   const { data, isLoading } = useAuditLog(
     page, 
     limit, 
-    search, 
-    selectedMethod as methodType | "", 
+    search,
+    descriptionSearch,
+    selectedMethod as methodType | "",
+    selectedAction,
     createdBefore, 
     createdAfter
   );
@@ -86,8 +90,12 @@ export default function ListAuditLog() {
               <AuditLogFilters
                 search={search}
                 setSearch={setSearch}
+                descriptionSearch={descriptionSearch}
+                setDescriptionSearch={setDescriptionSearch}
                 selectedMethod={selectedMethod}
                 setSelectedMethod={setSelectedMethod}
+                selectedAction={selectedAction}
+                setSelectedAction={setSelectedAction}
                 createdBefore={createdBefore}
                 setCreatedBefore={setCreatedBefore}
                 createdAfter={createdAfter}
