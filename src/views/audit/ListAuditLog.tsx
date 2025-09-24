@@ -6,11 +6,9 @@ import {
   ChevronUp,
   Download,
   FileText,
-  Funnel,
   MessageSquareText,
   MoveDown,
   MoveUp,
-  Search,
   User2,
 } from "lucide-react";
 import {
@@ -28,6 +26,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { AuditLogFilters } from "@/components/audit/AuditLogFilters";
 import { getPaginationSettings } from "@/lib/paginationStorage";
 import { RenderPagination } from "@/components/RenderPagination";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
@@ -41,9 +40,23 @@ export default function ListAuditLog() {
   const [page, setPage] = useState(savedPage);
   const [limit, setLimit] = useState(savedLimit);
   const [search, setSearch] = useState("");
+  const [descriptionSearch, setDescriptionSearch] = useState("");
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [selectedMethod, setSelectedMethod] = useState<methodType | "">("");
+  const [selectedAction, setSelectedAction] = useState<ActionType | "">("");
+  const [createdBefore, setCreatedBefore] = useState<string | undefined>(undefined);
+  const [createdAfter, setCreatedAfter] = useState<string | undefined>(undefined);
 
-  const { data, isLoading } = useAuditLog(page, limit, search);
+  const { data, isLoading } = useAuditLog(
+    page, 
+    limit, 
+    search,
+    descriptionSearch,
+    selectedMethod as methodType | "",
+    selectedAction,
+    createdBefore, 
+    createdAfter
+  );
 
   const toggleExpand = (id: number) => {
     setExpandedId((prev) => (prev === id ? null : id));
@@ -71,33 +84,25 @@ export default function ListAuditLog() {
           Auditoria Geral
         </CardTitle>
 
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center border border-border rounded-lg px-3 py-3 w-full max-w-lg">
-            <Search size={16} className="mr-2 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Pesquisar transação"
-              className="outline-none text-sm w-full"
-              value={search}
-              onChange={(e) => {
-                setPage(1);
-                setSearch(e.target.value);
-              }}
-            />
-          </div>
-
+        <div className="flex items-center justify-end gap-4">
           <div className="flex items-center gap-2">
             <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button className="w-14 h-12 bg-blue-500">
-                    <Funnel size={18} color="#fff" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Filtros</p>
-                </TooltipContent>
-              </Tooltip>
+              <AuditLogFilters
+                search={search}
+                setSearch={setSearch}
+                descriptionSearch={descriptionSearch}
+                setDescriptionSearch={setDescriptionSearch}
+                selectedMethod={selectedMethod}
+                setSelectedMethod={setSelectedMethod}
+                selectedAction={selectedAction}
+                setSelectedAction={setSelectedAction}
+                createdBefore={createdBefore}
+                setCreatedBefore={setCreatedBefore}
+                createdAfter={createdAfter}
+                setCreatedAfter={setCreatedAfter}
+                setPage={setPage}
+                methodColors={methodColors}
+              />
 
               <Tooltip>
                 <TooltipTrigger asChild>
