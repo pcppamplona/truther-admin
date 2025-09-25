@@ -1,4 +1,4 @@
-import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableHeader,
@@ -14,187 +14,147 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { Search } from "lucide-react";
-import { useState } from "react";
+import { ArrowDown01, ArrowUp01, Plus, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useTickets } from "@/services/Tickets/useTickets";
 import { useNavigate } from "react-router-dom";
 import { dateFormat, timeFormat } from "@/lib/formatters";
-import { useAuthStore } from "@/store/auth";
 import { getColorRGBA, statusColors } from "./components/utilsOcurrences";
-import { CreateTicket } from "./components/CreateTicket";
-import { Group, groupHierarchy, TicketData } from "@/interfaces/TicketData";
+// import { CreateTicket } from "./components/CreateTicket";
+import {
+  getPaginationSettings,
+  setPaginationSettings,
+} from "@/lib/paginationStorage";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { SkeletonTable } from "@/components/skeletons/skeletonTable";
+import { RenderPagination } from "@/components/RenderPagination";
+import { TicketData } from "@/interfaces/TicketData";
 
 export default function ListOcurrences() {
   const navigate = useNavigate();
-  const { user } = useAuthStore();
-  const userId = user?.id;
-  const userGroupLevel = user?.groupLevel;
+  const { page: savedPage, limit: savedLimit } =
+    getPaginationSettings("tickets");
 
-  const { data: Tickets } = useTickets();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("Todas");
+  const [page, setPage] = useState(savedPage);
+  const [limit, setLimit] = useState(savedLimit);
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("created_at");
+  const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
 
-  const accessibleGroups = userGroupLevel
-    ? (Object.keys(groupHierarchy) as Group[]).filter(
-        (group) =>
-          groupHierarchy[group] <= groupHierarchy[userGroupLevel as Group]
-      )
-    : [];
+  useEffect(() => {
+    setPaginationSettings("tickets", page, limit);
+  }, [page, limit]);
 
-  const filteredTickets = Tickets?.filter((ticket) => {
-    const matchesSearch = (ticket.reason.reason ?? "")
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-
-    // let recipientGroup: Group | null = null;
-
-    // if (ticket.reason.typeRecipient === "GROUP") {
-    //   recipientGroup = ticket.reason.recipient as Group;
-    // } else if (ticket.reason.typeRecipient === "USER") {
-    //   // Destinatário é usuário, não tem grupo
-    //   recipientGroup = null;
-    // } else if (ticket.reason.typeRecipient === "ALL") {
-    //   recipientGroup = ticket.reason.recipient as Group;
-    // }
-
-    let recipientGroup: Group | null = null;
-
-    if (ticket.reason.typeRecipient === "GROUP") {
-      recipientGroup = ticket.reason.recipient as Group;
-    } else if (ticket.reason.typeRecipient === "USER") {
-      recipientGroup = null; // acesso controlado por user id
-    } else if (ticket.reason.typeRecipient === "ALL") {
-      // Pode ser tanto Group quanto User
-      if (typeof ticket.reason.recipient === "string") {
-        recipientGroup = ticket.reason.recipient as Group;
-      } else if (
-        typeof ticket.reason.recipient === "object" &&
-        ticket.reason.recipient
-      ) {
-        recipientGroup = ticket.reason.recipient as Group;
-      }
-    }
-
-    const isGroupAccessible =
-      recipientGroup !== null
-        ? accessibleGroups.includes(recipientGroup)
-        : true;
-
-    const matchesFilter = (() => {
-      if (filter === "Meus Tickets") {
-        return (
-          ticket.assignedTo !== null &&
-          typeof ticket.assignedTo !== "string" &&
-          ticket.assignedTo.id === userId
-        );
-      }
-
-      if ((filter as Group) in groupHierarchy) {
-        if (ticket.reason.typeRecipient === "GROUP") {
-          return ticket.reason.recipient === filter;
-        }
-
-        if (ticket.reason.typeRecipient === "ALL") {
-          return ticket.reason.recipient === filter;
-        }
-
-        if (ticket.reason.typeRecipient === "USER") {
-          const assignedGroup =
-            ticket.assignedTo !== null && typeof ticket.assignedTo !== "string"
-              ? ticket.assignedTo.group
-              : null;
-          return assignedGroup === filter;
-        }
-      }
-
-      return true;
-    })();
-
-    // const matchesFilter = (() => {
-    //   if (filter === "Meus Tickets") {
-    //     return (
-    //       ticket.assignedTo !== null &&
-    //       typeof ticket.assignedTo !== "string" &&
-    //       ticket.assignedTo.id === userId
-    //     );
-    //   }
-
-    //   if ((filter as Group) in groupHierarchy) {
-    //     if (ticket.reason.typeRecipient === "GROUP") {
-    //       return ticket.reason.recipient === filter;
-    //     }
-
-    //     if (ticket.reason.typeRecipient === "ALL") {
-    //       if (typeof ticket.reason.recipient === "string") {
-    //         return ticket.reason.recipient === filter;
-    //       } else if (
-    //         typeof ticket.reason.recipient === "object" &&
-    //         ticket.reason.recipient.group
-    //       ) {
-    //         return ticket.reason.recipient.group === filter;
-    //       }
-    //     }
-
-    //     if (ticket.reason.typeRecipient === "USER") {
-    //       const assignedGroup =
-    //         ticket.assignedTo !== null && typeof ticket.assignedTo !== "string"
-    //           ? ticket.assignedTo.group
-    //           : null;
-    //       return assignedGroup === filter;
-    //     }
-    //   }
-
-    //   return true;
-    // })();
-
-    return matchesSearch && isGroupAccessible && matchesFilter;
-  });
+  const { data, isLoading } = useTickets(
+    page,
+    limit,
+    search,
+    sortBy,
+    sortOrder
+  );
 
   const handleRowClick = (ticket: TicketData) => {
-    navigate("/ocurrenceDetails", { state: { id: ticket.id } });
+    navigate("/ocurrenceDetails", { state: { ticketId: ticket.id } });
   };
 
+  const [filter, setFilter] = useState("Todas");
+
+  // const userId = user?.id;
+  // const userGroupLevel = user?.groupLevel;
+
   return (
-    <div>
+    <>
       <CardHeader>
-        <CardTitle className="text-2xl font-bold">
+        <CardTitle className="text-2xl font-bold mb-4">
           Ocorrências - Tickets
-          <div className="flex items-center border border-border rounded-lg px-3 py-2 mt-4">
-            <Search size={16} className="mr-2" />
-            <input
-              type="text"
-              placeholder="Pesquisar clientes"
-              className="outline-none text-sm w-full"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
         </CardTitle>
 
-        <div className="flex justify-self-end items-center space-x-4 my-2">
-          <Select value={filter} onValueChange={(value) => setFilter(value)}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Todas" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Todas">Todas</SelectItem>
-              <SelectItem value="Meus Tickets">Meus Tickets</SelectItem>
-              {accessibleGroups.map((group) => (
-                <SelectItem key={group} value={group}>
-                  Grupo {group}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <CreateTicket />
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center border border-border rounded-lg px-3 py-3 w-full max-w-lg">
+            <Search size={16} className="mr-2 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Pesquisar tickets"
+              className="outline-none text-sm w-full"
+              value={search}
+              onChange={(e) => {
+                setPage(1);
+                setSearch(e.target.value);
+              }}
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="flex justify-self-end items-center space-x-4 my-2">
+              <Select
+                value={filter}
+                onValueChange={(value) => setFilter(value)}
+              >
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="Todas" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Todas">Todas</SelectItem>
+                  <SelectItem value="Meus Tickets">Meus Tickets</SelectItem>
+                </SelectContent>
+              </Select>
+              {/* <CreateTicket /> */}
+            </div>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-14 h-12"
+                    onClick={() =>
+                      setSortOrder(sortOrder === "ASC" ? "DESC" : "ASC")
+                    }
+                  >
+                    {sortOrder === "ASC" ? (
+                      <ArrowUp01 size={18} />
+                    ) : (
+                      <ArrowDown01 size={18} />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Ordenar Tickets</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button className="w-14 h-12">
+                    <Plus size={18} color="#fff" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Criar novo Ticket</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
       </CardHeader>
-
-      <CardContent>
+      <div className="w-full px-4 lg:px-6">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
+              <TableCell
+                onClick={() => {
+                  setSortBy("id");
+                  setSortOrder(sortOrder === "ASC" ? "DESC" : "ASC");
+                }}
+              >
+                ID
+              </TableCell>
               <TableHead>Título</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Responsável</TableHead>
@@ -202,42 +162,63 @@ export default function ListOcurrences() {
               <TableHead>Expiração</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
-            {filteredTickets?.map((ticket) => (
-              <TableRow key={ticket.id} onClick={() => handleRowClick(ticket)}>
-                <TableCell>{ticket.id}</TableCell>
-                <TableCell>{ticket.reason.reason}</TableCell>
-                <TableCell>
-                  <div
-                    className="px-3 py-1 rounded-lg text-sm font-semibold lowercase"
-                    style={{
-                      backgroundColor: getColorRGBA(
-                        ticket.status,
-                        statusColors,
-                        0.2
-                      ),
-                      color: getColorRGBA(ticket.status, statusColors, 0.9),
-                      width: "fit-content",
-                    }}
-                  >
-                    {ticket.status}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  {ticket.assignedTo && typeof ticket.assignedTo !== "string"
-                    ? ticket.assignedTo.name
-                    : "Não atribuído"}
-                </TableCell>
-                <TableCell>
-                  {dateFormat(ticket.createdAt)} às{" "}
-                  {timeFormat(ticket.createdAt)}
-                </TableCell>
-                <TableCell>{ticket.reason.expiredAt} horas</TableCell>
-              </TableRow>
-            ))}
+            {isLoading ? (
+              <SkeletonTable />
+            ) : (
+              data?.data?.map((ticket) => (
+                <TableRow
+                  key={ticket.id}
+                  onClick={() => handleRowClick(ticket)}
+                >
+                  <TableCell>{ticket.id}</TableCell>
+
+                  <TableCell>{ticket.reason.reason}</TableCell>
+
+                  <TableCell>
+                    <div
+                      className="px-3 py-1 rounded-lg text-sm font-semibold lowercase"
+                      style={{
+                        backgroundColor: getColorRGBA(
+                          ticket.status,
+                          statusColors,
+                          0.2
+                        ),
+                        color: getColorRGBA(ticket.status, statusColors, 0.9),
+                        width: "fit-content",
+                      }}
+                    >
+                      {ticket.status}
+                    </div>
+                  </TableCell>
+
+                  <TableCell>
+                    {ticket.assigned_user?.name ?? "Não atribuído"}
+                  </TableCell>
+
+                  <TableCell>
+                    {dateFormat(ticket.created_at)} às{" "}
+                    {timeFormat(ticket.created_at)}
+                  </TableCell>
+
+                  <TableCell>{ticket.reason.expiredAt}</TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
-      </CardContent>
-    </div>
+      </div>
+
+      <div className="flex justify-center mt-4">
+        <RenderPagination
+          page={page}
+          setPage={setPage}
+          total={Number(data?.total)}
+          limit={Number(data?.limit)}
+          setLimit={setLimit}
+        />
+      </div>
+    </>
   );
 }
