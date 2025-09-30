@@ -5,14 +5,22 @@ import { Info } from "@/components/info";
 import { dateFormat, timeFormat } from "@/lib/formatters";
 import { FolderOpenDot, GitMerge, MessageCircleMore, User } from "lucide-react";
 
-import { useTicketComments, useTicketId } from "@/services/Tickets/useTickets";
+import {
+  useTicketAudit,
+  useTicketComments,
+  useTicketId,
+} from "@/services/Tickets/useTickets";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SkeletonCard } from "@/components/skeletons/skeletonCard";
-import React from "react";
-import { useAuthStore } from "@/store/auth";
-// import CreateComment from "./components/Createcomment";
 import { AssignToMeDialog } from "./components/AssignToMeDialog";
 import CreateComment from "./components/Createcomment";
+import {
+  actionColors,
+  getColorRGBA,
+  methodColors,
+  statusColors,
+} from "@/lib/utils";
+import { ActionType } from "@/interfaces/AuditLogData";
 
 export default function OcurrenceDetails() {
   const location = useLocation();
@@ -20,29 +28,23 @@ export default function OcurrenceDetails() {
 
   const { data: ticket, isLoading, isError } = useTicketId(ticketId);
   const { data: ticketComments } = useTicketComments(ticketId);
-
+  const { data: ticketAudit } = useTicketAudit(ticketId);
 
   // const canComment = React.useMemo(() => {
   //   if (!ticket || !user) return false;
-
   //   const { status, assigned_user } = ticket;
-
   //   if (status === "FINALIZADO" || status === "FINALIZADO EXPIRADO") {
   //     return false;
   //   }
-
   //   if (!assigned_user) return true;
-
   //   if (typeof assigned_user !== "string" && assigned_user.id === user.id) {
   //     return true;
   //   }
-
   //   const userLevel = groupHierarchy[user.groupLevel as Group];
   //   const assignedLevel =
   //     typeof assigned_user === "string"
   //       ? groupHierarchy[assigned_user as Group]
   //       : groupHierarchy[assigned_user.group_level as Group];
-
   //   return userLevel > assignedLevel;
   // }, [ticket, user]);
 
@@ -79,7 +81,19 @@ export default function OcurrenceDetails() {
                   <Info label="ID" value={ticket.id} />
                   <div>
                     <p className="text-sm text-muted-foreground">Status</p>
-                    {/* <FinalizeTicketDialog ticket={ticket} /> */}
+                    <div
+                      className="w-fit text-sm font-semibold lowercase rounded-sm border-none px-2 py-1"
+                      style={{
+                        backgroundColor:
+                            getColorRGBA?.(ticket.status, statusColors, 0.2) ??
+                          "#eee",
+                        color:
+                          getColorRGBA?.(ticket.status, statusColors, 0.8) ??
+                          "#000",
+                      }}
+                    >
+                      {ticket.status}
+                    </div>
                   </div>
 
                   <div className="flex flex-row gap-4 items-center">
@@ -88,7 +102,6 @@ export default function OcurrenceDetails() {
                       value={ticket.assigned_user?.name ?? "Não atribuído"}
                     />
                     <AssignToMeDialog ticket={ticket} />
-                    {/* <DialogCloseButton ticket={ticket} /> */}
                   </div>
                   <Info
                     label="Data de Criação"
@@ -100,7 +113,7 @@ export default function OcurrenceDetails() {
 
                   <Info
                     label="Tempo de expiração"
-                    value={`${ticket.reason.expiredAt} horas`}
+                    value={`${ticket.reason.expired_at} horas`}
                   />
                 </>
               )}
@@ -114,8 +127,68 @@ export default function OcurrenceDetails() {
                 Histórico da Ocorrência
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 overflow-y-auto pb-2"></CardContent>
+            <CardContent className="flex-1 overflow-y-auto">
+              {isLoading ? (
+                <div className="space-y-4">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="space-y-2">
+                      <Skeleton className="h-3 w-24" />
+                      <Skeleton className="h-4 w-32" />
+                      <Skeleton className="h-4 w-full" />
+                      {i < 2 && <div className="my-4 border-t border-muted" />}
+                    </div>
+                  ))}
+                </div>
+              ) : ticketAudit && ticketAudit.length > 0 ? (
+                ticketAudit.map((audit, index) => (
+                  <div key={audit.id}>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <p className="text-xs text-muted-foreground">
+                        {dateFormat(audit.created_at)} às{" "}
+                        {timeFormat(audit.created_at)}
+                      </p>
+                      <div
+                        className={`px-3 m-2 w-fit min-w-18 flex border-l-[3px] text-sm uppercase font-semibold ${
+                          actionColors[audit.action as ActionType]
+                        }`}
+                      >
+                        {audit.action}
+                      </div>
+                    </div>
+
+                    <p className="text-sm">
+                      <span className="font-semibold">{audit.sender_name}</span>{" "}
+                    </p>
+
+                    <div className="flex flex-row items-center gap-2">
+                      <p
+                        className={`font-semibold uppercase tracking-wide text-xs ${
+                          methodColors[audit.method]
+                        }`}
+                      >
+                        {audit.method}
+                      </p>
+
+                      <p className="text-sm text-muted-foreground">
+                        – {audit.description}
+                      </p>
+                    </div>
+
+                    {index < ticketAudit.length - 1 && (
+                      <div className="pt-4">
+                        <hr className="border-muted" />
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground italic">
+                  Nenhuma interação adicionada.
+                </p>
+              )}
+            </CardContent>
           </Card>
+
           <Card>
             <CardHeader>
               <CardTitle className="flex flex-row items-center gap-2">

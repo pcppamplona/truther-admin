@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Bookmark, BookmarkCheck } from "lucide-react";
@@ -13,6 +14,7 @@ import { useAuthStore } from "@/store/auth";
 import { useUpdateTicket } from "@/services/Tickets/useTickets";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface AssignToMeDialogProps {
   ticket: TicketData;
@@ -25,7 +27,7 @@ export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
 
   const handleAssignToMe = async () => {
     try {
-      const data = await mutateAsync({
+      await mutateAsync({
         id: ticket.id,
         data: {
           assigned_user: user?.id,
@@ -33,10 +35,19 @@ export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
         },
       });
 
-      console.log("Ticket atualizado:", data);
       setOpen(false);
+
+      toast.success("Ticket atualizado", {
+        description: "Agora está atribuído a você.",
+        duration: 2000,
+      });
     } catch (error) {
       console.error("Erro ao atualizar ticket:", error);
+
+      toast.error("Erro ao atualizar", {
+        description: "Não foi possível atribuir o ticket.",
+        duration: 2000,
+      });
     }
   };
 
@@ -61,6 +72,7 @@ export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Confirmar atribuição</DialogTitle>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
 
         <p className="text-sm text-muted-foreground">
@@ -71,7 +83,9 @@ export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
           <DialogClose asChild>
             <Button variant="outline">Cancelar</Button>
           </DialogClose>
-          <Button disabled={isPending} onClick={handleAssignToMe}>Confirmar</Button>
+          <Button disabled={isPending} onClick={handleAssignToMe}>
+            Confirmar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

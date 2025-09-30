@@ -14,13 +14,12 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { ArrowDown01, ArrowUp01, Plus, Search } from "lucide-react";
+import { ArrowDown01, ArrowUp01, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTickets } from "@/services/Tickets/useTickets";
 import { useNavigate } from "react-router-dom";
 import { dateFormat, timeFormat } from "@/lib/formatters";
-import { getColorRGBA, statusColors } from "./components/utilsOcurrences";
-// import { CreateTicket } from "./components/CreateTicket";
+import { CreateTicket } from "./components/CreateTicket/CreateTicket";
 import {
   getPaginationSettings,
   setPaginationSettings,
@@ -35,6 +34,7 @@ import { Button } from "@/components/ui/button";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import { RenderPagination } from "@/components/RenderPagination";
 import { TicketData } from "@/interfaces/TicketData";
+import { getColorRGBA, statusColors } from "@/lib/utils";
 
 export default function ListOcurrences() {
   const navigate = useNavigate();
@@ -104,7 +104,6 @@ export default function ListOcurrences() {
                   <SelectItem value="Meus Tickets">Meus Tickets</SelectItem>
                 </SelectContent>
               </Select>
-              {/* <CreateTicket /> */}
             </div>
 
             <TooltipProvider>
@@ -131,9 +130,7 @@ export default function ListOcurrences() {
 
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button className="w-14 h-12">
-                    <Plus size={18} color="#fff" />
-                  </Button>
+                  <CreateTicket />
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Criar novo Ticket</p>
@@ -202,7 +199,7 @@ export default function ListOcurrences() {
                     {timeFormat(ticket.created_at)}
                   </TableCell>
 
-                  <TableCell>{ticket.reason.expiredAt}</TableCell>
+                  <TableCell>{ticket.reason.expired_at}</TableCell>
                 </TableRow>
               ))
             )}

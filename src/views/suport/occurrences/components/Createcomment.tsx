@@ -14,6 +14,7 @@ import { Plus } from "lucide-react";
 import { useAuthStore } from "@/store/auth";
 import { TicketData } from "@/interfaces/TicketData";
 import { useCreateTicketComment, useUpdateTicket } from "@/services/Tickets/useTickets";
+import { toast } from "sonner";
 
 
 export interface CommentProps {
@@ -60,6 +61,11 @@ export default function CreateComment({ ticket }: CommentProps) {
         author: user?.name ?? "",
         message: message,
         date: new Date().toISOString(),
+      });
+
+       toast.success("Comentário adicionado", {
+        description: `Seu novo comentário já foi adicionado ao ticket ${ticket.id}`,
+        duration: 2000,
       });
 
       setMessage("");

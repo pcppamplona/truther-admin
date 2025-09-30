@@ -20,10 +20,11 @@ export function RenderPagination({
   limit,
   setLimit,
 }: RenderPaginationProps) {
-  const totalPages = Math.ceil(total / limit);
+  const totalPages = limit > 0 ? Math.ceil(total / limit) : 1;
 
   const handleChangeLimit = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLimit(Number(e.target.value));
+    const newLimit = Number(e.target.value);
+    setLimit(isNaN(newLimit) ? 10 : newLimit);
     setPage(1);
   };
 

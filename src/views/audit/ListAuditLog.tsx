@@ -34,6 +34,7 @@ import { dateFormat, timeFormat } from "@/lib/formatters";
 import { ActionType, methodType } from "@/interfaces/AuditLogData";
 import { useAuditLog } from "@/services/audit/useAuditLog";
 import { Info } from "@/components/info";
+import { actionColors, methodColors } from "@/lib/utils";
 
 export default function ListAuditLog() {
   const { page: savedPage, limit: savedLimit } = getPaginationSettings("audit");
@@ -60,21 +61,6 @@ export default function ListAuditLog() {
 
   const toggleExpand = (id: number) => {
     setExpandedId((prev) => (prev === id ? null : id));
-  };
-
-  const methodColors: Record<methodType, string> = {
-    POST: "text-[#f4da7a]",
-    DELETE: "text-[#d18785]",
-    GET: "text-[#5aaa7a]",
-    UPDATE: "text-[#73acf3]",
-    PATCH: "text-[#ad98ca]",
-  };
-
-  const actionColors: Record<ActionType, string> = {
-    alter: "border-[#3319c7]",
-    listing: "border-[#9e3790]",
-    crm: "border-[#a57b2c]",
-    security: "border-[#1a6b80]",
   };
 
   return (

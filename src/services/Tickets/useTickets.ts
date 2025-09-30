@@ -12,6 +12,7 @@ import {
   UpdateTicketInput,
 } from "@/interfaces/TicketData";
 import { PaginateData } from "@/interfaces/PaginateData";
+import { AuditLog } from "@/interfaces/AuditLogData";
 
 export const useTickets = (
   page: number,
@@ -97,6 +98,7 @@ export function useUpdateTicket() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["tickets"] });
       queryClient.invalidateQueries({ queryKey: ["tickets-id", variables.id] });
+      queryClient.invalidateQueries({ queryKey: ["tickets-audit", variables.id] }); 
     },
   });
 }
@@ -111,7 +113,8 @@ export const useCreateTicketComment = () => {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["tickets"] });
       queryClient.invalidateQueries({ queryKey: ["tickets-id", variables.id] });
-      queryClient.invalidateQueries({ queryKey: ["tickets-comments", variables.ticket_id], });
+      queryClient.invalidateQueries({ queryKey: ["tickets-comments", variables.ticket_id]});
+      queryClient.invalidateQueries({ queryKey: ["tickets-audit", variables.ticket_id]});
     },
   });
 };
@@ -119,8 +122,8 @@ export const useCreateTicketComment = () => {
 export const useTicketAudit = (ticket_id: number) => {
   return useQuery({
     queryKey: ["tickets-audit", ticket_id],
-    queryFn: async (): Promise<TicketComment[]> => {
-      const { data } = await api.get<TicketComment[]>(
+    queryFn: async (): Promise<AuditLog[]> => {
+      const { data } = await api.get<AuditLog[]>(
         `audit-logs/ticket/${ticket_id}`
       );
       return data;

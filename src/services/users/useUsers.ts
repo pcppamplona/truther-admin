@@ -3,18 +3,6 @@ import { api } from "../api";
 import { UserData } from "@/interfaces/UserData";
 import { PaginateData } from "@/interfaces/PaginateData";
 
-// export const useUsers = () => {
-//   return useQuery({
-//     queryKey: ["users"],
-//     queryFn: async (): Promise<UserData> => {
-//       const { data } = await api.get<UserData>(`users`);
-//       return data;
-//     },
-//     staleTime: Number.POSITIVE_INFINITY,
-//     refetchOnMount: true,
-//   });
-// };
-
 export const useUsers = (
   page: number,
   limit: number,
@@ -42,3 +30,14 @@ export const useUsers = (
   })
 }
 
+export const useAllUsers = () => {
+  return useQuery({
+    queryKey: ["all-users"],
+    queryFn: async (): Promise<UserData[]> => {
+      const { data } = await api.get<UserData[]>(`users`);
+      return data;
+    },
+    staleTime: Number.POSITIVE_INFINITY,
+    refetchOnMount: true,
+  });
+};

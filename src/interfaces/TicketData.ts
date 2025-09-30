@@ -25,12 +25,12 @@ export type ClientTicket = {
 
 export type Reason = {
   id: number;
-  categoryId: string;
+  category_id: string;
   type: string;
   reason: string;
-  expiredAt: string;
+  expired_at: number;
   description: string;
-  typeRecipient: TypeRecipient;
+  type_recipient: TypeRecipient;
   recipient: string; 
 };
 
@@ -97,7 +97,7 @@ export interface FinalizeTicketInput {
 
 
 export interface TicketTyped {
-  id: number;
+  id?: number;
   created_by: number;           
   client_id: number | null;     
   assigned_group: Group | null; 

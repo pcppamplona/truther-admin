@@ -119,3 +119,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 6px; /* largura da barra */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* fundo */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #555454; /* cor do thumb (barra) */
+  border-radius: 9999px; /* deixa arredondado */
+}
+
