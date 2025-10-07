@@ -1,4 +1,4 @@
-import { Reason } from "@/interfaces/TicketData";
+import { FinalizationReply, Reason } from "@/interfaces/TicketData";
 import { api } from "../api";
 import {
   useQuery,
@@ -40,17 +40,15 @@ export const useTicketReasonsById = (id: number) => {
   });
 };
 
-// export async function getReplyReason(reasonId: number): Promise<FinalizationReply[]> {
-//   const res = await api.get("replyReasons", {
-//     searchParams: { reasonId: reasonId.toString() },
-//   }).json<FinalizationReply[]>();
-//   return res;
-// }
-
-
-// export async function getReplyActions(replyId: number): Promise<ReplyAction[]> {
-//   const res = await api.get("replyActions", {
-//     searchParams: { replyId: replyId.toString() },
-//   }).json<ReplyAction[]>();
-//   return res;
-// }
+export const useTicketReasonsReply = (reason_id: number) => {
+  return useQuery<FinalizationReply>({
+    queryKey: ["tickets-reasons-reply-reason_id", reason_id],
+    queryFn: async () => {
+      const { data } = await api.get<FinalizationReply>(`tickets/reasons/reply/${reason_id}`);
+      return data;
+    },
+    enabled: !!reason_id,
+    staleTime: Number.POSITIVE_INFINITY,
+    refetchOnMount: true,
+  });
+};

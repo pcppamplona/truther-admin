@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { api } from "../api";
 import {
+  FinalizeTicketPayload,
   TicketComment,
   TicketData,
   TicketTyped,
@@ -103,6 +104,27 @@ export function useUpdateTicket() {
   });
 }
 
+export function useFinalizeTicket() {
+  const queryClient = useQueryClient();
+
+  const updateTicket = async (payload: FinalizeTicketPayload): Promise<TicketTyped> => {
+    const { id, ...data } = payload;
+    const response = await api.patch<TicketTyped>(`/tickets/${id}/finalize`, data);
+    return response.data;
+  };
+
+  return useMutation({
+    mutationFn: updateTicket,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["tickets"] });
+      queryClient.invalidateQueries({ queryKey: ["tickets-id", variables.id] });
+      queryClient.invalidateQueries({ queryKey: ["tickets-audit", variables.id] });
+      queryClient.invalidateQueries({ queryKey: ["tickets-comments", variables.id]});
+    },
+  });
+}
+
+
 export const useCreateTicketComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -133,104 +155,3 @@ export const useTicketAudit = (ticket_id: number) => {
     refetchOnMount: true,
   });
 };
-
-// interface FinalizeTicketFlowParams {
-//   ticket: TicketData;
-//   reply: FinalizationReply | null;
-//   commentText?: string;
-// }
-
-// export function useFinalizeTicketFlow() {
-//   const { user } = useAuthStore();
-
-//   const queryClient = useQueryClient();
-
-//   const finalize = useMutation({
-//     mutationFn: async ({
-//       ticket,
-//       reply,
-//       commentText,
-//     }: FinalizeTicketFlowParams) => {
-
-//       const now = new Date().toISOString();
-
-//       // 1️⃣ Adiciona comentário se necessário
-//       if (reply?.comment && commentText) {
-//         const commentPayload: TicketComment = {
-//           ticketId: ticket.id!,
-//           author: user?.name!!,
-//           message: commentText,
-//           date: now,
-//         };
-//         await useCreateTicketComment(commentPayload);
-
-//         await useCreateTicketAudit({
-//           ticketId: ticket.id!,
-//           action: "Adicionou",
-//           performedBy: {
-//             id: user?.id!!,
-//             name: user?.name!!,
-//             group: user?.groupLevel,
-//           },
-//           message: "um novo Comentário",
-//           description: `Comentário adicionado por ${user?.name}, ao ticket: ${ticket.id}`,
-//           date: now,
-//         });
-//       }
-
-//       // 2️⃣ Prepara payload de atualização do ticket
-//       const updatePayload: Partial<TicketData> = {
-//         status: "FINALIZADO",
-//       };
-
-//       const needsAssignment = !ticket.assignedTo;
-
-//       if (needsAssignment) {
-//         updatePayload.assignedTo = {
-//           id: user?.id!!,
-//           name: user?.name!!,
-//           group: user?.groupLevel,
-//         };
-//       }
-
-//       // 3️⃣ Atualiza ticket com todos os dados necessários
-//       await updateTicket(ticket.id!, updatePayload);
-
-//       // 4️⃣ Auditorias de atribuição (se aplicável)
-//       if (needsAssignment) {
-//         await useCreateTicketAudit({
-//           ticketId: ticket.id!,
-//           action: "Atribuiu",
-//           performedBy: {
-//             id: user?.id!!,
-//             name: user?.name!!,
-//             group: user?.groupLevel,
-//           },
-//           message: "um Ticket",
-//           description: `Ocorrência ${ticket.id} atribuída a ${user?.name}.`,
-//           date: now,
-//         });
-//       }
-
-//       // 5️⃣ Auditoria de finalização
-//       await useCreateTicketAudit({
-//         ticketId: ticket.id!,
-//         action: "Atualizou",
-//         performedBy: {
-//           id: user?.id!!,
-//           name: user?.name!!,
-//           group: user?.groupLevel,
-//         },
-//         message: "um Ticket",
-//         description: `Ocorrência ${ticket.id} marcada como FINALIZADO por ${user?.name}.`,
-//         date: now,
-//       });
-
-//       // 6️⃣ Refetch dos dados
-//       await queryClient.invalidateQueries({ queryKey: ["tickets"] });
-//       await queryClient.invalidateQueries({ queryKey: ["ticket-id", ticket.id] });
-//     },
-//   });
-
-//   return finalize;
-// }

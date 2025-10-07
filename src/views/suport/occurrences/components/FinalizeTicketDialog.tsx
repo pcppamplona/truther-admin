@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -15,11 +15,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-
-import { FinalizationReply, Status, TicketData } from "@/interfaces/TicketData";
-import { getColorRGBA, statusColors } from "./utilsOcurrences";
-import { getReplyReason } from "@/services/Tickets/useReasons";
-import { useFinalizeTicket } from "@/services/Tickets/useFinalizeTicket";
+import { TicketData, FinalizationReply } from "@/interfaces/TicketData";
+import { Forward } from "lucide-react";
+import { toast } from "sonner";
+import { useAuthStore } from "@/store/auth";
+import { useTicketReasonsReply } from "@/services/Tickets/useReasons";
+import { useFinalizeTicket } from "@/services/Tickets/useTickets";
 
 interface Props {
   ticket: TicketData;
@@ -27,143 +28,107 @@ interface Props {
 
 export function FinalizeTicketDialog({ ticket }: Props) {
   const [open, setOpen] = useState(false);
+  const [selectedReply, setSelectedReply] = useState<FinalizationReply | null>(
+    null
+  );
   const [comment, setComment] = useState("");
-  const [currentStatus, setCurrentStatus] = useState<Status>(ticket.status as Status);
-  const [selectedReply, setSelectedReply] = useState<FinalizationReply | null>(null);
-  const [replys, setReplys] = useState<FinalizationReply[]>([]);
   const [showComment, setShowComment] = useState(false);
-  const [showAssignConfirm, setShowAssignConfirm] = useState(false);
 
   const finalizeTicket = useFinalizeTicket();
+  const { user } = useAuthStore();
 
-  useEffect(() => {
-    const fetchReplys = async () => {
-      if (ticket.reason.id) {
-        const reasonReplys = await getReplyReason(ticket.reason.id);
-        setReplys(reasonReplys);
-      }
-    };
-    fetchReplys();
-  }, [ticket.reason.id]);
+  const { data: replysData } = useTicketReasonsReply(ticket.reason.id);
+  const replys = Array.isArray(replysData)
+    ? replysData
+    : [replysData].filter(Boolean);
 
-  const handleChange = (status: Status) => {
-    if (status === "FINALIZADO") {
-      setOpen(true);
+  // const canFinalize =
+  //   ticket.assigned_user &&
+  //   ticket.assigned_user.id === user?.id &&
+  //   !["FINALIZADO", "FINALIZADO EXPIRADO"].includes(ticket.status);
+
+  const handleOpen = () => {
+    if (!ticket.assigned_user) {
+      toast.error("Ticket sem responsável", {
+        description: "Atribua-se ao ticket antes de finalizá-lo.",
+        duration: 3000,
+      });
+      return;
     }
+
+    if (ticket.assigned_user.id !== user?.id) {
+      toast.error("Acesso negado", {
+        description: "Você não é o responsável ou não tem permissão de finalizar este ticket.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    setOpen(true);
   };
 
   const handleFinalize = async () => {
-    if (!selectedReply) return;
+    if (!selectedReply) {
+      toast.error("Selecione uma resposta de finalização.", { duration: 2000 });
+      return;
+    }
 
-    const needsComment = selectedReply.comment;
-    const hasResponsible = !!ticket.assignedTo;
-
-    if (needsComment && comment.trim() === "") {
+    if (selectedReply.comment && comment.trim() === "") {
+      toast.error("Comentário obrigatório", {
+        description: "Esta resposta exige um comentário de finalização.",
+        duration: 2000,
+      });
       setShowComment(true);
       return;
     }
 
-    if (!hasResponsible) {
-      setShowAssignConfirm(true);
-      return;
+    try {
+      await finalizeTicket.mutateAsync({
+        id: ticket.id,
+        reply_id: selectedReply.id,
+        comment: comment.trim() || undefined,
+      });
+
+      toast.success("Ticket finalizado com sucesso!");
+      setOpen(false);
+      setSelectedReply(null);
+      setComment("");
+    } catch (error: any) {
+      toast.error("Erro ao finalizar ticket", {
+        description: error?.response?.data?.message ?? "Erro inesperado.",
+      });
     }
-
-    await finalizeTicket.mutateAsync({
-      ticket,
-      reply: selectedReply,
-      commentText: comment.trim() || undefined,
-      forceAssign: false,
-    });
-
-    setCurrentStatus("FINALIZADO");
-    closeDialog();
   };
-
-  const handleComment = async () => {
-    const hasResponsible = !!ticket.assignedTo;
-
-    if (!selectedReply) return;
-
-    if (!hasResponsible) {
-      // Comentário enviado, mas precisa atribuir antes de finalizar
-      setShowAssignConfirm(true);
-      setShowComment(false);
-      return;
-    }
-
-    await finalizeTicket.mutateAsync({
-      ticket,
-      reply: selectedReply,
-      commentText: comment.trim(),
-      forceAssign: false,
-    });
-
-    setCurrentStatus("FINALIZADO");
-    closeDialog();
-  };
-
-  const handleAssignAndFinalize = async () => {
-    if (!selectedReply) return;
-
-    await finalizeTicket.mutateAsync({
-      ticket,
-      reply: selectedReply,
-      commentText: comment.trim() || undefined,
-      forceAssign: true,
-    });
-
-    setCurrentStatus("FINALIZADO");
-    closeDialog();
-  };
-
-  const closeDialog = () => {
-    setOpen(false);
-    setSelectedReply(null);
-    setComment("");
-    setShowComment(false);
-    setShowAssignConfirm(false);
-  };
-
-  const bgColor = getColorRGBA?.(currentStatus, statusColors, 0.2) ?? "#eee";
-  const textColor = getColorRGBA?.(currentStatus, statusColors, 0.9) ?? "#000";
 
   return (
     <>
-      <Select onValueChange={handleChange} value={currentStatus}>
-        <SelectTrigger
-          className="w-fit h-2 text-sm font-semibold lowercase rounded-sm border-none"
-          style={{ backgroundColor: bgColor, color: textColor }}
-        >
-          <SelectValue placeholder={ticket.status} />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value={ticket.status} disabled>
-            {ticket.status}
-          </SelectItem>
-          {ticket.status !== "FINALIZADO" && ticket.status !== "FINALIZADO EXPIRADO" && (
-            <SelectItem value="FINALIZADO" className="text-primary">
-              FINALIZAR TICKET
-            </SelectItem>
-          )}
-        </SelectContent>
-      </Select>
+      <Button
+        variant="outline"
+        className="h-8"
+        onClick={handleOpen}
+        // disabled={!canFinalize}
+      >
+        <Forward size={18} />
+        <p>Finalizar</p>
+      </Button>
 
-      <Dialog open={open} onOpenChange={closeDialog}>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Respostas da Finalização</DialogTitle>
+            <DialogTitle>Finalizar Ticket #{ticket.id}</DialogTitle>
           </DialogHeader>
 
           <Select
             value={selectedReply?.id.toString() ?? ""}
             onValueChange={(value) => {
-              const replyFound = replys.find((r) => r.id.toString() === value);
-              setSelectedReply(replyFound ?? null);
-              setShowComment(replyFound?.comment === true);
+              const reply =
+                replys.find((r) => r.id.toString() === value) ?? null;
+              setSelectedReply(reply);
+              setShowComment(reply?.comment === true);
             }}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Selecione o motivo" />
+              <SelectValue placeholder="Selecione o motivo da finalização" />
             </SelectTrigger>
             <SelectContent>
               {replys.map((reply) => (
@@ -177,42 +142,25 @@ export function FinalizeTicketDialog({ ticket }: Props) {
           {showComment && (
             <div className="mt-4">
               <Textarea
-                placeholder="Escreva um comentário de finalização aqui..."
+                placeholder="Escreva o comentário de finalização..."
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                className="min-h-[120px] whitespace-pre-wrap break-words"
+                className="min-h-[100px]"
               />
-              <Button
-                className="mt-2"
-                onClick={handleComment}
-                disabled={comment.trim() === ""}
-              >
-                Enviar comentário
-              </Button>
             </div>
           )}
 
-          {showAssignConfirm ? (
-            <div className="mt-4 flex flex-col gap-2">
-              <p className="text-sm text-muted-foreground">
-                Este ticket não possui responsável. Deseja se atribuir e finalizar?
-              </p>
-              <div className="flex justify-end gap-2">
-                <Button variant="secondary" onClick={() => setShowAssignConfirm(false)}>
-                  Cancelar
-                </Button>
-                <Button onClick={handleAssignAndFinalize}>
-                  Sim, atribuir e finalizar
-                </Button>
-              </div>
-            </div>
-          ) : !showComment && (
-            <DialogFooter>
-              <Button onClick={handleFinalize} disabled={!selectedReply}>
-                Confirmar
-              </Button>
-            </DialogFooter>
-          )}
+          <DialogFooter>
+            <Button
+              onClick={handleFinalize}
+              disabled={finalizeTicket.isPending || !selectedReply}
+            >
+              {finalizeTicket.isPending ? "Finalizando..." : "Confirmar"}
+            </Button>
+            <Button variant="secondary" onClick={() => setOpen(false)}>
+              Cancelar
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>

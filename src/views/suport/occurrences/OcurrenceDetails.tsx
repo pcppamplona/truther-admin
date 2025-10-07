@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Info } from "@/components/info";
 import { dateFormat, timeFormat } from "@/lib/formatters";
 import { FolderOpenDot, GitMerge, MessageCircleMore, User } from "lucide-react";
-
 import {
   useTicketAudit,
   useTicketComments,
@@ -13,7 +12,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { SkeletonCard } from "@/components/skeletons/skeletonCard";
 import { AssignToMeDialog } from "./components/AssignToMeDialog";
-import CreateComment from "./components/Createcomment";
 import {
   actionColors,
   getColorRGBA,
@@ -21,10 +19,20 @@ import {
   statusColors,
 } from "@/lib/utils";
 import { ActionType } from "@/interfaces/AuditLogData";
+import CreateCommentDialog from "./components/CreateCommentDialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { FinalizeTicketDialog } from "./components/FinalizeTicketDialog";
+import { useAuthStore } from "@/store/auth";
 
 export default function OcurrenceDetails() {
   const location = useLocation();
   const ticketId = location.state?.ticketId;
+  const { user } = useAuthStore();
 
   const { data: ticket, isLoading, isError } = useTicketId(ticketId);
   const { data: ticketComments } = useTicketComments(ticketId);
@@ -52,6 +60,12 @@ export default function OcurrenceDetails() {
   if (isError) return <p>Erro ao carregar ocorrência.</p>;
   if (!ticket) return <p>Ocorrência não encontrada.</p>;
 
+  const canComment =
+    ticket.assigned_user?.id === user?.id &&
+    !["FINALIZADO", "FINALIZADO EXPIRADO"].includes(ticket.status);
+
+  const canAssign = Boolean(!ticket.assigned_user?.id);
+
   return (
     <SidebarLayout
       breadcrumb={[
@@ -64,9 +78,29 @@ export default function OcurrenceDetails() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Card className="h-full max-h-[500px] flex flex-col">
             <CardHeader>
-              <CardTitle className="flex flex-row items-center gap-2">
-                <FolderOpenDot />
-                Informações da Ocorrência
+              <CardTitle className="flex flex-row items-center justify-between">
+                <div className="flex flex-row items-center gap-2">
+                  <FolderOpenDot />
+                  Informações da Ocorrência
+                </div>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      {ticket.status !== "FINALIZADO" ? (
+                        <FinalizeTicketDialog ticket={ticket} />
+                      ) : null}
+                    </TooltipTrigger>
+
+                    <TooltipContent>
+                      {ticket.status === "FINALIZADO" ? (
+                        <p>Iniciar o processo de finalização de ticket!</p>
+                      ) : (
+                        <p>Finalizar esse ticket!</p>
+                      )}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -85,7 +119,7 @@ export default function OcurrenceDetails() {
                       className="w-fit text-sm font-semibold lowercase rounded-sm border-none px-2 py-1"
                       style={{
                         backgroundColor:
-                            getColorRGBA?.(ticket.status, statusColors, 0.2) ??
+                          getColorRGBA?.(ticket.status, statusColors, 0.2) ??
                           "#eee",
                         color:
                           getColorRGBA?.(ticket.status, statusColors, 0.8) ??
@@ -101,7 +135,8 @@ export default function OcurrenceDetails() {
                       label="Responsável"
                       value={ticket.assigned_user?.name ?? "Não atribuído"}
                     />
-                    <AssignToMeDialog ticket={ticket} />
+
+                    <AssignToMeDialog ticket={ticket} disabled={!canAssign} />
                   </div>
                   <Info
                     label="Data de Criação"
@@ -219,8 +254,8 @@ export default function OcurrenceDetails() {
                 <div className="flex flex-row items-center gap-2">
                   <MessageCircleMore /> Comentários
                 </div>
-                {/* {canComment && <CreateComment ticket={ticket} />} */}
-                <CreateComment ticket={ticket} />
+                {canComment && <CreateCommentDialog ticket={ticket} />}
+                {/* <CreateCommentDialog ticket={ticket} /> */}
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto">
@@ -239,7 +274,8 @@ export default function OcurrenceDetails() {
                 ticketComments.map((comment, index) => (
                   <div key={comment.id}>
                     <p className="text-xs text-muted-foreground">
-                      {dateFormat(comment.date)} às {timeFormat(comment.date)}
+                      {dateFormat(comment.date ?? "-")} às{" "}
+                      {timeFormat(comment.date ?? "-")}
                     </p>
                     <p className="text-sm font-semibold">{comment.author}</p>
                     <p className="text-sm">{comment.message}</p>

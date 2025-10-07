@@ -28,7 +28,7 @@ export function StepRecipient({
 }: StepRecipientProps) {
   const { data: reasonData, isLoading } = useTicketReasonsById(reasonId);
 
-  const { data: usersData } = useAllUsers()
+  const { data: usersData } = useAllUsers();
   const users = usersData ?? [];
 
   const [reasonTypeRecipient, setReasonTypeRecipient] =
@@ -83,6 +83,49 @@ export function StepRecipient({
         </div>
       )}
 
+      {/* USER */}
+      {reasonTypeRecipient === "USER" && (
+        <div className="p-4 rounded border bg-muted space-y-2">
+          <p className="text-sm">Selecione o usuário destinatário:</p>
+
+          <div className="space-y-2 max-h-64 overflow-y-auto">
+            {users.map((user) => {
+              const isSelected = selectedUserId === user.id;
+
+              return (
+                <div
+                  key={user.id}
+                  className={`flex items-center rounded-lg p-2 cursor-pointer transition hover:bg-muted-foreground/10 ${
+                    isSelected ? "bg-primary text-white" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedUserId(user.id);
+                    setSelectedGroup(user.groupLevel as Group);
+                  }}
+                >
+                  <div
+                    className={`flex items-center justify-center h-10 w-10 rounded-full ${
+                      isSelected
+                        ? "bg-white text-primary"
+                        : "bg-primary text-white"
+                    }`}
+                  >
+                    {getInitials(user.name)}
+                  </div>
+                  <div className="flex flex-col overflow-hidden ml-4">
+                    <span className="truncate font-medium text-sm">
+                      {user.name}
+                    </span>
+                    <span className="truncate text-xs">{user.username}</span>
+                  </div>
+                  <ChevronRight className="ml-auto size-4" />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* ALL */}
       {reasonTypeRecipient === "ALL" && (
         <div className="p-4 border rounded bg-muted space-y-4">
@@ -118,6 +161,9 @@ export function StepRecipient({
                       }`}
                       onClick={() => {
                         setSelectedUserId(user.id);
+                        setSelectedGroup(user.groupLevel as Group);
+                        onChange("assigned_user", user.id);
+                        onChange("assigned_group", user.groupLevel as Group);
                       }}
                     >
                       <div

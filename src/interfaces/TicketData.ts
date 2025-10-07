@@ -59,37 +59,37 @@ export interface TicketComment {
   ticket_id: number; 
   author: string;
   message: string;
-  date: string;
+  date?: string;
 }
 
 export interface ReplyAction {
   id: number;
   reply_id: number;
-  type: "new_event" | "send_email";
-  data: {
-    reason_id?: number;
-    group_id?: string;
-    user_id?: number;
-    email?: string;
-    title?: string;
-    body?: string;
-  };
+  action_type_id: number;
+  data_email: string | null;
+  data_new_ticket_reason_id: number | null;
+  data_new_ticket_assign_to_group: Group | null;
 }
 
 export type FinalizationReply = {
   id: number;
-  reasonId: number;
+  reason_id: number;
   reply: string;
-  comment: Boolean
+  comment: boolean;
 };
 
+export interface FinalizeTicketPayload {
+  id: number;
+  reply_id: number;
+  comment?: string;
+}
+
 export interface FinalizeTicketInput {
-  ticketId: number;
-  replyId: number;
-  commentText?: string;
-  forceAssign?: boolean;
-  user: {
-    id: string;
+  ticket_id: number;
+  reply_id: number;
+  comment?: string;
+  user?: {
+    id: number;
     name: string;
     group: string;
   };
@@ -104,7 +104,8 @@ export interface TicketTyped {
   assigned_user: number | null;
   reason_id: number;          
   status: Status;
-  created_at: string;
+  created_at?: string;
+  finalizate_reply?: number;
 }
 
 export interface UpdateTicketInput {

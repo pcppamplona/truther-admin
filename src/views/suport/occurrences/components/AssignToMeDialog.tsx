@@ -18,14 +18,19 @@ import { toast } from "sonner";
 
 interface AssignToMeDialogProps {
   ticket: TicketData;
+  disabled?: boolean;
 }
 
-export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
+export function AssignToMeDialog({
+  ticket,
+  disabled = false,
+}: AssignToMeDialogProps) {
   const { user } = useAuthStore();
   const [open, setOpen] = useState(false);
   const { mutateAsync, isPending } = useUpdateTicket();
 
   const handleAssignToMe = async () => {
+    if (disabled) return;
     try {
       await mutateAsync({
         id: ticket.id,
@@ -51,10 +56,15 @@ export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
     }
   };
 
+  // const isAssigned = Boolean(ticket.assigned_user);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="flex items-center gap-1">
+        <button
+          className="flex items-center gap-1"
+          disabled={Boolean(ticket.assigned_user?.id) || isPending}
+        >
           {ticket.assigned_user?.id ? (
             <>
               <BookmarkCheck className="text-muted-foreground" />
@@ -69,22 +79,20 @@ export function AssignToMeDialog({ ticket }: AssignToMeDialogProps) {
         </button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="sm:max-w-md w-full">
         <DialogHeader>
           <DialogTitle>Confirmar atribuição</DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription>
+            Você deseja realmente se atribuir a esta ocorrência?
+          </DialogDescription>
         </DialogHeader>
 
-        <p className="text-sm text-muted-foreground">
-          Deseja realmente se atribuir a esta ocorrência?
-        </p>
-
-        <DialogFooter className="mt-4">
+        <DialogFooter className="flex justify-end gap-2 mt-4">
           <DialogClose asChild>
             <Button variant="outline">Cancelar</Button>
           </DialogClose>
           <Button disabled={isPending} onClick={handleAssignToMe}>
-            Confirmar
+            {isPending ? "Atribuindo..." : "Confirmar"}
           </Button>
         </DialogFooter>
       </DialogContent>

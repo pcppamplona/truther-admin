@@ -14,7 +14,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { ArrowDown01, ArrowUp01, Search } from "lucide-react";
+import { ArrowDown01, ArrowUp01, Search, TriangleAlert } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTickets } from "@/services/Tickets/useTickets";
 import { useNavigate } from "react-router-dom";
@@ -163,6 +163,21 @@ export default function ListOcurrences() {
           <TableBody>
             {isLoading ? (
               <SkeletonTable />
+            ) : data?.data?.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-10">
+                  <div className="flex flex-col items-center justify-center text-center">
+                    <TriangleAlert className="text-muted-foreground" />
+                    <p className="text-lg font-semibold">
+                      Nenhum ticket encontrado
+                    </p>
+                    <p className="text-sm text-muted-foreground max-w-md">
+                      Não foi possível encontrar nenhum ticket. Tente ajustar a
+                      <br />pesquisa ou criar um novo.
+                    </p>
+                  </div>
+                </TableCell>
+              </TableRow>
             ) : (
               data?.data?.map((ticket) => (
                 <TableRow

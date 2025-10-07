@@ -16,12 +16,11 @@ import { TicketData } from "@/interfaces/TicketData";
 import { useCreateTicketComment, useUpdateTicket } from "@/services/Tickets/useTickets";
 import { toast } from "sonner";
 
-
 export interface CommentProps {
   ticket: TicketData;
 }
 
-export default function CreateComment({ ticket }: CommentProps) {
+export default function CreateCommentDialog({ ticket }: CommentProps) {
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
   const [confirming, setConfirming] = useState(false);
@@ -60,7 +59,7 @@ export default function CreateComment({ ticket }: CommentProps) {
         ticket_id: ticket.id,
         author: user?.name ?? "",
         message: message,
-        date: new Date().toISOString(),
+        // date: new Date().toISOString(),
       });
 
        toast.success("Comentário adicionado", {

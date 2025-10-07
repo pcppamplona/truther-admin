@@ -49,7 +49,6 @@ export function CreateTicket() {
       assigned_user: ticketData.assigned_user ?? null,
       reason_id: ticketData.reason_id,
       status: "PENDENTE",
-      created_at: new Date().toISOString(),
     };
 
     try {
