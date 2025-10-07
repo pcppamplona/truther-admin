@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import { SidebarLayout } from "@/components/layouts/SidebarLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Info } from "@/components/info";
-import { dateFormat, timeFormat } from "@/lib/formatters";
+import { dateFormat, documentFormat, phoneFormat, timeFormat } from "@/lib/formatters";
 import { FolderOpenDot, GitMerge, MessageCircleMore, User } from "lucide-react";
 import {
   useTicketAudit,
@@ -241,8 +241,8 @@ export default function OcurrenceDetails() {
                 <>
                   <Info label="ID" value={ticket.client?.id} />
                   <Info label="Nome" value={ticket.client?.name} />
-                  <Info label="Documento" value={ticket.client?.document} />
-                  <Info label="Telefone" value={ticket.client?.phone} />
+                  <Info label="Documento" value={documentFormat(ticket.client?.document)} />
+                  <Info label="Telefone" value={phoneFormat(ticket.client?.phone)} />
                 </>
               )}
             </CardContent>
@@ -250,7 +250,7 @@ export default function OcurrenceDetails() {
 
           <Card className="h-full max-h-[300px] flex flex-col">
             <CardHeader>
-              <CardTitle className="flex flex-row items-center justify-between gap-2">
+              <CardTitle className="flex flex-row justify-between gap-2">
                 <div className="flex flex-row items-center gap-2">
                   <MessageCircleMore /> Comentários
                 </div>
