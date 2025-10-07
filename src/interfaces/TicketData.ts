@@ -1,20 +1,21 @@
 export interface TicketData {
-  id?: number;
-  createdBy: User;
-  client: Client | null;
-  assignedTo: Group | User | null;
+  id: number;
+  created_by: UserTicket;
+  client: ClientTicket;
+  assigned_group: string | null;
+  assigned_user: UserTicket | null;
   reason: Reason;
   status: Status;
-  createdAt: string;
+  created_at: string;
 }
 
-export type User = {
+export type UserTicket = {
   id: number;
   name: string;
-  group: string;
+  group_level: string;
 };
 
-export type Client = {
+export type ClientTicket = {
   id: number;
   name: string;
   document: string;
@@ -24,12 +25,12 @@ export type Client = {
 
 export type Reason = {
   id: number;
-  categoryId: string;
+  category_id: string;
   type: string;
   reason: string;
-  expiredAt: string;
+  expired_at: number;
   description: string;
-  typeRecipient: TypeRecipient;
+  type_recipient: TypeRecipient;
   recipient: string; 
 };
 
@@ -53,46 +54,61 @@ export type Status =
   | "FINALIZADO EXPIRADO"
   | "AGUARDANDO RESPOSTA DO CLIENTE";
 
-  
-//commentário
 export interface TicketComment {
-  id?: string | number ;
-  ticketId: string | number;
+  id?: number;
+  ticket_id: number; 
   author: string;
   message: string;
-  date: string;
+  date?: string;
 }
-
-//auditorias
-export interface TicketAudit {
-  id?: string | number;
-  ticketId: string | number;
-  action: "Adicionou" | "Atribuiu" | "Atualizou" | "Finalizou";
-  performedBy: User;
-  message: string;
-  description: string;
-  date: string;
-}
-
-//parte de finalização do reason
-export type FinalizationReply = {
-  id: number;
-  reasonId: number;
-  reply: string;
-  // actionType: "none" | "new_event"| "send_email";
-  comment: Boolean
-};
 
 export interface ReplyAction {
   id: number;
-  replyId: number;
-  type: "new_event" | "send_email";
-  data: {
-    reasonId?: number;
-    groupId?: string;
-    userId?: number;
-    email?: string;
-    title?: string;
-    body?: string;
+  reply_id: number;
+  action_type_id: number;
+  data_email: string | null;
+  data_new_ticket_reason_id: number | null;
+  data_new_ticket_assign_to_group: Group | null;
+}
+
+export type FinalizationReply = {
+  id: number;
+  reason_id: number;
+  reply: string;
+  comment: boolean;
+};
+
+export interface FinalizeTicketPayload {
+  id: number;
+  reply_id: number;
+  comment?: string;
+}
+
+export interface FinalizeTicketInput {
+  ticket_id: number;
+  reply_id: number;
+  comment?: string;
+  user?: {
+    id: number;
+    name: string;
+    group: string;
   };
+}
+
+
+export interface TicketTyped {
+  id?: number;
+  created_by: number;           
+  client_id: number | null;     
+  assigned_group: Group | null; 
+  assigned_user: number | null;
+  reason_id: number;          
+  status: Status;
+  created_at?: string;
+  finalizate_reply?: number;
+}
+
+export interface UpdateTicketInput {
+  id: number;
+  data: Partial<TicketTyped>;
 }

@@ -1,5 +1,8 @@
-import { FinalizationReply, Reason, ReplyAction } from "@/interfaces/TicketData";
+import { FinalizationReply, Reason } from "@/interfaces/TicketData";
 import { api } from "../api";
+import {
+  useQuery,
+} from "@tanstack/react-query";
 
 export async function getTicketCategories() {
   return [
@@ -11,37 +14,41 @@ export async function getTicketCategories() {
   ];
 }
 
-export async function getReasonsByCategory(categoryId: number): Promise<Reason[]> {
-  const res = await api.get("ticketReasons", {
-    searchParams: { categoryId: categoryId.toString() },
-  }).json<Reason[]>();
-  return res;
-}
+export const useTicketReasonsByCategory = (category_id: number) => {
+  return useQuery<Reason[]>({
+    queryKey: ["tickets-reasons-by-category", category_id],
+    queryFn: async () => {
+      const { data } = await api.get<Reason[]>(`tickets/reasons/category/${category_id}`);
+      return data;
+    },
+    enabled: !!category_id,
+    staleTime: Number.POSITIVE_INFINITY,
+    refetchOnMount: true,
+  });
+};
 
-export async function getReasonById(reasonId: number): Promise<Reason> {
-  const res = await api.get("ticketReasons", {
-    searchParams: { reasonId: reasonId.toString() },
-  }).json<Reason[]>();
+export const useTicketReasonsById = (id: number) => {
+  return useQuery<Reason>({
+    queryKey: ["tickets-reasons-by-id", id],
+    queryFn: async () => {
+      const { data } = await api.get<Reason>(`tickets/reasons/${id}`);
+      return data;
+    },
+    enabled: !!id,
+    staleTime: Number.POSITIVE_INFINITY,
+    refetchOnMount: true,
+  });
+};
 
-  if (!res || res.length === 0) {
-    throw new Error(`Nenhum motivo encontrado para ID ${reasonId}`);
-  }
-
-  return res[0];
-}
-
-
-export async function getReplyReason(reasonId: number): Promise<FinalizationReply[]> {
-  const res = await api.get("replyReasons", {
-    searchParams: { reasonId: reasonId.toString() },
-  }).json<FinalizationReply[]>();
-  return res;
-}
-
-
-export async function getReplyActions(replyId: number): Promise<ReplyAction[]> {
-  const res = await api.get("replyActions", {
-    searchParams: { replyId: replyId.toString() },
-  }).json<ReplyAction[]>();
-  return res;
-}
+export const useTicketReasonsReply = (reason_id: number) => {
+  return useQuery<FinalizationReply>({
+    queryKey: ["tickets-reasons-reply-reason_id", reason_id],
+    queryFn: async () => {
+      const { data } = await api.get<FinalizationReply>(`tickets/reasons/reply/${reason_id}`);
+      return data;
+    },
+    enabled: !!reason_id,
+    staleTime: Number.POSITIVE_INFINITY,
+    refetchOnMount: true,
+  });
+};

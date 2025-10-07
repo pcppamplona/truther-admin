@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router";
 import RoutesApp from "./routes/routerApp";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeInitializer } from "./lib/utils";
+import { Toaster } from "sonner";
 
 const client = new QueryClient();
 
@@ -14,6 +15,7 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <ThemeInitializer />
         <RoutesApp />
+        <Toaster richColors /> 
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>
