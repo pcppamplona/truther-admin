@@ -7,11 +7,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useTicketReasonsById } from "@/services/Tickets/useReasons";
 import { useAllUsers } from "@/services/users/useUsers";
 import { Group, TicketTyped, TypeRecipient } from "@/interfaces/TicketData";
 import { getInitials } from "@/lib/formatters";
 import { ChevronRight } from "lucide-react";
+import { useTicketReasonsById } from "@/services/Tickets/useReasons";
 
 interface StepRecipientProps {
   onChange: (field: keyof TicketTyped, value: any) => void;

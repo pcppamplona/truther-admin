@@ -7,6 +7,7 @@ export interface TicketData {
   reason: Reason;
   status: Status;
   created_at: string;
+  finalizate_reply?: number;
 }
 
 export type UserTicket = {
@@ -20,18 +21,6 @@ export type ClientTicket = {
   name: string;
   document: string;
   phone: string;
-};
-
-
-export type Reason = {
-  id: number;
-  category_id: string;
-  type: string;
-  reason: string;
-  expired_at: number;
-  description: string;
-  type_recipient: TypeRecipient;
-  recipient: string; 
 };
 
 export type TypeRecipient = "GROUP" | "USER" | "ALL";
@@ -53,23 +42,6 @@ export type Status =
   | "FINALIZADO"
   | "FINALIZADO EXPIRADO"
   | "AGUARDANDO RESPOSTA DO CLIENTE";
-
-export interface TicketComment {
-  id?: number;
-  ticket_id: number; 
-  author: string;
-  message: string;
-  date?: string;
-}
-
-export interface ReplyAction {
-  id: number;
-  reply_id: number;
-  action_type_id: number;
-  data_email: string | null;
-  data_new_ticket_reason_id: number | null;
-  data_new_ticket_assign_to_group: Group | null;
-}
 
 export type FinalizationReply = {
   id: number;
@@ -95,14 +67,21 @@ export interface FinalizeTicketInput {
   };
 }
 
+export interface TicketComment {
+  id?: number;
+  ticket_id: number;
+  author: string;
+  message: string;
+  date?: string;
+}
 
 export interface TicketTyped {
   id?: number;
-  created_by: number;           
-  client_id: number | null;     
-  assigned_group: Group | null; 
+  created_by: number;
+  client_id: number | null;
+  assigned_group: Group | null;
   assigned_user: number | null;
-  reason_id: number;          
+  reason_id: number;
   status: Status;
   created_at?: string;
   finalizate_reply?: number;
@@ -111,4 +90,37 @@ export interface TicketTyped {
 export interface UpdateTicketInput {
   id: number;
   data: Partial<TicketTyped>;
+}
+
+export type Reason = {
+  id?: number;
+  category_id: string;
+  type: string;
+  reason: string;
+  expired_at: number;
+  description: string;
+  type_recipient: TypeRecipient;
+  recipient: string;
+};
+
+export interface ReplyReason {
+  id?: number;
+  reason_id: number;
+  reply: string;
+  comment: boolean;
+}
+
+export interface ActionsType {
+  id?: number;
+  type: string;
+  created_at?: string;
+}
+
+export interface ReplyAction {
+  id?: number;
+  reply_id?: number;
+  action_type_id: number;
+  data_email?: string;
+  data_new_ticket_reason_id?: number;
+  data_new_ticket_assign_to_group?: Group;
 }

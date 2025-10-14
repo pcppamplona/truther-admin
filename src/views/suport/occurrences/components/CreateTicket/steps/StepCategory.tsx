@@ -7,11 +7,9 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import {
-  getTicketCategories,
-  useTicketReasonsByCategory,
-} from "@/services/Tickets/useReasons";
+
 import { Reason } from "@/interfaces/TicketData";
+import { getTicketCategories, useTicketReasonsByCategory } from "@/services/Tickets/useReasons";
 
 interface Category {
   id: number;

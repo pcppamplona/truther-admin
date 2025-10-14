@@ -19,8 +19,8 @@ import { TicketData, FinalizationReply } from "@/interfaces/TicketData";
 import { Forward } from "lucide-react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/auth";
-import { useTicketReasonsReply } from "@/services/Tickets/useReasons";
 import { useFinalizeTicket } from "@/services/Tickets/useTickets";
+import { useTicketReasonsReply } from "@/services/Tickets/useReasons";
 
 interface Props {
   ticket: TicketData;
