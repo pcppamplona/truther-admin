@@ -11,7 +11,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/store/auth";
-import { Presentation, BotMessageSquare, House, DollarSign, User, FlagTriangleRight } from "lucide-react";
+import { Presentation, BotMessageSquare, House, DollarSign, User, FlagTriangleRight, ArrowRightLeft } from "lucide-react";
 
 export function AppSidebar() {
 
@@ -82,6 +82,23 @@ export function AppSidebar() {
            {
             title: "Saque",
             url: "cashout",
+          },
+        ],
+      },
+      {
+        title: "Transações",
+        url: "transactions",
+        icon: ArrowRightLeft,
+        items: [
+          {
+            title: "PIX In",
+            url: "transactions/pix-in",
+            matchUrls: ["transactions/pix-in"],
+          },
+          {
+            title: "PIX Out",
+            url: "transactions/pix-out",
+            matchUrls: ["transactions/pix-out"],
           },
         ],
       },

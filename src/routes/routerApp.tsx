@@ -14,6 +14,9 @@ import Ocurrences from "@/views/suport/occurrences";
 import OcurrenceDetails from "@/views/suport/occurrences/OcurrenceDetails";
 import SendGas from "@/views/suport/sendGas";
 import Users from "@/views/users";
+import Transactions from "@/views/transactions";
+import PixInPage from "@/views/transactions/pixIn";
+import PixOutPage from "@/views/transactions/pixOut";
 import { Route, Routes } from "react-router";
 
 export default function RoutesApp() {
@@ -38,6 +41,10 @@ export default function RoutesApp() {
       <Route path="/cashout" element={<Cashout />} />
 
       <Route path="/users" element={<Users />} />
+
+      <Route path="/transactions" element={<Transactions />} />
+      <Route path="/transactions/pix-in" element={<PixInPage />} />
+      <Route path="/transactions/pix-out" element={<PixOutPage />} />
 
       <Route path="/auditLog" element={<AuditLog />} />
     </Routes>

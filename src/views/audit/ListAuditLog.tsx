@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar1Icon,
@@ -125,9 +125,8 @@ export default function ListAuditLog() {
               <SkeletonTable />
             ) : (
               data?.data?.map((audit) => (
-                <>
+                <Fragment key={audit.id}>
                   <TableRow
-                    key={audit.id}
                     className="cursor-pointer hover:bg-input transition"
                     onClick={() => toggleExpand(audit.id)}
                   >
@@ -236,7 +235,7 @@ export default function ListAuditLog() {
                       </TableRow>
                     )}
                   </AnimatePresence>
-                </>
+                </Fragment>
               ))
             )}
           </TableBody>
