@@ -81,7 +81,7 @@ export function ActionsTypesView() {
                   <div className="flex flex-col items-center justify-center text-center">
                     <TriangleAlert className="text-muted-foreground mb-2" />
                     <p className="text-lg font-semibold">
-                      Nenhum motivo encontrado
+                      Nenhum Ação encontrado
                     </p>
                     <p className="text-sm text-muted-foreground max-w-md">
                       Não foi possível encontrar nenhuma ação. Tente atualizar

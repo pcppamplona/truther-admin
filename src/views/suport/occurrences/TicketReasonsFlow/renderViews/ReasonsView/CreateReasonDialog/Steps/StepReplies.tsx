@@ -1,11 +1,13 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Trash } from "lucide-react";
 import { ReplyReason } from "@/interfaces/TicketData";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface StepRepliesProps {
-  onChange: (field: any, value: any) => void;
+  replies: ReplyWithActions[];
+  onChange: (replies: ReplyWithActions[]) => void;
   onNext: () => void;
   onBack: () => void;
 }
@@ -14,28 +16,18 @@ interface ReplyWithActions extends ReplyReason {
   actions: any[];
 }
 
-export function StepReplies({ onChange, onBack, onNext }: StepRepliesProps) {
-  // const [replies, setReplies] = useState<
-  //   { reply: string; comment: boolean; actions: any[] }[]
-  // >([]);
-
-  // const addReply = () => {
-  //   setReplies([...replies, { reply: "", comment: false, actions: [] }]);
-  // };
-
-  // const updateReply = (index: number, field: string, value: any) => {
-  //   const updated = [...replies];
-  //   updated[index][field] = value;
-  //   setReplies(updated);
-  //   onChange("replies", updated);
-  // };
-  const [replies, setReplies] = useState<ReplyWithActions[]>([]);
-
+export function StepReplies({
+  replies,
+  onChange,
+  onBack,
+  onNext,
+}: StepRepliesProps) {
   const addReply = () => {
-    setReplies((prev) => [
-      ...prev,
+    const updated = [
+      ...replies,
       { reason_id: 0, reply: "", comment: false, actions: [] },
-    ]);
+    ];
+    onChange(updated);
   };
 
   const updateReply = <K extends keyof ReplyWithActions>(
@@ -45,29 +37,51 @@ export function StepReplies({ onChange, onBack, onNext }: StepRepliesProps) {
   ) => {
     const updated = [...replies];
     updated[index][field] = value;
-    setReplies(updated);
-    onChange("replies", updated);
+    onChange(updated);
+  };
+
+  const removeReply = (index: number) => {
+    const updated = replies.filter((_, i) => i !== index);
+    onChange(updated);
   };
 
   return (
     <div className="space-y-4">
       {replies.map((r, i) => (
-        <div key={i} className="border p-3 rounded-md space-y-2">
-          <Label className="mb-2">Reply #{i + 1}</Label>
+        <div
+          key={i}
+          className="border border-l-3 border-l-primary p-3 rounded-md space-y-3"
+        >
+          <div className="flex items-center justify-between">
+            <Label className="font-medium">{i + 1}º Reply</Label>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => removeReply(i)}
+              className="text-destructive hover:text-destructive"
+            >
+              <Trash size={16} />
+            </Button>
+          </div>
 
-          <Label className="mb-2 mt-6">Titulo</Label>
-          <Input
-            value={r.reply}
-            onChange={(e) => updateReply(i, "reply", e.target.value)}
-            placeholder="Titulo do seu reply"
-          />
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={r.comment}
-              onChange={(e) => updateReply(i, "comment", e.target.checked)}
+          <div className="space-y-2">
+            <Label>Título</Label>
+            <Input
+              value={r.reply}
+              onChange={(e) => updateReply(i, "reply", e.target.value)}
+              placeholder="Título do seu reply"
             />
-            <Label>Gera comentário</Label>
+
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id={`comment-${i}`}
+                checked={r.comment}
+                onCheckedChange={(checked) =>
+                  updateReply(i, "comment", Boolean(checked))
+                }
+              />
+              <Label>Precisa de comentário para a finalizar?</Label>
+            </div>
           </div>
         </div>
       ))}
@@ -80,7 +94,15 @@ export function StepReplies({ onChange, onBack, onNext }: StepRepliesProps) {
         <Button variant="outline" onClick={onBack}>
           Voltar
         </Button>
-        <Button onClick={onNext}>Avançar</Button>
+
+        <Button
+          onClick={onNext}
+          disabled={
+            replies.length === 0 || replies.some((r) => !r.reply.trim())
+          }
+        >
+          Avançar
+        </Button>
       </div>
     </div>
   );

@@ -10,14 +10,7 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { ArrowDown01, Plus, TriangleAlert } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { TriangleAlert } from "lucide-react";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 
 export function ReplyActionsView() {
@@ -41,27 +34,10 @@ export function ReplyActionsView() {
             </CardTitle>
             <CardDescription>
               Aqui estão os ticket reasons. Aqui mostramos os replys conectados
-              aos seus actions. <br />Aqui tambem mostra o data dos items a serem
-              feito pelas actions types.
+              aos seus actions. <br />
+              Aqui tambem mostra o data dos items a serem feito pelas actions
+              types.
             </CardDescription>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button variant="outline" className="w-14 h-12">
-              <ArrowDown01 size={18} />
-            </Button>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button className="w-14 h-12" onClick={() => {}}>
-                    <Plus size={18} color="#fff" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Criar novo reply reason</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
           </div>
         </div>
       </CardHeader>
@@ -88,11 +64,11 @@ export function ReplyActionsView() {
                   <div className="flex flex-col items-center justify-center text-center">
                     <TriangleAlert className="text-muted-foreground mb-2" />
                     <p className="text-lg font-semibold">
-                      Nenhum motivo encontrado
+                      Nenhuma Ação encontrada
                     </p>
                     <p className="text-sm text-muted-foreground max-w-md">
-                      Não foi possível encontrar nenhum reply action. Tente
-                      atualizar a página ou criar um novo.
+                      Não foi possível encontrar nenhuma action reply. Tente
+                      atualizar a página ou criar um nova se possível.
                     </p>
                   </div>
                 </TableCell>

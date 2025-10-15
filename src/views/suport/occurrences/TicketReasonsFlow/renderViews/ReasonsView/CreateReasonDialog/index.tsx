@@ -8,7 +8,7 @@ import {
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Play, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { useAuthStore } from "@/store/auth";
@@ -16,7 +16,6 @@ import { useTicketReason } from "@/services/Tickets/useReasons";
 import { StepReason } from "./Steps/StepReason";
 import { StepReplies } from "./Steps/StepReplies";
 import { StepReplyActions } from "./Steps/StepReplyActions";
-
 import type { Reason, ReplyAction } from "@/interfaces/TicketData";
 
 interface ReplyPayload {
@@ -32,14 +31,14 @@ interface CreateTicketReasonPayload extends Omit<Reason, "id"> {
 export function CreateReasonDialog() {
   const { user } = useAuthStore();
   const createTicketReason = useTicketReason();
-  const [currentReplyIndex, setCurrentReplyIndex] = useState(0);
+  const [, setCurrentReplyIndex] = useState(0);
 
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(1);
 
   const stepTitles: Record<number, string> = {
     1: "Categoria e Motivo",
-    2: "Respostas (Replies)",
+    2: "Resposta para o Motivo",
     3: "Ações (Reply Actions)",
   };
 
@@ -96,14 +95,14 @@ export function CreateReasonDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-14 h-12">
+        <Button className="w-12 h-12">
           <Plus size={18} color="#fff" />
         </Button>
       </DialogTrigger>
 
       <DialogContent className="max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogDescription>Criar novo reason</DialogDescription>
+          <DialogDescription>Criar novo Reason</DialogDescription>
           <Progress value={(step / 3) * 100} className="my-4" />
           <DialogTitle>{stepTitles[step]}</DialogTitle>
         </DialogHeader>
@@ -114,7 +113,8 @@ export function CreateReasonDialog() {
 
         {step === 2 && (
           <StepReplies
-            onChange={handleChange}
+            replies={reasonData.replies || []}
+            onChange={(replies) => handleChange("replies", replies)}
             onNext={() => {
               setCurrentReplyIndex(0);
               setStep(3);
@@ -126,29 +126,30 @@ export function CreateReasonDialog() {
         {step === 3 && reasonData.replies && reasonData.replies.length > 0 && (
           <div className="space-y-6">
             {reasonData.replies.map((reply, index) => (
-              <div
-                key={index}
-                className="border border-zinc-700 rounded-lg p-4 shadow-sm bg-zinc-900/50"
-              >
-                <h3 className="font-semibold mb-3 text-sm text-zinc-200 border-b border-zinc-800 pb-2">
-                  Reply #{index + 1}:{" "}
-                  <span className="text-zinc-400">{reply.reply}</span>
-                </h3>
-
-                <StepReplyActions
-                  reply={reply}
-                  replyIndex={index}
-                  onUpdateActions={(i, actions) => {
-                    const updatedReplies = [...reasonData.replies!];
-                    updatedReplies[i].actions = actions;
-                    handleChange("replies", updatedReplies);
-                  }}
-                  hideNavigation
-                />
+              <div key={index} className="border-t border-border pt-4">
+                <div className="border border-l-3 border-l-primary rounded-lg p-4 shadow-sm">
+                  <div className="font-semibold text-sm text-zinc-200">
+                    <div className="flex flex-row items-center gap-2">
+                      <Play size={15} />
+                      Reply {index + 1} -{" "}
+                      <span className="text-zinc-400">{reply.reply}</span>
+                    </div>
+                    <StepReplyActions
+                      reply={reply}
+                      replyIndex={index}
+                      onUpdateActions={(i, actions) => {
+                        const updatedReplies = [...reasonData.replies!];
+                        updatedReplies[i].actions = actions;
+                        handleChange("replies", updatedReplies);
+                      }}
+                      hideNavigation
+                    />
+                  </div>
+                </div>
               </div>
             ))}
 
-            <div className="flex justify-between mt-8 border-t border-zinc-800 pt-4">
+            <div className="flex justify-between mt-8 border-t border-border pt-4">
               <Button variant="outline" onClick={() => setStep(2)}>
                 Voltar
               </Button>

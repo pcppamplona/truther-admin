@@ -190,12 +190,12 @@ export default function ListOcurrences() {
 
                   <TableCell>
                     <div
-                      className="px-3 py-1 rounded-lg text-sm font-semibold lowercase"
+                      className="px-3 py-2 rounded-lg text-xs font-semibold uppercase"
                       style={{
                         backgroundColor: getColorRGBA(
                           ticket.status,
                           statusColors,
-                          0.2
+                          0.1
                         ),
                         color: getColorRGBA(ticket.status, statusColors, 0.9),
                         width: "fit-content",

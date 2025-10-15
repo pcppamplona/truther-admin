@@ -118,9 +118,9 @@ export interface ActionsType {
 
 export interface ReplyAction {
   id?: number;
-  reply_id?: number;
+  reply_id: number;
   action_type_id: number;
-  data_email?: string;
-  data_new_ticket_reason_id?: number;
-  data_new_ticket_assign_to_group?: Group;
+  data_email?: string | null;
+  data_new_ticket_reason_id?: number | null;
+  data_new_ticket_assign_to_group?: Group | null;
 }

@@ -105,7 +105,7 @@ export function StepReason({ onChange, onNext }: StepReasonProps) {
           placeholder="Escreva seu comentário aqui..."
           value={form.description}
           onChange={(e) => handleChange("description", e.target.value)}
-          className="min-h-[60px] whitespace-pre-wrap break-words"
+          className="min-h-[60px] whitespace-pre-wrap break-words resize-none"
         />
       </div>
 

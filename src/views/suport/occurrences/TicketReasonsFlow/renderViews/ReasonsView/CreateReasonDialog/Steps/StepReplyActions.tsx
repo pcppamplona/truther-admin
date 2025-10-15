@@ -7,10 +7,17 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useActionTypes } from "@/services/Tickets/useActionTypes";
 import { Group, ReplyAction } from "@/interfaces/TicketData";
+import { Plus, Trash2 } from "lucide-react";
 
 interface StepReplyActionsProps {
   reply: { reply: string; comment: boolean; actions: ReplyAction[] };
@@ -41,18 +48,32 @@ export function StepReplyActions({
     setActions(updated);
   };
 
+    const removeAction = (i: number) =>
+    setActions(actions.filter((_, index) => index !== i));
+
+
   useEffect(() => {
     onUpdateActions(replyIndex, actions);
   }, [actions]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5 mt-3">
       {actions.map((a, i) => (
         <div
           key={i}
-          className="border border-zinc-800 p-4 rounded-md space-y-3 bg-zinc-950/40"
+          className="border border-l-6 border-muted p-4 rounded-md space-y-3"
         >
-          <Label className="text-sm text-zinc-300">Ação para este reply</Label>
+          <div className="flex justify-between items-center">
+          <Label className="text-sm">{i + 1}º Ação para este reply</Label>
+           <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => removeAction(i)}
+              className="text-destructive"
+              >
+              <Trash2 size={16} />
+            </Button>
+              </div>
           <Select
             value={a.action_type_id ? String(a.action_type_id) : ""}
             onValueChange={(v) => updateAction(i, "action_type_id", Number(v))}
@@ -115,9 +136,20 @@ export function StepReplyActions({
         </div>
       ))}
 
-      <Button variant="secondary" onClick={addAction}>
-        Adicionar ação
-      </Button>
+      <div className="w-full flex justify-end">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button className="w-10 h-10 rounded-full" onClick={addAction}>
+                <Plus size={16} color="#fff" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Adicionar uma ação</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
 
       {!hideNavigation && (
         <div className="flex justify-between mt-6">

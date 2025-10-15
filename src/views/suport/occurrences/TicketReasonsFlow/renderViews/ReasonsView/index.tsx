@@ -44,18 +44,6 @@ export function ReasonsView() {
               <ArrowDown01 size={18} />
             </Button>
             <CreateReasonDialog />
-            {/* <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button className="w-14 h-12" onClick={() => {}}>
-                    <Plus size={18} color="#fff" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Criar novo reason</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider> */}
           </div>
         </div>
       </CardHeader>

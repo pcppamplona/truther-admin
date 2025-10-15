@@ -116,10 +116,10 @@ export default function OcurrenceDetails() {
                   <div>
                     <p className="text-sm text-muted-foreground">Status</p>
                     <div
-                      className="w-fit text-sm font-semibold lowercase rounded-sm border-none px-2 py-1"
+                      className="w-fit text-sm font-semibold uppercase rounded-sm border-none px-2 py-1"
                       style={{
                         backgroundColor:
-                          getColorRGBA?.(ticket.status, statusColors, 0.2) ??
+                          getColorRGBA?.(ticket.status, statusColors, 0.1) ??
                           "#eee",
                         color:
                           getColorRGBA?.(ticket.status, statusColors, 0.8) ??

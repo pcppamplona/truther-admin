@@ -10,15 +10,11 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { ArrowDown01, Plus, TriangleAlert } from "lucide-react";
+import { ArrowDown01, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
+import CreateReplyReasonDialog from "./CreateReplyReason";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export function RepliesView() {
   const { data: allReplies, isLoading } = useAllReplies();
@@ -29,10 +25,6 @@ export function RepliesView() {
     if (allReplies) setReplies(allReplies);
   }, [allReplies]);
 
-  const handleRowClick = (replyId: number) => {
-    console.log("Clicked reply:", replyId);
-  };
-
   return (
     <>
       <CardHeader className="mb-4">
@@ -40,8 +32,8 @@ export function RepliesView() {
           <div>
             <CardTitle className="text-2xl font-bold mb-2">Replies</CardTitle>
             <CardDescription>
-              Aqui estão as respostas (replies) associadas aos motivos de ticket.
-              Cada resposta pode estar vinculada a um motivo específico.
+              Aqui estão as respostas (replies) associadas aos motivos de
+              ticket. Cada resposta pode estar vinculada a um motivo específico.
             </CardDescription>
           </div>
 
@@ -49,18 +41,7 @@ export function RepliesView() {
             <Button variant="outline" className="w-14 h-12">
               <ArrowDown01 size={18} />
             </Button>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button className="w-14 h-12" onClick={() => {}}>
-                    <Plus size={18} color="#fff" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Criar novo reply</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <CreateReplyReasonDialog />
           </div>
         </div>
       </CardHeader>
@@ -72,7 +53,7 @@ export function RepliesView() {
               <TableHead>ID</TableHead>
               <TableHead>Reason ID</TableHead>
               <TableHead>Reply</TableHead>
-              <TableHead>Comment</TableHead>
+              <TableHead className="flex justify-center items-center">Comment</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -88,8 +69,8 @@ export function RepliesView() {
                       Nenhuma resposta encontrada
                     </p>
                     <p className="text-sm text-muted-foreground max-w-md">
-                      Não foi possível encontrar nenhuma reply. Tente atualizar a página
-                      ou criar uma nova.
+                      Não foi possível encontrar nenhuma reply. Tente atualizar
+                      a página ou criar uma nova.
                     </p>
                   </div>
                 </TableCell>
@@ -98,14 +79,13 @@ export function RepliesView() {
               replies.map((reply) => (
                 <TableRow
                   key={reply.id}
-                  onClick={() => handleRowClick(reply.id)}
                   className="cursor-pointer hover:bg-muted/50 transition-colors"
                 >
                   <TableCell>{reply.id}</TableCell>
                   <TableCell>{reply.reason_id}</TableCell>
                   <TableCell className="font-medium">{reply.reply}</TableCell>
-                  <TableCell>
-                    {reply.comment ? "Sim" : "Não"}
+                  <TableCell className="flex justify-center items-center">
+                    <Checkbox id="comment" checked={reply.comment} />
                   </TableCell>
                 </TableRow>
               ))
