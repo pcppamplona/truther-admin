@@ -9,18 +9,12 @@ import {
   SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 
-type SubItem = {
-  title: string;
-  url: string;
-  matchUrls?: string[];
-};
-
 type NavItem = {
   title: string;
   url: string;
   icon?: React.ComponentType<any>;
-  items?: SubItem[];
   matchUrls?: string[];
+  items?: NavItem[];
 };
 
 export function NavMain({ items }: { items: NavItem[] }) {
@@ -29,65 +23,41 @@ export function NavMain({ items }: { items: NavItem[] }) {
 
   const isMatch = (path: string, matchUrls?: string[]) => {
     if (currentPath === path) return true;
-    if (matchUrls) {
-      return matchUrls.some((match) => currentPath.startsWith(match));
-    }
+    if (matchUrls) return matchUrls.some((match) => currentPath.startsWith(match));
     return false;
   };
 
-  return (
-    <SidebarGroup>
-      <SidebarMenu>
-        {items.map((item) => {
-          const isItemActive =
+  const renderItems = (navItems: NavItem[], isSub = false) => {
+    const Container = isSub ? SidebarMenuSub : SidebarMenu;
+    const Item = isSub ? SidebarMenuSubItem : SidebarMenuItem;
+    const Button = isSub ? SidebarMenuSubButton : SidebarMenuButton;
+
+    return (
+      <Container>
+        {navItems.map((item) => {
+          const isActive =
             isMatch(item.url, item.matchUrls) ||
             item.items?.some((sub) => isMatch(sub.url, sub.matchUrls));
 
           return (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton
+            <Item key={item.title}>
+              <Button
                 asChild
-                className={
-                  isItemActive ? "text-primary font-semibold" : ""
-                }
+                className={isActive ? "text-primary font-semibold" : ""}
               >
                 <a href={`/${item.url}`} className="w-full block">
                   {item.icon && <item.icon />}
                   {item.title}
                 </a>
-              </SidebarMenuButton>
+              </Button>
 
-              {item.items && (
-                <SidebarMenuSub>
-                  {item.items.map((subItem) => {
-                    const isSubActive = isMatch(subItem.url, subItem.matchUrls);
-
-                    return (
-                      <SidebarMenuSubItem key={subItem.title}>
-                        <SidebarMenuSubButton
-                          asChild
-                          className={
-                            isSubActive
-                              ? "text-primary font-semibold"
-                              : ""
-                          }
-                        >
-                          <a
-                            href={`/${subItem.url}`}
-                            className="w-full block text-sm pl-4"
-                          >
-                            {subItem.title}
-                          </a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    );
-                  })}
-                </SidebarMenuSub>
-              )}
-            </SidebarMenuItem>
+              {item.items && renderItems(item.items, true)}
+            </Item>
           );
         })}
-      </SidebarMenu>
-    </SidebarGroup>
-  );
+      </Container>
+    );
+  };
+
+  return <SidebarGroup>{renderItems(items)}</SidebarGroup>;
 }
