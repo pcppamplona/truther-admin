@@ -34,10 +34,9 @@ export function ActionsTypesView() {
       <CardHeader className="mb-4">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-2xl font-bold mb-2">Reasons</CardTitle>
+            <CardTitle className="text-2xl font-bold mb-2">Ações</CardTitle>
             <CardDescription>
-              Aqui estão os motivos (reasons) utilizados na criação de tickets.
-              Cada motivo pode conter respostas e ações associadas.
+              Aqui estão os motivos ActionTypes. As ações que podem ser associadas a um reply, quando o mesmo for finalizado.
             </CardDescription>
           </div>
 
