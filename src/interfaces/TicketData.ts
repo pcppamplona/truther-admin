@@ -8,6 +8,8 @@ export interface TicketData {
   status: Status;
   created_at: string;
   finalizate_reply?: number;
+  chain_id_main?: number;
+  chain_id_last?: number;
 }
 
 export type UserTicket = {
@@ -85,6 +87,8 @@ export interface TicketTyped {
   status: Status;
   created_at?: string;
   finalizate_reply?: number;
+  chain_id_main?: number;
+  chain_id_last?: number;
 }
 
 export interface UpdateTicketInput {

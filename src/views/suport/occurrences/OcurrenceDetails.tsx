@@ -2,8 +2,20 @@ import { useLocation } from "react-router-dom";
 import { SidebarLayout } from "@/components/layouts/SidebarLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Info } from "@/components/info";
-import { dateFormat, documentFormat, phoneFormat, timeFormat } from "@/lib/formatters";
-import { FolderOpenDot, GitMerge, MessageCircleMore, User } from "lucide-react";
+import {
+  dateFormat,
+  documentFormat,
+  phoneFormat,
+  timeFormat,
+} from "@/lib/formatters";
+import {
+  FolderOpenDot,
+  GitMerge,
+  Link,
+  Link2,
+  MessageCircleMore,
+  User,
+} from "lucide-react";
 import {
   useTicketAudit,
   useTicketComments,
@@ -28,6 +40,8 @@ import {
 } from "@/components/ui/tooltip";
 import { FinalizeTicketDialog } from "./components/FinalizeTicketDialog";
 import { useAuthStore } from "@/store/auth";
+import { Separator } from "@/components/ui/separator";
+import { ChainTicketCard } from "./components/ChainTicketCard";
 
 export default function OcurrenceDetails() {
   const location = useLocation();
@@ -76,7 +90,7 @@ export default function OcurrenceDetails() {
     >
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Card className="h-full max-h-[500px] flex flex-col">
+          <Card className="h-full max-h-[600px] flex flex-col">
             <CardHeader>
               <CardTitle className="flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center gap-2">
@@ -155,7 +169,86 @@ export default function OcurrenceDetails() {
             </CardContent>
           </Card>
 
-          <Card className="h-full max-h-[500px] flex flex-col">
+          <Card className="h-full max-h-[600px] flex flex-col">
+            <CardHeader>
+              <CardTitle className="flex flex-row justify-between gap-2">
+                <div className="flex flex-row items-center gap-2">
+                  <MessageCircleMore /> Comentários
+                </div>
+                {canComment && <CreateCommentDialog ticket={ticket} />}
+                {/* <CreateCommentDialog ticket={ticket} /> */}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 overflow-y-auto">
+              {isLoading ? (
+                <div className="space-y-4">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="space-y-2">
+                      <Skeleton className="h-3 w-24" />
+                      <Skeleton className="h-4 w-32" />
+                      <Skeleton className="h-4 w-full" />
+                      {i < 2 && <Separator className="my-4" />}
+                    </div>
+                  ))}
+                </div>
+              ) : ticketComments && ticketComments.length > 0 ? (
+                ticketComments.map((comment, index) => (
+                  <>
+                    <div
+                      key={comment.id}
+                      className="border-l-3 pl-2 border-l-border"
+                    >
+                      <p className="text-xs text-muted-foreground">
+                        {dateFormat(comment.date ?? "-")} às{" "}
+                        {timeFormat(comment.date ?? "-")}
+                      </p>
+                      <p className="text-sm font-semibold">{comment.author}</p>
+                      <p className="text-sm">{comment.message}</p>
+                    </div>
+                    {index < ticketComments.length - 1 && (
+                      <Separator className="my-4" />
+                    )}
+                  </>
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground italic">
+                  Nenhum comentário adicionado.
+                </p>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card className="h-full max-h-[250px] flex flex-col">
+            <CardHeader>
+              <CardTitle className="flex flex-row items-center gap-2">
+                <User /> Dados do Solicitante
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {isLoading ? (
+                <SkeletonCard />
+              ) : isError || !ticket?.client ? (
+                <p className="text-sm text-muted-foreground italic">
+                  Solicitante não informado.
+                </p>
+              ) : (
+                <>
+                  <Info label="ID" value={ticket.client?.id} />
+                  <Info label="Nome" value={ticket.client?.name} />
+                  <Info
+                    label="Documento"
+                    value={documentFormat(ticket.client?.document)}
+                  />
+                  <Info
+                    label="Telefone"
+                    value={phoneFormat(ticket.client?.phone)}
+                  />
+                </>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card className="h-full max-h-[250px] flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <GitMerge />
@@ -183,7 +276,7 @@ export default function OcurrenceDetails() {
                         {timeFormat(audit.created_at)}
                       </p>
                       <div
-                        className={`px-3 m-2 w-fit min-w-18 flex border-l-[3px] text-sm uppercase font-semibold ${
+                        className={`px-3 w-fit min-w-18 flex border-l-[3px] text-sm uppercase font-semibold ${
                           actionColors[audit.action as ActionType]
                         }`}
                       >
@@ -210,9 +303,7 @@ export default function OcurrenceDetails() {
                     </div>
 
                     {index < ticketAudit.length - 1 && (
-                      <div className="pt-4">
-                        <hr className="border-muted" />
-                      </div>
+                      <Separator className="my-4" />
                     )}
                   </div>
                 ))
@@ -224,73 +315,21 @@ export default function OcurrenceDetails() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex flex-row items-center gap-2">
-                <User /> Dados do Solicitante
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {isLoading ? (
-                <SkeletonCard />
-              ) : isError || !ticket?.client ? (
-                <p className="text-sm text-muted-foreground italic">
-                  Solicitante não informado.
-                </p>
-              ) : (
-                <>
-                  <Info label="ID" value={ticket.client?.id} />
-                  <Info label="Nome" value={ticket.client?.name} />
-                  <Info label="Documento" value={documentFormat(ticket.client?.document)} />
-                  <Info label="Telefone" value={phoneFormat(ticket.client?.phone)} />
-                </>
-              )}
-            </CardContent>
-          </Card>
+          {ticket.chain_id_main ? (
+            <ChainTicketCard
+              id={ticket.chain_id_main}
+              title="Ticket inicial da cadeia"
+              icon={<Link2 />}
+            />
+          ) : null}
 
-          <Card className="h-full max-h-[300px] flex flex-col">
-            <CardHeader>
-              <CardTitle className="flex flex-row justify-between gap-2">
-                <div className="flex flex-row items-center gap-2">
-                  <MessageCircleMore /> Comentários
-                </div>
-                {canComment && <CreateCommentDialog ticket={ticket} />}
-                {/* <CreateCommentDialog ticket={ticket} /> */}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 overflow-y-auto">
-              {isLoading ? (
-                <div className="space-y-4">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="space-y-2">
-                      <Skeleton className="h-3 w-24" />
-                      <Skeleton className="h-4 w-32" />
-                      <Skeleton className="h-4 w-full" />
-                      {i < 2 && <div className="my-4 border-t border-muted" />}
-                    </div>
-                  ))}
-                </div>
-              ) : ticketComments && ticketComments.length > 0 ? (
-                ticketComments.map((comment, index) => (
-                  <div key={comment.id}>
-                    <p className="text-xs text-muted-foreground">
-                      {dateFormat(comment.date ?? "-")} às{" "}
-                      {timeFormat(comment.date ?? "-")}
-                    </p>
-                    <p className="text-sm font-semibold">{comment.author}</p>
-                    <p className="text-sm">{comment.message}</p>
-                    {index < ticketComments.length - 1 && (
-                      <div className="my-4 border-t border-muted" />
-                    )}
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-muted-foreground italic">
-                  Nenhum comentário adicionado.
-                </p>
-              )}
-            </CardContent>
-          </Card>
+          {ticket.chain_id_last ? (
+            <ChainTicketCard
+              id={ticket.chain_id_last}
+              title="Ticket anterior na cadeia"
+              icon={<Link />}
+            />
+          ) : null}
         </div>
       </div>
     </SidebarLayout>
