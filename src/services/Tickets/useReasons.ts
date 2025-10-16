@@ -88,7 +88,8 @@ export const useTicketReason = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ticket-reasons"] });
       queryClient.invalidateQueries({ queryKey: ["all-ticket-reasons"] });
-
+      queryClient.invalidateQueries({ queryKey: ["all-reply-actions"] });
+      queryClient.invalidateQueries({ queryKey: ["all-ticket-replys"] });
     },
   });
 };

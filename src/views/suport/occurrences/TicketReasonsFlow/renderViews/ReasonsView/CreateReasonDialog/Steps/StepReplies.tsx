@@ -12,9 +12,14 @@ interface StepRepliesProps {
   onBack: () => void;
 }
 
-interface ReplyWithActions extends ReplyReason {
+// interface ReplyWithActions extends ReplyReason {
+//   actions: any[];
+// }
+interface ReplyWithActions extends Omit<ReplyReason, "reason_id"> {
+  reason_id?: number;
   actions: any[];
 }
+
 
 export function StepReplies({
   replies,

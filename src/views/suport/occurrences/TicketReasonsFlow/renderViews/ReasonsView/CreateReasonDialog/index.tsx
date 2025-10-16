@@ -8,7 +8,7 @@ import {
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { Play, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { useAuthStore } from "@/store/auth";
@@ -126,27 +126,17 @@ export function CreateReasonDialog() {
         {step === 3 && reasonData.replies && reasonData.replies.length > 0 && (
           <div className="space-y-6">
             {reasonData.replies.map((reply, index) => (
-              <div key={index} className="border-t border-border pt-4">
-                <div className="border border-l-3 border-l-primary rounded-lg p-4 shadow-sm">
-                  <div className="font-semibold text-sm text-zinc-200">
-                    <div className="flex flex-row items-center gap-2">
-                      <Play size={15} />
-                      Reply {index + 1} -{" "}
-                      <span className="text-zinc-400">{reply.reply}</span>
-                    </div>
-                    <StepReplyActions
-                      reply={reply}
-                      replyIndex={index}
-                      onUpdateActions={(i, actions) => {
-                        const updatedReplies = [...reasonData.replies!];
-                        updatedReplies[i].actions = actions;
-                        handleChange("replies", updatedReplies);
-                      }}
-                      hideNavigation
-                    />
-                  </div>
-                </div>
-              </div>
+              <StepReplyActions
+                key={index}
+                reply={reply}
+                replyIndex={index}
+                onUpdateActions={(i, actions) => {
+                  const updatedReplies = [...reasonData.replies!];
+                  updatedReplies[i].actions = actions;
+                  handleChange("replies", updatedReplies);
+                }}
+                hideNavigation
+              />
             ))}
 
             <div className="flex justify-between mt-8 border-t border-border pt-4">

@@ -40,6 +40,7 @@ export function useCreateReply() {
       queryClient.invalidateQueries({
         queryKey: ["all-ticket-replies"],
       });
+      queryClient.invalidateQueries({ queryKey: ["all-reply-actions"] });
     },
   });
 }

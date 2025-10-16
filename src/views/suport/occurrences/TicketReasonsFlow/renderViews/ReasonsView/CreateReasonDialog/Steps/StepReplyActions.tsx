@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useActionTypes } from "@/services/Tickets/useActionTypes";
 import { Group, ReplyAction } from "@/interfaces/TicketData";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Play } from "lucide-react";
 
 interface StepReplyActionsProps {
   reply: { reply: string; comment: boolean; actions: ReplyAction[] };
@@ -48,124 +48,136 @@ export function StepReplyActions({
     setActions(updated);
   };
 
-    const removeAction = (i: number) =>
+  const removeAction = (i: number) =>
     setActions(actions.filter((_, index) => index !== i));
-
 
   useEffect(() => {
     onUpdateActions(replyIndex, actions);
   }, [actions]);
 
   return (
-    <div className="space-y-5 mt-3">
-      {actions.map((a, i) => (
-        <div
-          key={i}
-          className="border border-l-6 border-muted p-4 rounded-md space-y-3"
-        >
-          <div className="flex justify-between items-center">
-          <Label className="text-sm">{i + 1}º Ação para este reply</Label>
-           <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => removeAction(i)}
-              className="text-destructive"
+    <div className="relative border-t border-border pt-6 mt-6">
+      <div className="border border-l-3 border-l-primary rounded-lg p-4 shadow-sm">
+        <div className="font-semibold text-sm text-zinc-200">
+          <div className="flex flex-row items-center gap-2 mb-3">
+            <Play size={15} />
+            Reply {replyIndex + 1} -{" "}
+            <span className="text-zinc-400">{reply.reply}</span>
+          </div>
+
+          <div className="space-y-5 my-4">
+            {actions.map((a, i) => (
+              <div
+                key={i}
+                className="border border-l-6 border-muted p-4 rounded-md space-y-3"
               >
-              <Trash2 size={16} />
-            </Button>
+                <div className="flex justify-between items-center">
+                  <Label className="text-sm">{i + 1}º Ação para este reply</Label>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeAction(i)}
+                    className="text-destructive"
+                  >
+                    <Trash2 size={16} />
+                  </Button>
+                </div>
+
+                <Select
+                  value={a.action_type_id ? String(a.action_type_id) : ""}
+                  onValueChange={(v) => updateAction(i, "action_type_id", Number(v))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione a ação" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {actionsType?.map((act) => (
+                      <SelectItem key={act.id} value={String(act.id)}>
+                        {act.type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {a.action_type_id === 1 && (
+                  <Input
+                    placeholder="E-mail"
+                    value={a.data_email ?? ""}
+                    onChange={(e) => updateAction(i, "data_email", e.target.value)}
+                  />
+                )}
+
+                {a.action_type_id === 2 && (
+                  <Input
+                    placeholder="Reason ID para novo ticket"
+                    type="number"
+                    value={a.data_new_ticket_reason_id ?? ""}
+                    onChange={(e) =>
+                      updateAction(i, "data_new_ticket_reason_id", Number(e.target.value))
+                    }
+                  />
+                )}
+
+                {a.action_type_id === 3 && (
+                  <Select
+                    value={a.data_new_ticket_assign_to_group ?? ""}
+                    onValueChange={(v) =>
+                      updateAction(i, "data_new_ticket_assign_to_group", v as Group)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o grupo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="N1">N1</SelectItem>
+                      <SelectItem value="N2">N2</SelectItem>
+                      <SelectItem value="N3">N3</SelectItem>
+                      <SelectItem value="PRODUTO">PRODUTO</SelectItem>
+                      <SelectItem value="MKT">MKT</SelectItem>
+                      <SelectItem value="ADMIN">ADMIN</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
-          <Select
-            value={a.action_type_id ? String(a.action_type_id) : ""}
-            onValueChange={(v) => updateAction(i, "action_type_id", Number(v))}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecione a ação" />
-            </SelectTrigger>
-            <SelectContent>
-              {actionsType?.map((act) => (
-                <SelectItem key={act.id} value={String(act.id)}>
-                  {act.type}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            ))}
+          </div>
 
-          {a.action_type_id === 1 && (
-            <Input
-              placeholder="E-mail"
-              value={a.data_email ?? ""}
-              onChange={(e) => updateAction(i, "data_email", e.target.value)}
-            />
-          )}
+          <div className="flex justify-center mt-4">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={addAction}
+                    className="w-8 h-8 rounded-full bg-primary hover:bg-primary-foreground text-white flex items-center justify-center shadow-md"
+                  >
+                    <Plus size={18} strokeWidth={2.5} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Adicionar uma ação</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
 
-          {a.action_type_id === 2 && (
-            <Input
-              placeholder="Reason ID para novo ticket"
-              type="number"
-              value={a.data_new_ticket_reason_id ?? ""}
-              onChange={(e) =>
-                updateAction(
-                  i,
-                  "data_new_ticket_reason_id",
-                  Number(e.target.value)
-                )
-              }
-            />
-          )}
-
-          {a.action_type_id === 3 && (
-            <Select
-              value={a.data_new_ticket_assign_to_group ?? ""}
-              onValueChange={(v) =>
-                updateAction(i, "data_new_ticket_assign_to_group", v as Group)
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione o grupo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="N1">N1</SelectItem>
-                <SelectItem value="N2">N2</SelectItem>
-                <SelectItem value="N3">N3</SelectItem>
-                <SelectItem value="PRODUTO">PRODUTO</SelectItem>
-                <SelectItem value="MKT">MKT</SelectItem>
-                <SelectItem value="ADMIN">ADMIN</SelectItem>
-              </SelectContent>
-            </Select>
-          )}
-        </div>
-      ))}
-
-      <div className="w-full flex justify-end">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button className="w-10 h-10 rounded-full" onClick={addAction}>
-                <Plus size={16} color="#fff" />
+          {!hideNavigation && (
+            <div className="flex justify-between mt-6">
+              <Button variant="secondary" onClick={onBack}>
+                Voltar
               </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Adicionar uma ação</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
-
-      {!hideNavigation && (
-        <div className="flex justify-between mt-6">
-          <Button variant="secondary" onClick={onBack}>
-            Voltar
-          </Button>
-          <Button
-            onClick={() => {
-              onUpdateActions(replyIndex, actions);
-              onNext?.();
-            }}
-          >
-            Finalizar
-          </Button>
+              <Button
+                onClick={() => {
+                  onUpdateActions(replyIndex, actions);
+                  onNext?.();
+                }}
+              >
+                Finalizar
+              </Button>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
+

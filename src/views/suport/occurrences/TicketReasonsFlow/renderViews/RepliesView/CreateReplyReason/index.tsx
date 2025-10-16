@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Trash } from "lucide-react";
+import { ListTree, Plus, Trash } from "lucide-react";
 import { useCreateReply } from "@/services/Tickets/useReplies";
 import { useAllTicketReasons } from "@/services/Tickets/useReasons";
 import { useActionTypes } from "@/services/Tickets/useActionTypes";
@@ -43,7 +43,7 @@ export default function CreateReplyReasonDialog() {
       action_type_id: number;
       data_email: string | null;
       data_new_ticket_reason_id: number | null;
-      data_new_ticket_assign_to_group: string | null;
+      data_new_ticket_assign_to_group: Group | null;
     }[]
   >([]);
 
@@ -226,7 +226,7 @@ export default function CreateReplyReasonDialog() {
             value={reasonId ? String(reasonId) : ""}
             onValueChange={(v) => setReasonId(Number(v))}
           >
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Selecione um reason" />
             </SelectTrigger>
             <SelectContent>
@@ -256,12 +256,62 @@ export default function CreateReplyReasonDialog() {
           <Label htmlFor="comment">Precisa de comentário</Label>
         </div>
 
+        <div className="flex flex-col mt-4 border border-border rounded-md p-3">
+          <div className="flex justify-between items-center">
+            <Label className="font-medium">
+              <ListTree />
+              Ações para esse Reply
+            </Label>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type="button"
+                    className="w-8 h-8 rounded-full flex items-center justify-center"
+                    onClick={() => setShowActionSelect((v) => !v)}
+                  >
+                    <Plus size={18} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Adicionar Ação</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+
+          {showActionSelect && (
+            <div className="flex gap-2 items-center mt-4">
+              <Select
+                value={newActionTypeId ? String(newActionTypeId) : ""}
+                onValueChange={(v) => setNewActionTypeId(Number(v))}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Selecione uma ação" />
+                </SelectTrigger>
+                <SelectContent>
+                  {actionTypes?.map((act) => (
+                    <SelectItem key={act.id} value={String(act.id)}>
+                      {act.type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant="outline"
+                onClick={handleAddAction}
+                disabled={!newActionTypeId}
+              >
+                Confirmar
+              </Button>
+            </div>
+          )}
+        </div>
+
         {actions.map((a, i) => (
           <div
             key={i}
-            className="border border-l-4 border-l-primary p-3 mt-6 rounded-md space-y-3"
+            className="border border-border border-l-primary border-l-3 p-4 rounded-md shadow-sm bg-background"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex justify-between items-center">
               <Label className="font-medium">
                 Ação {i + 1} —{" "}
                 {actionTypes?.find((t) => t.id === a.action_type_id)?.type}
@@ -275,51 +325,9 @@ export default function CreateReplyReasonDialog() {
                 <Trash size={16} />
               </Button>
             </div>
-
-            {renderActionFields(a, i)}
+            <div className="space-y-3">{renderActionFields(a, i)}</div>
           </div>
         ))}
-
-        <div className="flex items-center gap-2 mt-6">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  type="button"
-                  className="w-12 h-12"
-                  onClick={() => setShowActionSelect((v) => !v)}
-                >
-                  <Plus size={18} color="#fff" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Adicionar Ação</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          {showActionSelect && (
-            <Select
-              value={newActionTypeId ? String(newActionTypeId) : ""}
-              onValueChange={(v) => setNewActionTypeId(Number(v))}
-            >
-              <SelectTrigger className="w-[240px]">
-                <SelectValue placeholder="Selecione uma ação" />
-              </SelectTrigger>
-              <SelectContent>
-                {actionTypes?.map((act) => (
-                  <SelectItem key={act.id} value={String(act.id)}>
-                    {act.type}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-
-          {showActionSelect && (
-            <Button variant="outline" onClick={handleAddAction}>
-              Adicionar
-            </Button>
-          )}
-        </div>
 
         <DialogFooter className="mt-6">
           <Button variant="outline" onClick={() => setOpen(false)}>
