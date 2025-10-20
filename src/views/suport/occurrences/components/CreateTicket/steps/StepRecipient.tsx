@@ -73,7 +73,6 @@ export function StepRecipient({
 
   return (
     <div className="space-y-4">
-      {/* GROUP */}
       {reasonTypeRecipient === "GROUP" && (
         <div className="p-4 border rounded bg-muted">
           <p>
@@ -83,7 +82,6 @@ export function StepRecipient({
         </div>
       )}
 
-      {/* USER */}
       {reasonTypeRecipient === "USER" && (
         <div className="p-4 rounded border bg-muted space-y-2">
           <p className="text-sm">Selecione o usuário destinatário:</p>
@@ -126,7 +124,6 @@ export function StepRecipient({
         </div>
       )}
 
-      {/* ALL */}
       {reasonTypeRecipient === "ALL" && (
         <div className="p-4 border rounded bg-muted space-y-4">
           <p>Escolha se deseja direcionar para um grupo ou usuário:</p>

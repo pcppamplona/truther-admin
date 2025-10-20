@@ -29,6 +29,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { dateFormat, documentFormat, timeFormat } from "@/lib/formatters";
 
 export default function ListClients() {
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ export default function ListClients() {
             <Search size={16} className="mr-2 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Pesquisar clientes"
+              placeholder="Pesquisar clientes Ex: Documento, nome..."
               className="outline-none text-sm w-full"
               value={search}
               onChange={(e) => {
@@ -136,8 +137,9 @@ export default function ListClients() {
               >
                 Nome
               </TableCell>
-              <TableCell>uuid</TableCell>
-              <TableCell>role</TableCell>
+              <TableCell>Documento</TableCell>
+              <TableCell>Role</TableCell>
+              <TableCell>Data Criação</TableCell>
               <TableCell>KYC</TableCell>
             </TableRow>
           </TableHeader>
@@ -152,8 +154,9 @@ export default function ListClients() {
                 >
                   <TableCell>{client.id}</TableCell>
                   <TableCell>{client.name ?? "n/a"}</TableCell>
-                  <TableCell>{client.uuid}</TableCell>
+                  <TableCell>{documentFormat(client.document)}</TableCell>
                   <TableCell>{client.role}</TableCell>
+                  <TableCell>{dateFormat(client.created_at)} ás {timeFormat(client.created_at)}</TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
                       <span

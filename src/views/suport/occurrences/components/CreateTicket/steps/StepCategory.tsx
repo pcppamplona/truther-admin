@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -9,12 +9,8 @@ import {
 } from "@/components/ui/select";
 
 import { Reason } from "@/interfaces/TicketData";
-import { getTicketCategories, useTicketReasonsByCategory } from "@/services/Tickets/useReasons";
-
-interface Category {
-  id: number;
-  type: string;
-}
+import { useTicketReasonsByCategory } from "@/services/Tickets/useReasons";
+import { useAllReasonCategories } from "@/services/Tickets/useReasonCategories";
 
 interface StepCategoryProps {
   onChange: (field: any, value: any) => void;
@@ -22,14 +18,14 @@ interface StepCategoryProps {
 }
 
 export function StepCategory({ onChange, onNext }: StepCategoryProps) {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const { data: categories = [] } = useAllReasonCategories();
 
-  const { data: ticketReasons, isLoading: reasonsLoading } = useTicketReasonsByCategory(selectedCategoryId ?? 0);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null
+  );
 
-  useEffect(() => {
-    getTicketCategories().then(setCategories);
-  }, []);
+  const { data: ticketReasons, isLoading: reasonsLoading } =
+    useTicketReasonsByCategory(selectedCategoryId ?? 0);
 
   const handleSelectCategory = (value: string) => {
     const categoryId = Number(value);

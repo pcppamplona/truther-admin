@@ -10,8 +10,7 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { ArrowDown01, TriangleAlert } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { TriangleAlert } from "lucide-react";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import CreateReplyReasonDialog from "./CreateReplyReason";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -38,9 +37,6 @@ export function RepliesView() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" className="w-14 h-12">
-              <ArrowDown01 size={18} />
-            </Button>
             <CreateReplyReasonDialog />
           </div>
         </div>

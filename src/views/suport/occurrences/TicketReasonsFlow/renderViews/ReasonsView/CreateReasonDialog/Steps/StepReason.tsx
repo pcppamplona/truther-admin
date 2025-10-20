@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,14 +9,9 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { getTicketCategories } from "@/services/Tickets/useReasons";
 import { Textarea } from "@/components/ui/textarea";
 import { Group, groupHierarchy } from "@/interfaces/TicketData";
-
-interface Category {
-  id: number;
-  type: string;
-}
+import { useAllReasonCategories } from "@/services/Tickets/useReasonCategories";
 
 interface StepReasonProps {
   onChange: (field: any, value: any) => void;
@@ -24,16 +19,7 @@ interface StepReasonProps {
 }
 
 export function StepReason({ onChange, onNext }: StepReasonProps) {
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  useEffect(() => {
-    async function loadCategories() {
-      const data = await getTicketCategories();
-      setCategories(data);
-    }
-
-    loadCategories();
-  }, []);
+  const { data: categories = [] } = useAllReasonCategories();
 
   const [form, setForm] = useState({
     category_id: "",

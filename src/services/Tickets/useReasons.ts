@@ -1,20 +1,10 @@
-import { FinalizationReply, Reason, ReplyAction } from "@/interfaces/TicketData";
+import { FinalizationReply, Reason, ReplyAction, TicketReasonResponse } from "@/interfaces/TicketData";
 import { api } from "../api";
 import {
   useMutation,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-
-export async function getTicketCategories() {
-  return [
-    { id: 1, type: "KYC" },
-    { id: 2, type: "PIX IN" },
-    { id: 3, type: "PIX OUT" },
-    { id: 4, type: "ATM" },
-    { id: 5, type: "BOLETO" },
-  ];
-}
 
 export const useTicketReasonsByCategory = (category_id: number) => {
   return useQuery<Reason[]>({
@@ -66,6 +56,20 @@ export const useAllTicketReasons = () => {
     refetchOnMount: true,
   });
 }
+
+export const useTicketReasonsByIdFlow = (id: number) => {
+  return useQuery<TicketReasonResponse>({
+    queryKey: ["tickets-reasons-by-id-flow", id],
+    queryFn: async () => {
+      const { data } = await api.get<TicketReasonResponse>(`/ticket-reasons/${id}`);
+      return data;
+    },
+    enabled: !!id,
+    staleTime: Number.POSITIVE_INFINITY,
+    refetchOnMount: true,
+  });
+};
+
 
 
 type ReplyPayload = {

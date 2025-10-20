@@ -65,7 +65,6 @@ export function CreateReasonDialog() {
 
     const payload: CreateTicketReasonPayload = {
       category_id: reasonData.category_id!,
-      type: reasonData.type ?? "Novo fluxo",
       reason: reasonData.reason ?? "Sem título",
       expired_at: reasonData.expired_at ?? 7,
       description: reasonData.description ?? "",
@@ -95,7 +94,7 @@ export function CreateReasonDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-12 h-12">
+        <Button className="w-14 h-12">
           <Plus size={18} color="#fff" />
         </Button>
       </DialogTrigger>
@@ -120,6 +119,7 @@ export function CreateReasonDialog() {
               setStep(3);
             }}
             onBack={() => setStep(1)}
+            onSkip={handleSubmit} 
           />
         )}
 
