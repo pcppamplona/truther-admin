@@ -1,13 +1,15 @@
 export interface TicketData {
   id: number;
   created_by: UserTicket;
-  client: ClientTicket;
+  client: ClientTicket | null;
   assigned_group: string | null;
   assigned_user: UserTicket | null;
   reason: Reason;
   status: Status;
   created_at: string;
   finalizate_reply?: number;
+  chain_id_main?: number;
+  chain_id_last?: number;
 }
 
 export type UserTicket = {
@@ -85,6 +87,8 @@ export interface TicketTyped {
   status: Status;
   created_at?: string;
   finalizate_reply?: number;
+  chain_id_main?: number;
+  chain_id_last?: number;
 }
 
 export interface UpdateTicketInput {
@@ -95,7 +99,6 @@ export interface UpdateTicketInput {
 export type Reason = {
   id?: number;
   category_id: string;
-  type: string;
   reason: string;
   expired_at: number;
   description: string;
@@ -108,12 +111,14 @@ export interface ReplyReason {
   reason_id: number;
   reply: string;
   comment: boolean;
+  actions?: ReplyAction[];
 }
 
 export interface ActionsType {
   id?: number;
   type: string;
   created_at?: string;
+  description_action?: string;
 }
 
 export interface ReplyAction {
@@ -123,4 +128,23 @@ export interface ReplyAction {
   data_email?: string | null;
   data_new_ticket_reason_id?: number | null;
   data_new_ticket_assign_to_group?: Group | null;
+  action_type?: ActionsType;
+}
+
+export interface TicketReasonResponse {
+  id: number;
+  category_id: string;
+  type: string;
+  reason: string;
+  expired_at: number;
+  description: string;
+  type_recipient: TypeRecipient;
+  recipient: string;
+  replies: ReplyReason[];
+}
+
+export interface ReasonCategory {
+  id?: number;
+  type: string;
+  description: string;
 }

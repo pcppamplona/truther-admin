@@ -1,5 +1,4 @@
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
-import { Button } from "@/components/ui/button";
 import { CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   Table,
@@ -9,16 +8,10 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { ActionsType } from "@/interfaces/TicketData";
 import { dateFormat } from "@/lib/formatters";
 import { useActionTypes } from "@/services/Tickets/useActionTypes";
-import { ArrowDown01, Plus, TriangleAlert } from "lucide-react";
+import { TriangleAlert } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export function ActionsTypesView() {
@@ -39,24 +32,6 @@ export function ActionsTypesView() {
               Aqui estão os motivos ActionTypes. As ações que podem ser associadas a um reply, quando o mesmo for finalizado.
             </CardDescription>
           </div>
-
-          <div className="flex items-center gap-2">
-            <Button variant="outline" className="w-14 h-12">
-              <ArrowDown01 size={18} />
-            </Button>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button className="w-14 h-12" onClick={() => {}}>
-                    <Plus size={18} color="#fff" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Criar novo reason</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
         </div>
       </CardHeader>
 
@@ -67,7 +42,7 @@ export function ActionsTypesView() {
               <TableHead>ID</TableHead>
               <TableHead>Tipo</TableHead>
               <TableHead>Criação</TableHead>
-  
+              <TableHead>Descrição</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -99,7 +74,7 @@ export function ActionsTypesView() {
                   <TableCell>{action.id}</TableCell>
                   <TableCell className="font-medium">{action.type}</TableCell>
                   <TableCell>{dateFormat(action?.created_at ?? "")}</TableCell>
-                
+                  <TableCell>{action.description_action}</TableCell>
                 </TableRow>
               ))
             )}

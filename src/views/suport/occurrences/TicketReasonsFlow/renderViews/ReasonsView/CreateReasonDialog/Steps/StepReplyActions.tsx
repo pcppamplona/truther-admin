@@ -72,7 +72,9 @@ export function StepReplyActions({
                 className="border border-l-6 border-muted p-4 rounded-md space-y-3"
               >
                 <div className="flex justify-between items-center">
-                  <Label className="text-sm">{i + 1}º Ação para este reply</Label>
+                  <Label className="text-sm">
+                    {i + 1}º Ação para este reply
+                  </Label>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -85,9 +87,11 @@ export function StepReplyActions({
 
                 <Select
                   value={a.action_type_id ? String(a.action_type_id) : ""}
-                  onValueChange={(v) => updateAction(i, "action_type_id", Number(v))}
+                  onValueChange={(v) =>
+                    updateAction(i, "action_type_id", Number(v))
+                  }
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Selecione a ação" />
                   </SelectTrigger>
                   <SelectContent>
@@ -100,43 +104,59 @@ export function StepReplyActions({
                 </Select>
 
                 {a.action_type_id === 1 && (
-                  <Input
-                    placeholder="E-mail"
-                    value={a.data_email ?? ""}
-                    onChange={(e) => updateAction(i, "data_email", e.target.value)}
-                  />
+                  <div>
+                    <Label className="mb-2 mt-6">Email do destinatário</Label>
+                    <Input
+                      placeholder="E-mail"
+                      value={a.data_email ?? ""}
+                      onChange={(e) =>
+                        updateAction(i, "data_email", e.target.value)
+                      }
+                    />
+                  </div>
                 )}
 
                 {a.action_type_id === 2 && (
-                  <Input
-                    placeholder="Reason ID para novo ticket"
-                    type="number"
-                    value={a.data_new_ticket_reason_id ?? ""}
-                    onChange={(e) =>
-                      updateAction(i, "data_new_ticket_reason_id", Number(e.target.value))
-                    }
-                  />
-                )}
+                  <div>
+                    <Label className="mb-2 mt-6">Reason do novo ticket</Label>
+                    <Input
+                      placeholder="Reason ID para novo ticket"
+                      type="number"
+                      value={a.data_new_ticket_reason_id ?? ""}
+                      onChange={(e) =>
+                        updateAction(
+                          i,
+                          "data_new_ticket_reason_id",
+                          Number(e.target.value)
+                        )
+                      }
+                    />
 
-                {a.action_type_id === 3 && (
-                  <Select
-                    value={a.data_new_ticket_assign_to_group ?? ""}
-                    onValueChange={(v) =>
-                      updateAction(i, "data_new_ticket_assign_to_group", v as Group)
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o grupo" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="N1">N1</SelectItem>
-                      <SelectItem value="N2">N2</SelectItem>
-                      <SelectItem value="N3">N3</SelectItem>
-                      <SelectItem value="PRODUTO">PRODUTO</SelectItem>
-                      <SelectItem value="MKT">MKT</SelectItem>
-                      <SelectItem value="ADMIN">ADMIN</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    <Label className="mb-2 mt-6">Grupo de destino</Label>
+
+                    <Select
+                      value={a.data_new_ticket_assign_to_group ?? ""}
+                      onValueChange={(v) =>
+                        updateAction(
+                          i,
+                          "data_new_ticket_assign_to_group",
+                          v as Group
+                        )
+                      }
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Selecione o grupo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="N1">N1</SelectItem>
+                        <SelectItem value="N2">N2</SelectItem>
+                        <SelectItem value="N3">N3</SelectItem>
+                        <SelectItem value="PRODUTO">PRODUTO</SelectItem>
+                        <SelectItem value="MKT">MKT</SelectItem>
+                        <SelectItem value="ADMIN">ADMIN</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 )}
               </div>
             ))}
@@ -180,4 +200,3 @@ export function StepReplyActions({
     </div>
   );
 }
-

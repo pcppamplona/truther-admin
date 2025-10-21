@@ -46,6 +46,12 @@ export default function ListOcurrences() {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("created_at");
   const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
+  const [filter, setFilter] = useState("Todas");
+  const [assignedGroup, setAssignedGroup] = useState<string | undefined>(
+    undefined
+  );
+
+  const onlyAssigned = filter === "Meus Tickets";
 
   useEffect(() => {
     setPaginationSettings("tickets", page, limit);
@@ -56,17 +62,14 @@ export default function ListOcurrences() {
     limit,
     search,
     sortBy,
-    sortOrder
+    sortOrder,
+    onlyAssigned,
+    assignedGroup
   );
 
   const handleRowClick = (ticket: TicketData) => {
     navigate("/ocurrenceDetails", { state: { ticketId: ticket.id } });
   };
-
-  const [filter, setFilter] = useState("Todas");
-
-  // const userId = user?.id;
-  // const userGroupLevel = user?.groupLevel;
 
   return (
     <>
@@ -91,20 +94,32 @@ export default function ListOcurrences() {
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="flex justify-self-end items-center space-x-4 my-2">
-              <Select
-                value={filter}
-                onValueChange={(value) => setFilter(value)}
-              >
-                <SelectTrigger className="w-[200px]">
-                  <SelectValue placeholder="Todas" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Todas">Todas</SelectItem>
-                  <SelectItem value="Meus Tickets">Meus Tickets</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <Select value={filter} onValueChange={setFilter}>
+              <SelectTrigger className="w-[150px]">
+                <SelectValue placeholder="Todas" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Todas">Todas</SelectItem>
+                <SelectItem value="Meus Tickets">Meus Tickets</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select
+              value={assignedGroup ?? ""}
+              onValueChange={setAssignedGroup}
+            >
+              <SelectTrigger className="w-[100px]">
+                <SelectValue placeholder="Grupo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="N1">N1</SelectItem>
+                <SelectItem value="N2">N2</SelectItem>
+                <SelectItem value="N3">N3</SelectItem>
+                <SelectItem value="PRODUTO">PRODUTO</SelectItem>
+                <SelectItem value="MKT">MKT</SelectItem>
+                <SelectItem value="ADMIN">ADMIN</SelectItem>
+              </SelectContent>
+            </Select>
 
             <TooltipProvider>
               <Tooltip>
@@ -173,7 +188,8 @@ export default function ListOcurrences() {
                     </p>
                     <p className="text-sm text-muted-foreground max-w-md">
                       Não foi possível encontrar nenhum ticket. Tente ajustar a
-                      <br />pesquisa ou criar um novo.
+                      <br />
+                      pesquisa ou criar um novo.
                     </p>
                   </div>
                 </TableCell>

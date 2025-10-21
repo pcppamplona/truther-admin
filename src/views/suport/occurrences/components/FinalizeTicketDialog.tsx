@@ -37,7 +37,7 @@ export function FinalizeTicketDialog({ ticket }: Props) {
   const finalizeTicket = useFinalizeTicket();
   const { user } = useAuthStore();
 
-  const { data: replysData } = useTicketReasonsReply(ticket.reason.id);
+  const { data: replysData } = useTicketReasonsReply(Number(ticket.reason.id));
   const replys = Array.isArray(replysData)
     ? replysData
     : [replysData].filter(Boolean);

@@ -8,6 +8,7 @@ export const getInitials = (text: string): string => {
 };
 
 export const documentFormat = (value: any) => {
+  if (!value) return "-"; 
   const convertValue = String(value);
   if (convertValue.length == 11) {
     return convertValue.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");

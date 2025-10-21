@@ -10,22 +10,20 @@ interface StepRepliesProps {
   onChange: (replies: ReplyWithActions[]) => void;
   onNext: () => void;
   onBack: () => void;
+  onSkip: () => void;
 }
 
-// interface ReplyWithActions extends ReplyReason {
-//   actions: any[];
-// }
 interface ReplyWithActions extends Omit<ReplyReason, "reason_id"> {
   reason_id?: number;
   actions: any[];
 }
-
 
 export function StepReplies({
   replies,
   onChange,
   onBack,
   onNext,
+  onSkip,
 }: StepRepliesProps) {
   const addReply = () => {
     const updated = [
@@ -100,14 +98,22 @@ export function StepReplies({
           Voltar
         </Button>
 
-        <Button
-          onClick={onNext}
-          disabled={
-            replies.length === 0 || replies.some((r) => !r.reply.trim())
-          }
-        >
-          Avançar
-        </Button>
+        <div className="flex gap-2">
+          {replies.length === 0 && (
+            <Button variant="secondary" onClick={onSkip}>
+              Pular e Finalizar
+            </Button>
+          )}
+
+          <Button
+            onClick={onNext}
+            disabled={
+              replies.length === 0 || replies.some((r) => !r.reply.trim())
+            }
+          >
+            Avançar
+          </Button>
+        </div>
       </div>
     </div>
   );
