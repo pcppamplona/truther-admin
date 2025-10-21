@@ -1,5 +1,4 @@
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
-import { Button } from "@/components/ui/button";
 import { CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   Table,
@@ -15,9 +14,9 @@ import {
   useTicketReasonsByIdFlow,
 } from "@/services/Tickets/useReasons";
 import {
-  ArrowDown01,
   ChevronDown,
   ChevronUp,
+  CornerDownRight,
   TriangleAlert,
 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -61,9 +60,6 @@ export function ReasonsView() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" className="w-14 h-12">
-              <ArrowDown01 size={18} />
-            </Button>
             <CreateReasonDialog />
           </div>
         </div>
@@ -107,7 +103,7 @@ export function ReasonsView() {
                   <TableRow
                     key={reason.id}
                     onClick={() => handleRowClick(reason.id ?? 0)}
-                    className="cursor-pointer hover:bg-muted/50 transition-colors"
+                    className="cursor-pointer transition-colors"
                   >
                     <TableCell>{reason.id}</TableCell>
                     <TableCell>{reason.category_id}</TableCell>
@@ -132,77 +128,66 @@ export function ReasonsView() {
                     </TableCell>
                   </TableRow>
 
-                  {expandedId === reason.id && (
-                    <TableRow className="bg-muted/30">
+                  {expandedId === reason.id ? (
+                    <TableRow className="bg-secondary">
                       <TableCell colSpan={8} className="p-6">
                         <div className="space-y-6">
-
-                          {/* Dados do Reason */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <Info label="ID" value={reasonDetailsQuery.data?.id} />
-                            <Info label="Category ID" value={reasonDetailsQuery.data?.category_id} />
-                            <Info label="Type" value={reasonDetailsQuery.data?.type} />
-                            <Info label="Reason" value={reasonDetailsQuery.data?.reason} />
-                            <Info label="Description" value={reasonDetailsQuery.data?.description} />
-                            <Info label="Expired At" value={`${reasonDetailsQuery.data?.expired_at}h`} />
-                            <Info label="Type Recipient" value={reasonDetailsQuery.data?.type_recipient} />
-                            <Info label="Recipient" value={reasonDetailsQuery.data?.recipient} />
-                          </div>
-
-                          {/* Replies */}
                           {reasonDetailsQuery.data?.replies?.length ? (
                             <div className="space-y-4">
-                              <h4 className="font-semibold text-sm uppercase tracking-wide text-zinc-400">
-                                Replies
+                              <h4 className="flex flex-row items-center font-semibold text-sm uppercase tracking-wide gap-2">
+                                <CornerDownRight size={18} />Replies do reason {reason.id}
                               </h4>
                               {reasonDetailsQuery.data.replies.map((reply) => (
                                 <div
                                   key={reply.id}
-                                  className="border border-border rounded-lg bg-background/60 p-4 shadow-sm"
+                                  className="border border-l-primary border-l-3 rounded-lg bg-background p-4 shadow-sm space-y-4"
                                 >
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <Info label="Reply ID" value={reply.id} />
-                                    <Info label="Comment" value={reply.comment ? "Sim" : "Não"} />
+                                    <Info label="Necessário comentário?" value={reply.comment ? "Sim" : "Não"} />
                                     <Info label="Reply" value={reply.reply} />
                                   </div>
 
-                                  {/* Actions */}
-                                  {reply.actions?.length ? (
-                                    <div className="mt-4 pl-4 border-l-2 border-border">
-                                      <h5 className="font-medium text-sm mb-2 text-zinc-400 uppercase">
-                                        Actions
-                                      </h5>
-                                      <div className="space-y-3">
-                                        {reply.actions.map((action) => (
-                                          <div
-                                            key={action.id}
-                                            className="border border-border rounded p-3 bg-muted/40"
-                                          >
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                              <Info label="Action Type ID" value={action.action_type_id} />
-                                              <Info label="Email" value={action.data_email ?? "-"} />
-                                              <Info
-                                                label="New Ticket Reason ID"
-                                                value={action.data_new_ticket_reason_id ?? "-"}
-                                              />
-                                              <Info
-                                                label="Assign To Group"
-                                                value={action.data_new_ticket_assign_to_group ?? "-"}
-                                              />
+                                    {reply.actions?.length ? (
+                                        <>
+                                          {reply.actions.map((action) => (
+                                            <div key={action.id} className="space-y-2">
+                                              <div className="border border-l-muted-foreground border-l-3 rounded p-3 bg-muted/40">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                  <Info label="Action Type" value={action.action_type?.type ?? "-"} />
+                                                  <Info label="Description" value={action.action_type?.description_action} />
+                                                  {action.action_type?.type === "send_email" && (
+                                                    <Info label="Email" value={action.data_email ?? "-"} />
+                                                  )}
+
+                                                  {action.action_type?.type === "new_ticket" && (
+                                                    <>
+                                                      <Info label="New Ticket Reason ID" value={action.data_new_ticket_reason_id ?? "-"} />
+                                                      <Info label="Assign To Group" value={action.data_new_ticket_assign_to_group ?? "-"} />
+                                                    </>
+                                                  )}
+                                                </div>
+                                              </div>
                                             </div>
-                                          </div>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  ) : null}
-                                </div>
+                                          ))}
+                                        </>
+                                      ) : (
+                                        <div className="mt-4 pl-4 border-l-muted-foreground border-l-3 text-sm italic text-muted-foreground">
+                                          Nenhuma ação cadastrada para este reason.
+                                        </div>
+                                      )}
+                                  </div>
                               ))}
                             </div>
-                          ) : null}
+                          ) : (
+                            <div className="mt-4 pl-4 border-l-2 border-border text-sm italic text-muted-foreground">
+                              Nenhuma ação cadastrada para este reason.
+                            </div>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
-                  )}
+                  ) : null}
                 </>
               ))
             )}

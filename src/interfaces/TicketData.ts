@@ -118,6 +118,7 @@ export interface ActionsType {
   id?: number;
   type: string;
   created_at?: string;
+  description_action?: string;
 }
 
 export interface ReplyAction {
@@ -127,6 +128,7 @@ export interface ReplyAction {
   data_email?: string | null;
   data_new_ticket_reason_id?: number | null;
   data_new_ticket_assign_to_group?: Group | null;
+  action_type?: ActionsType;
 }
 
 export interface TicketReasonResponse {
