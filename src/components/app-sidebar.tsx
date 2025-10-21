@@ -11,11 +11,18 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/store/auth";
-import { Presentation, BotMessageSquare, House, DollarSign, User, FlagTriangleRight, ArrowRightLeft } from "lucide-react";
+import {
+  Presentation,
+  BotMessageSquare,
+  House,
+  DollarSign,
+  User,
+  FlagTriangleRight,
+  ArrowRightLeft
+} from "lucide-react";
 
 export function AppSidebar() {
-
-   const user = useAuthStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
 
   const data = {
     user: {
@@ -47,11 +54,19 @@ export function AppSidebar() {
             title: "Decodificar",
             url: "decode",
           },
-          
+
+          // {
+          //   title: "Ocorrências",
+          //   url: "ocurrences",
+          //   matchUrls: ["ocurrences", "ocurrenceDetails"],
+          // },
           {
             title: "Ocorrências",
             url: "ocurrences",
             matchUrls: ["ocurrences", "ocurrenceDetails"],
+            items: [
+              { title: "Motivos", url: "ticketReasons" },
+            ],
           },
           {
             title: "Reportes",
@@ -79,7 +94,7 @@ export function AppSidebar() {
             title: "Reembolso",
             url: "refund",
           },
-           {
+          {
             title: "Saque",
             url: "cashout",
           },
@@ -122,7 +137,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground ml-2"
             >
               <div className="flex aspect-square size-10 items-center justify-center rounded-lg">
                 <img
@@ -139,7 +154,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="border-b-border border-b-1">
+      <SidebarContent className="border-b-border border-b-1 ml-2">
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>

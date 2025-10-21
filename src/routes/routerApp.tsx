@@ -12,6 +12,7 @@ import ClientDetails from "@/views/suport/clients/ClientDetails";
 import Decode from "@/views/suport/decode";
 import Ocurrences from "@/views/suport/occurrences";
 import OcurrenceDetails from "@/views/suport/occurrences/OcurrenceDetails";
+import TicketReasonsFlow from "@/views/suport/occurrences/TicketReasonsFlow";
 import SendGas from "@/views/suport/sendGas";
 import Users from "@/views/users";
 import Transactions from "@/views/transactions";
@@ -32,6 +33,8 @@ export default function RoutesApp() {
       <Route path="/decode" element={<Decode />} />
       <Route path="/ocurrences" element={<Ocurrences />} />
       <Route path="/ocurrenceDetails" element={<OcurrenceDetails />} />
+      <Route path="/ticketReasons" element={<TicketReasonsFlow />} />
+
 
       <Route path="/marketing" element={<Marketing />} />
       <Route path="/notifications" element={<Notifications />} />

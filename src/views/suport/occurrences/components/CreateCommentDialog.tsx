@@ -59,7 +59,6 @@ export default function CreateCommentDialog({ ticket }: CommentProps) {
         ticket_id: ticket.id,
         author: user?.name ?? "",
         message: message,
-        // date: new Date().toISOString(),
       });
 
        toast.success("Comentário adicionado", {
@@ -71,7 +70,10 @@ export default function CreateCommentDialog({ ticket }: CommentProps) {
       setConfirming(false);
       setOpen(false);
     } catch (err) {
-      console.error("Erro ao criar comentário:", err);
+      toast.error("Não Foi possível adicionar o comentário!", {
+        description: `Seu novo comentário ao ticket ${ticket.id} foi negado. Tente novamente!`,
+        duration: 3000,
+      });
     }
   };
 

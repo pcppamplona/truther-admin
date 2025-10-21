@@ -23,7 +23,7 @@ import { ActionType, methodType } from "@/interfaces/AuditLogData";
 export const statusColors: Record<Status, string> = {
   "PENDENTE": "#FFA500",
   "PENDENTE EXPIRADO": "#F97316",
-  "EM ANDAMENTO": "#0000FF",
+  "EM ANDAMENTO": "#1c51dc",
   "EM ANDAMENTO EXPIRADO": "#2563EB",
   "FINALIZADO": "#008000",
   "FINALIZADO EXPIRADO": "#E11D48",

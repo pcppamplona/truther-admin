@@ -19,8 +19,8 @@ import { TicketData, FinalizationReply } from "@/interfaces/TicketData";
 import { Forward } from "lucide-react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/auth";
-import { useTicketReasonsReply } from "@/services/Tickets/useReasons";
 import { useFinalizeTicket } from "@/services/Tickets/useTickets";
+import { useTicketReasonsReply } from "@/services/Tickets/useReasons";
 
 interface Props {
   ticket: TicketData;
@@ -37,7 +37,7 @@ export function FinalizeTicketDialog({ ticket }: Props) {
   const finalizeTicket = useFinalizeTicket();
   const { user } = useAuthStore();
 
-  const { data: replysData } = useTicketReasonsReply(ticket.reason.id);
+  const { data: replysData } = useTicketReasonsReply(Number(ticket.reason.id));
   const replys = Array.isArray(replysData)
     ? replysData
     : [replysData].filter(Boolean);
