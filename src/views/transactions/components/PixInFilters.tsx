@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Calendar as CalendarIcon, Funnel, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -72,6 +71,7 @@ export function PixInFilters(props: PixInFiltersProps) {
   const [localTypeIn, setLocalTypeIn] = useState(typeIn);
   const [openBeforeCalendar, setOpenBeforeCalendar] = useState(false);
   const [openAfterCalendar, setOpenAfterCalendar] = useState(false);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   const resetLocal = () => {
     setLocalTxid("");
@@ -106,6 +106,7 @@ export function PixInFilters(props: PixInFiltersProps) {
       destinationKey: localDestinationKey,
       typeIn: localTypeIn,
     });
+
     setOpen(false);
   };
 
@@ -157,7 +158,7 @@ export function PixInFilters(props: PixInFiltersProps) {
             <Funnel size={16} className="mr-2" /> Filtros
           </Button>
         </DrawerTrigger>
-        <DrawerContent className="p-4 data-[vaul-drawer-direction=right]:w-[700px] data-[vaul-drawer-direction=right]:max-w-[70vw] data-[vaul-drawer-direction=right]:sm:max-w-[70vw]">
+        <DrawerContent ref={drawerRef} className="p-4 data-[vaul-drawer-direction=right]:w-[700px] data-[vaul-drawer-direction=right]:max-w-[70vw] data-[vaul-drawer-direction=right]:sm:max-w-[70vw]">
           <div className="grid grid-cols-2 gap-4 p-4">
             <DrawerHeader className="col-span-full">
               <DrawerTitle>Filtros PIX IN</DrawerTitle>
@@ -294,11 +295,14 @@ export function PixInFilters(props: PixInFiltersProps) {
                     {localCreatedAfter ? localCreatedAfter.toLocaleDateString() : "Selecionar"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent container={drawerRef.current} className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
                     selected={localCreatedAfter}
-                    onSelect={(date) => setLocalCreatedAfter(date ?? undefined)}
+                    onSelect={(date) => {
+                      setLocalCreatedAfter(date ?? undefined);
+                      setOpenAfterCalendar(false);
+                    }}
                     initialFocus
                   />
                 </PopoverContent>
@@ -314,11 +318,14 @@ export function PixInFilters(props: PixInFiltersProps) {
                     {localCreatedBefore ? localCreatedBefore.toLocaleDateString() : "Selecionar"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent container={drawerRef.current} className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
                     selected={localCreatedBefore}
-                    onSelect={(date) => setLocalCreatedBefore(date ?? undefined)}
+                    onSelect={(date) => {
+                      setLocalCreatedBefore(date ?? undefined);
+                      setOpenBeforeCalendar(false);
+                    }}
                     initialFocus
                   />
                 </PopoverContent>

@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import { RenderPagination } from "@/components/RenderPagination";
 import { getPaginationSettings, setPaginationSettings } from "@/lib/paginationStorage";
-import { usePixOutTransactions, PixOutQueryFilters } from "@/services/transactions/useTransactions";
+import { usePixOutTransactions } from "@/services/transactions/useTransactions";
 import { PixOutFilters, PixOutFiltersValues } from "./components/PixOutFilters";
+import { Info } from "@/components/info";
 
 export default function ListPixOut() {
   const { page: savedPage, limit: savedLimit } = getPaginationSettings("transactions-pix-out");
@@ -46,6 +49,11 @@ export default function ListPixOut() {
     created_before: filters.created_before,
   });
 
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const toggleExpand = (id: number) => {
+    setExpandedId((prev) => (prev === id ? null : id));
+  };
+
   return (
     <>
       <CardHeader>
@@ -72,13 +80,15 @@ export default function ListPixOut() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell>ID</TableCell>
               <TableCell>TXID</TableCell>
               <TableCell>Remetente</TableCell>
-              <TableCell>Nome</TableCell>
-              <TableCell>Documento</TableCell>
-              <TableCell>Status BK</TableCell>
-              <TableCell>Status PX</TableCell>
+              <TableCell>Nome Remetente</TableCell>
+              <TableCell>Nome Recebedor</TableCell>
+              <TableCell>Status Bank</TableCell>
+              <TableCell>Status Blockchain</TableCell>
+              <TableCell>Criado Em</TableCell>
+              <TableCell>Token</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -86,15 +96,64 @@ export default function ListPixOut() {
               <SkeletonTable />
             ) : (
               data?.data?.map((tx, index) => (
-                <TableRow key={`${tx.id}-${tx.txid}-${index}`}>
-                  <TableCell>{tx.id}</TableCell>
-                  <TableCell className="font-mono text-xs break-all">{tx.txid}</TableCell>
-                  <TableCell className="font-mono text-xs break-all">{tx.sender}</TableCell>
-                  <TableCell>{tx.sender_name ?? "n/a"}</TableCell>
-                  <TableCell>{tx.sender_document ?? "n/a"}</TableCell>
-                  <TableCell>{tx.status_bk ?? "n/a"}</TableCell>
-                  <TableCell>{tx.status_px ?? "n/a"}</TableCell>
-                </TableRow>
+                <Fragment key={`${tx.id}-${tx.txid}-${index}`}>
+                  <TableRow
+                    className="cursor-pointer hover:bg-input transition"
+                    onClick={() => toggleExpand(tx.id)}
+                  >
+                    <TableCell className="font-mono text-xs break-all">{tx.txid}</TableCell>
+                    <TableCell className="font-mono text-xs break-all">{tx.sender}</TableCell>
+                    <TableCell>{tx.sender_name ?? "n/a"}</TableCell>
+                    <TableCell>{tx.receiver_name ?? "n/a"}</TableCell>
+                    <TableCell>{tx.status_px ?? "n/a"}</TableCell>
+                    <TableCell>{tx.status_bk ?? "n/a"}</TableCell>
+                    <TableCell>{tx.createdAt ?? "n/a"}</TableCell>
+                    <TableCell>{tx.token_symbol ?? "n/a"}</TableCell>
+                    <TableCell>
+                      {expandedId === tx.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                    </TableCell>
+                  </TableRow>
+
+                  <AnimatePresence>
+                    {expandedId === tx.id && (
+                      <TableRow className="bg-muted/30">
+                        <TableCell colSpan={9} className="p-0">
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="overflow-hidden p-4 text-sm"
+                          >
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>ID</strong>} value={tx.id} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>End To End</strong>} value={tx.end2end ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>Documento Remetente</strong>} value={tx.sender_document ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>Valor (BRL)</strong>} value={tx.amount_brl ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>Data da Operação</strong>} value={tx.date_op ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>Documento Recebedor</strong>} value={tx.receiver_document ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>Chave Pix</strong>} value={tx.pixKey ?? "-"} />
+                              </div>
+                            </div>
+                          </motion.div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </AnimatePresence>
+                </Fragment>
               ))
             )}
           </TableBody>
