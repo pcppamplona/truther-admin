@@ -33,8 +33,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import { RenderPagination } from "@/components/RenderPagination";
-import { TicketData } from "@/interfaces/TicketData";
+import { RoleId, TicketData } from "@/interfaces/TicketData";
 import { getColorRGBA, statusColors } from "@/lib/utils";
+import { ForbiddenCard } from "@/components/ForbiddenCard";
 
 export default function ListOcurrences() {
   const navigate = useNavigate();
@@ -47,9 +48,7 @@ export default function ListOcurrences() {
   const [sortBy, setSortBy] = useState("created_at");
   const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
   const [filter, setFilter] = useState("Todas");
-  const [assignedGroup, setAssignedGroup] = useState<string | undefined>(
-    undefined
-  );
+  const [assignedGroup, setAssignedGroup] = useState<number | undefined>();
 
   const onlyAssigned = filter === "Meus Tickets";
 
@@ -57,7 +56,7 @@ export default function ListOcurrences() {
     setPaginationSettings("tickets", page, limit);
   }, [page, limit]);
 
-  const { data, isLoading } = useTickets(
+  const { data, isLoading, isError, error } = useTickets(
     page,
     limit,
     search,
@@ -105,19 +104,18 @@ export default function ListOcurrences() {
             </Select>
 
             <Select
-              value={assignedGroup ?? ""}
-              onValueChange={setAssignedGroup}
+              value={assignedGroup?.toString() ?? ""}
+              onValueChange={(val) => setAssignedGroup(val ? Number(val) : undefined)}
             >
               <SelectTrigger className="w-[100px]">
                 <SelectValue placeholder="Grupo" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="N1">N1</SelectItem>
-                <SelectItem value="N2">N2</SelectItem>
-                <SelectItem value="N3">N3</SelectItem>
-                <SelectItem value="PRODUTO">PRODUTO</SelectItem>
-                <SelectItem value="MKT">MKT</SelectItem>
-                <SelectItem value="ADMIN">ADMIN</SelectItem>
+                {RoleId.map((g) => (
+                  <SelectItem key={g.id} value={g.id.toString()}>
+                    {g.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
 
@@ -155,98 +153,111 @@ export default function ListOcurrences() {
           </div>
         </div>
       </CardHeader>
-      <div className="w-full px-4 lg:px-6">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableCell
-                onClick={() => {
-                  setSortBy("id");
-                  setSortOrder(sortOrder === "ASC" ? "DESC" : "ASC");
-                }}
-              >
-                ID
-              </TableCell>
-              <TableHead>Título</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Responsável</TableHead>
-              <TableHead>Data</TableHead>
-              <TableHead>Expiração</TableHead>
-            </TableRow>
-          </TableHeader>
 
-          <TableBody>
-            {isLoading ? (
-              <SkeletonTable />
-            ) : data?.data?.length === 0 ? (
+      {!isError && (
+        <div className="w-full px-4 lg:px-6">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-10">
-                  <div className="flex flex-col items-center justify-center text-center">
-                    <TriangleAlert className="text-muted-foreground" />
-                    <p className="text-lg font-semibold">
-                      Nenhum ticket encontrado
-                    </p>
-                    <p className="text-sm text-muted-foreground max-w-md">
-                      Não foi possível encontrar nenhum ticket. Tente ajustar a
-                      <br />
-                      pesquisa ou criar um novo.
-                    </p>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ) : (
-              data?.data?.map((ticket) => (
-                <TableRow
-                  key={ticket.id}
-                  onClick={() => handleRowClick(ticket)}
+                <TableCell
+                  onClick={() => {
+                    setSortBy("id");
+                    setSortOrder(sortOrder === "ASC" ? "DESC" : "ASC");
+                  }}
                 >
-                  <TableCell>{ticket.id}</TableCell>
+                  ID
+                </TableCell>
+                <TableHead>Título</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Responsável</TableHead>
+                <TableHead>Role</TableHead>
+                <TableHead>Data</TableHead>
+                <TableHead>Expiração</TableHead>
+              </TableRow>
+            </TableHeader>
 
-                  <TableCell>{ticket.reason.reason}</TableCell>
-
-                  <TableCell>
-                    <div
-                      className="px-3 py-2 rounded-lg text-xs font-semibold uppercase"
-                      style={{
-                        backgroundColor: getColorRGBA(
-                          ticket.status,
-                          statusColors,
-                          0.1
-                        ),
-                        color: getColorRGBA(ticket.status, statusColors, 0.9),
-                        width: "fit-content",
-                      }}
-                    >
-                      {ticket.status}
+            <TableBody>
+              {isLoading ? (
+                <SkeletonTable />
+              ) : data?.data?.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center py-10">
+                    <div className="flex flex-col items-center justify-center text-center">
+                      <TriangleAlert className="text-muted-foreground" />
+                      <p className="text-lg font-semibold">
+                        Nenhum ticket encontrado
+                      </p>
+                      <p className="text-sm text-muted-foreground max-w-md">
+                        Não foi possível encontrar nenhum ticket. Tente ajustar
+                        a
+                        <br />
+                        pesquisa ou criar um novo.
+                      </p>
                     </div>
                   </TableCell>
-
-                  <TableCell>
-                    {ticket.assigned_user?.name ?? "Não atribuído"}
-                  </TableCell>
-
-                  <TableCell>
-                    {dateFormat(ticket.created_at)} às{" "}
-                    {timeFormat(ticket.created_at)}
-                  </TableCell>
-
-                  <TableCell>{ticket.reason.expired_at}</TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              ) : (
+                data?.data?.map((ticket) => (
+                  <TableRow
+                    key={ticket.id}
+                    onClick={() => handleRowClick(ticket)}
+                  >
+                    <TableCell>{ticket.id}</TableCell>
+                    <TableCell>{ticket.reason.reason}</TableCell>
+                    <TableCell>
+                      <div
+                        className="px-3 py-2 rounded-lg text-xs font-semibold uppercase"
+                        style={{
+                          backgroundColor: getColorRGBA(
+                            ticket.status,
+                            statusColors,
+                            0.1
+                          ),
+                          color: getColorRGBA(ticket.status, statusColors, 0.9),
+                          width: "fit-content",
+                        }}
+                      >
+                        {ticket.status}
+                      </div>
+                    </TableCell>
 
-      <div className="flex justify-center mt-4">
-        <RenderPagination
-          page={page}
-          setPage={setPage}
-          total={Number(data?.total)}
-          limit={Number(data?.limit)}
-          setLimit={setLimit}
-        />
-      </div>
+                    <TableCell>
+                      {ticket.assigned_user?.name ?? "Não atribuído"}
+                    </TableCell>
+
+                    <TableCell>
+                      {RoleId.find((role) => role.id === ticket.assigned_role)
+                        ?.name ?? "Não atribuído"}
+                    </TableCell>
+
+                    <TableCell>
+                      {dateFormat(ticket.created_at)} às{" "}
+                      {timeFormat(ticket.created_at)}
+                    </TableCell>
+
+                    <TableCell>{ticket.reason.expired_at}</TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+      {!isError && (
+        <div className="flex justify-center mt-4">
+          <RenderPagination
+            page={page}
+            setPage={setPage}
+            total={Number(data?.total)}
+            limit={Number(data?.limit)}
+            setLimit={setLimit}
+          />
+        </div>
+      )}
+
+      {isError && error?.code === "PERMISSION_DENIED" && (
+        <ForbiddenCard permission={error.requiredPermission} />
+      )}
     </>
   );
 }

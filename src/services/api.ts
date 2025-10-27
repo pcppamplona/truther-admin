@@ -32,6 +32,22 @@ api.interceptors.response.use(
   }
 );
 
+api.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    if (error.response?.status === 403) {
+      throw {
+        code: error.response.data?.code || "PERMISSION_DENIED",
+        message: error.response.data?.message || "Acesso negado",
+        requiredPermission: error.response.data?.requiredPermission,
+      };
+    }
+
+    throw error;
+  }
+);
+
+
 // interceptor for simulantion latency
 // api.interceptors.request.use((config) => {
 //   return new Promise((resolve) => {
