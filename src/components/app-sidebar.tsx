@@ -18,6 +18,7 @@ import {
   DollarSign,
   User,
   FlagTriangleRight,
+  ArrowRightLeft
 } from "lucide-react";
 
 export function AppSidebar() {
@@ -37,7 +38,7 @@ export function AppSidebar() {
       },
       {
         title: "Suporte",
-        url: "clients", //suport
+        url: "clients",//suport
         icon: BotMessageSquare,
         items: [
           {
@@ -100,6 +101,23 @@ export function AppSidebar() {
         ],
       },
       {
+        title: "Transações",
+        url: "transactions",
+        icon: ArrowRightLeft,
+        items: [
+          {
+            title: "PIX In",
+            url: "transactions/pix-in",
+            matchUrls: ["transactions/pix-in"],
+          },
+          {
+            title: "PIX Out",
+            url: "transactions/pix-out",
+            matchUrls: ["transactions/pix-out"],
+          },
+        ],
+      },
+      {
         title: "Usuários",
         url: "users",
         icon: User,
@@ -140,7 +158,7 @@ export function AppSidebar() {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

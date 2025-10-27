@@ -20,7 +20,8 @@ export function RenderPagination({
   limit,
   setLimit,
 }: RenderPaginationProps) {
-  const totalPages = limit > 0 ? Math.ceil(total / limit) : 1;
+  const safeLimit = Number.isFinite(limit) && limit > 0 ? limit : 10;
+  const totalPages = Math.ceil(total / safeLimit);
 
   const handleChangeLimit = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLimit = Number(e.target.value);
@@ -39,7 +40,7 @@ export function RenderPagination({
       <div className="flex items-center space-x-2">
         <span className="text-foreground">Linhas</span>
         <select
-          value={limit}
+          value={safeLimit}
           onChange={handleChangeLimit}
           className="border rounded px-2 py-1 text-sm bg-secondary"
         >
