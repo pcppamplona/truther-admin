@@ -2,7 +2,7 @@ export interface TicketData {
   id: number;
   created_by: UserTicket;
   client: ClientTicket | null;
-  assigned_group: string | null;
+  assigned_role: number | null;
   assigned_user: UserTicket | null;
   reason: Reason;
   status: Status;
@@ -15,7 +15,7 @@ export interface TicketData {
 export type UserTicket = {
   id: number;
   name: string;
-  group_level: string;
+  role_id: string;
 };
 
 export type ClientTicket = {
@@ -27,6 +27,7 @@ export type ClientTicket = {
 
 export type TypeRecipient = "GROUP" | "USER" | "ALL";
 export type Group = "N1" | "N2" | "N3" | "PRODUTO" | "MKT" | "ADMIN";
+
 export const groupHierarchy: Record<Group, number> = {
   N1: 1,
   N2: 2,
@@ -35,6 +36,14 @@ export const groupHierarchy: Record<Group, number> = {
   MKT: 5,
   ADMIN: 6,
 };
+export const RoleId = [
+  { id: 1, name: "N1" },
+  { id: 2, name: "N2" },
+  { id: 3, name: "N3" },
+  { id: 4, name: "PRODUTO" },
+  { id: 5, name: "MKT" },
+  { id: 6, name: "ADMIN" },
+];
 
 export type Status =
   | "PENDENTE"
@@ -81,7 +90,8 @@ export interface TicketTyped {
   id?: number;
   created_by: number;
   client_id: number | null;
-  assigned_group: Group | null;
+  assigned_role: number | null;
+
   assigned_user: number | null;
   reason_id: number;
   status: Status;

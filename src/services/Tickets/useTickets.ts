@@ -15,34 +15,6 @@ import {
 import { PaginateData } from "@/interfaces/PaginateData";
 import { AuditLog } from "@/interfaces/AuditLogData";
 
-// export const useTickets = (
-//   page: number,
-//   limit: number,
-//   search?: string,
-//   sortBy?: string,
-//   sortOrder?: "ASC" | "DESC"
-// ) => {
-//   return useQuery<PaginateData<TicketData>>({
-//     queryKey: ["tickets", page, limit, search, sortBy, sortOrder],
-//     queryFn: async () => {
-//       const params = new URLSearchParams({
-//         page: String(page),
-//         limit: String(limit),
-//       });
-
-//       if (search) params.append("search", search);
-//       if (sortBy) params.append("sortBy", sortBy);
-//       if (sortOrder) params.append("sortOrder", sortOrder);
-
-//       const { data } = await api.get<PaginateData<TicketData>>(
-//         `tickets/paginated?${params.toString()}`
-//       );
-//       return data;
-//     },
-//     placeholderData: keepPreviousData,
-//     staleTime: Number.POSITIVE_INFINITY,
-//   });
-// };
 export const useTickets = (
   page: number,
   limit: number,
@@ -50,9 +22,9 @@ export const useTickets = (
   sortBy?: string,
   sortOrder?: "ASC" | "DESC",
   onlyAssigned?: boolean,
-  assignedGroup?: string
+  assignedRole?: number
 ) => {
-  return useQuery<PaginateData<TicketData>>({
+  return useQuery<PaginateData<TicketData>, any>({
     queryKey: [
       "tickets",
       page,
@@ -61,26 +33,27 @@ export const useTickets = (
       sortBy,
       sortOrder,
       onlyAssigned,
-      assignedGroup,
+      assignedRole,
     ],
     queryFn: async () => {
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: String(limit),
-      });
+      try {
+        const params = new URLSearchParams({
+          page: String(page),
+          limit: String(limit),
+        });
+        if (search) params.append("search", search);
+        if (sortBy) params.append("sortBy", sortBy);
+        if (sortOrder) params.append("sortOrder", sortOrder);
+        if (onlyAssigned !== undefined) params.append("onlyAssigned", String(onlyAssigned));
+        if (assignedRole !== undefined && assignedRole !== null) params.append("assignedRole", String(assignedRole));
 
-      if (search) params.append("search", search);
-      if (sortBy) params.append("sortBy", sortBy);
-      if (sortOrder) params.append("sortOrder", sortOrder);
-      if (onlyAssigned !== undefined)
-        params.append("onlyAssigned", String(onlyAssigned));
-      if (assignedGroup) params.append("assignedGroup", assignedGroup);
-
-      const { data } = await api.get<PaginateData<TicketData>>(
-        `tickets/paginated?${params.toString()}`
-      );
-
-      return data;
+        const { data } = await api.get<PaginateData<TicketData>>(
+          `tickets/paginated?${params.toString()}`
+        );
+        return data;
+      } catch (err: any) {
+        throw err.response?.data || err;
+      }
     },
     placeholderData: keepPreviousData,
     staleTime: Number.POSITIVE_INFINITY,

@@ -35,6 +35,7 @@ import { ActionType, methodType } from "@/interfaces/AuditLogData";
 import { useAuditLog } from "@/services/audit/useAuditLog";
 import { Info } from "@/components/info";
 import { actionColors, methodColors } from "@/lib/utils";
+import { ForbiddenCard } from "@/components/ForbiddenCard";
 
 export default function ListAuditLog() {
   const { page: savedPage, limit: savedLimit } = getPaginationSettings("audit");
@@ -48,7 +49,7 @@ export default function ListAuditLog() {
   const [createdBefore, setCreatedBefore] = useState<string | undefined>(undefined);
   const [createdAfter, setCreatedAfter] = useState<string | undefined>(undefined);
 
-  const { data, isLoading } = useAuditLog(
+  const { data, isLoading, isError, error } = useAuditLog(
     page, 
     limit, 
     search,
@@ -105,152 +106,162 @@ export default function ListAuditLog() {
         </div>
       </CardHeader>
 
-      <div className="w-full px-4 lg:px-6">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>method</TableCell>
-              <TableCell>data</TableCell>
-              <TableCell>hora</TableCell>
-              <TableCell>ação</TableCell>
-              <TableCell>sender</TableCell>
-              <TableCell>target</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHeader>
+      {!isError && (
+        <div className="w-full px-4 lg:px-6">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>method</TableCell>
+                <TableCell>data</TableCell>
+                <TableCell>hora</TableCell>
+                <TableCell>ação</TableCell>
+                <TableCell>sender</TableCell>
+                <TableCell>target</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHeader>
 
-          <TableBody>
-            {isLoading ? (
-              <SkeletonTable />
-            ) : (
-              data?.data?.map((audit) => (
-                <Fragment key={audit.id}>
-                  <TableRow
-                    className="cursor-pointer hover:bg-input transition"
-                    onClick={() => toggleExpand(audit.id)}
-                  >
-                    <TableCell>{audit.id}</TableCell>
-                    <TableCell
-                      className={`font-semibold ${methodColors[audit.method]}`}
+            <TableBody>
+              {isLoading ? (
+                <SkeletonTable />
+              ) : (
+                data?.data?.map((audit) => (
+                  <>
+                    <TableRow
+                      key={audit.id}
+                      className="cursor-pointer hover:bg-input transition"
+                      onClick={() => toggleExpand(audit.id)}
                     >
-                      {audit.method}
-                    </TableCell>
-                    <TableCell>{dateFormat(audit.created_at)}</TableCell>
-                    <TableCell>{timeFormat(audit.created_at)}</TableCell>
-                    <TableCell>
-                      <div
-                        className={`px-3 py-1 w-fit min-w-18 flex border-l-[3px] text-sm uppercase font-semibold ${
-                          actionColors[audit.action as ActionType]
-                        }`}
+                      <TableCell>{audit.id}</TableCell>
+                      <TableCell
+                        className={`font-semibold ${methodColors[audit.method]}`}
                       >
-                        {audit.action}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center">
-                        <MoveUp size={18} color="#818181" />
-                        {audit.sender_type}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center">
-                        <MoveDown size={18} color="#818181" />
-                        {audit.target_type}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {expandedId === audit.id ? (
-                        <ChevronUp size={18} />
-                      ) : (
-                        <ChevronDown size={18} />
+                        {audit.method}
+                      </TableCell>
+                      <TableCell>{dateFormat(audit.created_at)}</TableCell>
+                      <TableCell>{timeFormat(audit.created_at)}</TableCell>
+                      <TableCell>
+                        <div
+                          className={`px-3 py-1 w-fit min-w-18 flex border-l-[3px] text-sm uppercase font-semibold ${
+                            actionColors[audit.action as ActionType]
+                          }`}
+                        >
+                          {audit.action}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center">
+                          <MoveUp size={18} color="#818181" />
+                          {audit.sender_type}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center">
+                          <MoveDown size={18} color="#818181" />
+                          {audit.target_type}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {expandedId === audit.id ? (
+                          <ChevronUp size={18} />
+                        ) : (
+                          <ChevronDown size={18} />
+                        )}
+                      </TableCell>
+                    </TableRow>
+
+                    <AnimatePresence>
+                      {expandedId === audit.id && (
+                        <TableRow className="bg-muted/30">
+                          <TableCell colSpan={8} className="p-0">
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="overflow-hidden p-4 text-sm"
+                            >
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="border-l-2 border-[#818181] p-2">
+                                  <Info
+                                    label={
+                                      <span className="flex items-center gap-2">
+                                        <User2 size={18} />
+                                        <strong>Id</strong>
+                                      </span>
+                                    }
+                                    value={audit.target_type + audit.target_id}
+                                  />
+                                </div>
+
+                                <div className="border-l-2 border-[#818181] p-2">
+                                  <Info
+                                    label={
+                                      <span className="flex items-center gap-2">
+                                        <Calendar1Icon size={18} />
+                                        <strong>Data</strong>
+                                      </span>
+                                    }
+                                    value={audit.created_at}
+                                  />
+                                </div>
+
+                                <div className="border-l-2 border-[#818181] p-2">
+                                  <Info
+                                    label={
+                                      <span className="flex items-center gap-2">
+                                        <MessageSquareText size={18} />
+                                        <strong>Mensagem</strong>
+                                      </span>
+                                    }
+                                    value={audit.message}
+                                  />
+                                </div>
+
+                                <div className="border-l-2 border-[#818181] p-2">
+                                  <Info
+                                    label={
+                                      <span className="flex items-center gap-2">
+                                        <FileText size={18} />
+                                        <strong>Descrição</strong>
+                                      </span>
+                                    }
+                                    value={audit.description}
+                                  />
+                                </div>
+
+                              
+                              </div>
+                            </motion.div>
+                          </TableCell>
+                        </TableRow>
                       )}
-                    </TableCell>
-                  </TableRow>
+                    </AnimatePresence>
+                  </>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
 
-                  <AnimatePresence>
-                    {expandedId === audit.id && (
-                      <TableRow className="bg-muted/30">
-                        <TableCell colSpan={8} className="p-0">
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="overflow-hidden p-4 text-sm"
-                          >
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info
-                                  label={
-                                    <span className="flex items-center gap-2">
-                                      <User2 size={18} />
-                                      <strong>Id</strong>
-                                    </span>
-                                  }
-                                  value={audit.target_type + audit.target_id}
-                                />
-                              </div>
+      {!isError && (
+        <div className="flex justify-center mt-4">
+          <RenderPagination
+            page={page}
+            setPage={setPage}
+            total={Number(data?.total)}
+            limit={Number(data?.limit)}
+            setLimit={setLimit}
+          />
+        </div>
+      )}
 
-                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info
-                                  label={
-                                    <span className="flex items-center gap-2">
-                                      <Calendar1Icon size={18} />
-                                      <strong>Data</strong>
-                                    </span>
-                                  }
-                                  value={audit.created_at}
-                                />
-                              </div>
-
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info
-                                  label={
-                                    <span className="flex items-center gap-2">
-                                      <MessageSquareText size={18} />
-                                      <strong>Mensagem</strong>
-                                    </span>
-                                  }
-                                  value={audit.message}
-                                />
-                              </div>
-
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info
-                                  label={
-                                    <span className="flex items-center gap-2">
-                                      <FileText size={18} />
-                                      <strong>Descrição</strong>
-                                    </span>
-                                  }
-                                  value={audit.description}
-                                />
-                              </div>
-
-                             
-                            </div>
-                          </motion.div>
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </AnimatePresence>
-                </Fragment>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
-      <div className="flex justify-center mt-4">
-        <RenderPagination
-          page={page}
-          setPage={setPage}
-          total={Number(data?.total)}
-          limit={Number(data?.limit)}
-          setLimit={setLimit}
-        />
-      </div>
+      {isError && error?.code === "PERMISSION_DENIED" && (
+        <ForbiddenCard permission={error.requiredPermission} />
+      )}
+      
     </>
   );
 }
