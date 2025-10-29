@@ -21,7 +21,8 @@ export function RenderPagination({
   setLimit,
 }: RenderPaginationProps) {
   const safeLimit = Number.isFinite(limit) && limit > 0 ? limit : 10;
-  const totalPages = Math.ceil(total / safeLimit);
+  const totalPages = Math.max(1, Math.ceil(total / safeLimit));
+
 
   const handleChangeLimit = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLimit = Number(e.target.value);

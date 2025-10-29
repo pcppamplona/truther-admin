@@ -19,9 +19,10 @@ import TicketReasonsFlow from "@/views/suport/occurrences/TicketReasonsFlow";
 import Users from "@/views/users";
 import Transactions from "@/views/transactions";
 import PixInPage from "@/views/transactions/pixIn";
-import PixOutPage from "@/views/transactions/pixOut";
 import SendGas from "@/views/transactions/sendGas";
 import Decode from "@/views/transactions/decode";
+import PixOutPage from "@/views/transactions/pixOut";
+import BilletCashout from "@/views/transactions/billetCashout";
 
 export default function RoutesApp() {
   return (
@@ -49,7 +50,8 @@ export default function RoutesApp() {
       <Route path="/transactions" element={<Transactions />} />
       <Route path="/transactions/pix-in" element={<PixInPage />} />
       <Route path="/transactions/pix-out" element={<PixOutPage />} />
-       <Route path="/transactions/sendgas" element={<SendGas />} />
+      <Route path="/transactions/billet-cashout" element={<BilletCashout />} />
+      <Route path="/transactions/sendgas" element={<SendGas />} />
       <Route path="/transactions/decode" element={<Decode />} />
 
       <Route path="/auditLog" element={<AuditLog />} />
