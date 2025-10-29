@@ -8,9 +8,11 @@ import { RenderPagination } from "@/components/RenderPagination";
 import { getPaginationSettings, setPaginationSettings } from "@/lib/paginationStorage";
 import { usePixInTransactions } from "@/services/transactions/useTransactions";
 import { Info } from "@/components/info";
-import { PixInFilters, PixInFiltersValues } from "../components/PixInFilters";
+import { PixInFilters, PixInFiltersValues } from "./components/PixInFilters";
+import { useI18n } from "@/i18n";
 
 export default function ListPixIn() {
+  const { t } = useI18n();
   const { page: savedPage, limit: savedLimit } = getPaginationSettings("transactions-pix-in");
 
   const [page, setPage] = useState(savedPage);
@@ -59,7 +61,7 @@ export default function ListPixIn() {
   return (
     <>
       <CardHeader>
-        <CardTitle className="text-2xl font-bold mb-4">Transações PIX IN</CardTitle>
+        <CardTitle className="text-2xl font-bold mb-4">{t("transactions.pixIn.title")}</CardTitle>
         <PixInFilters
           txid={filters.txid}
           status_bank={filters.status_bank}
@@ -83,14 +85,14 @@ export default function ListPixIn() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell>TXID</TableCell>
-              <TableCell>Wallet</TableCell>
-              <TableCell>Nome</TableCell>
-              <TableCell>Nome Pagador</TableCell>
-              <TableCell>Status Banco</TableCell>
-              <TableCell>Status Blockchain</TableCell>
-              <TableCell>Criado Em</TableCell>
-              <TableCell>Token</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.txid")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.wallet")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.name")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.payerName")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.statusBank")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.statusBlockchain")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.createdAt")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.token")}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHeader>
@@ -130,34 +132,34 @@ export default function ListPixIn() {
                           >
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>ID</strong>} value={tx.id} />
+                                <Info label={<strong>{t("transactions.pixIn.details.id")}</strong>} value={tx.id} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Wallet ID</strong>} value={tx.wallet_id ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixIn.details.walletId")}</strong>} value={tx.wallet_id ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Documento Destinatário</strong>} value={tx.receive_doc ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixIn.details.recipientDocument")}</strong>} value={tx.receive_doc ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Chave de Destino</strong>} value={tx.destinationKey ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixIn.details.destinationKey")}</strong>} value={tx.destinationKey ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>End To End</strong>} value={tx.end2end ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixIn.details.end2end")}</strong>} value={tx.end2end ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Documento Pagador</strong>} value={tx.payer_document ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixIn.details.payerDocument")}</strong>} value={tx.payer_document ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Valor</strong>} value={tx.amount ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixIn.details.amount")}</strong>} value={tx.amount ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Erro Blockchain</strong>} value={tx.msg_error_blockchain ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixIn.details.errorBlockchain")}</strong>} value={tx.msg_error_blockchain ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Erro Banco</strong>} value={tx.msg_error_bank ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixIn.details.errorBank")}</strong>} value={tx.msg_error_bank ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Tipo de Entrada</strong>} value={tx.typeIn ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixIn.details.typeIn")}</strong>} value={tx.typeIn ?? "-"} />
                               </div>
                             </div>
                           </motion.div>

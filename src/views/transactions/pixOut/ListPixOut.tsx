@@ -9,8 +9,10 @@ import { getPaginationSettings, setPaginationSettings } from "@/lib/paginationSt
 import { usePixOutTransactions } from "@/services/transactions/useTransactions";
 import { Info } from "@/components/info";
 import { PixOutFilters, PixOutFiltersValues } from "../components/PixOutFilters";
+import { useI18n } from "@/i18n";
 
 export default function ListPixOut() {
+  const { t } = useI18n();
   const { page: savedPage, limit: savedLimit } = getPaginationSettings("transactions-pix-out");
 
   const [page, setPage] = useState(savedPage);

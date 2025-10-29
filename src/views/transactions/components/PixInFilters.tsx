@@ -3,25 +3,10 @@ import { Calendar as CalendarIcon, Funnel, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { useI18n } from "@/i18n";
 
 export interface PixInFiltersValues {
   txid: string;
@@ -53,6 +38,7 @@ function formatDateParam(date?: Date): string | undefined {
 }
 
 export function PixInFilters(props: PixInFiltersProps) {
+  const { t } = useI18n();
   const {
     txid,
     status_bank,
