@@ -22,7 +22,8 @@ export const useTickets = (
   sortBy?: string,
   sortOrder?: "ASC" | "DESC",
   onlyAssigned?: boolean,
-  assignedRole?: number
+  assignedRole?: number,
+  status?: string,
 ) => {
   return useQuery<PaginateData<TicketData>, any>({
     queryKey: [
@@ -34,6 +35,7 @@ export const useTickets = (
       sortOrder,
       onlyAssigned,
       assignedRole,
+      status
     ],
     queryFn: async () => {
       try {
@@ -46,6 +48,7 @@ export const useTickets = (
         if (sortOrder) params.append("sortOrder", sortOrder);
         if (onlyAssigned !== undefined) params.append("onlyAssigned", String(onlyAssigned));
         if (assignedRole !== undefined && assignedRole !== null) params.append("assignedRole", String(assignedRole));
+        if (status) params.append("status", status); 
 
         const { data } = await api.get<PaginateData<TicketData>>(
           `tickets/paginated?${params.toString()}`

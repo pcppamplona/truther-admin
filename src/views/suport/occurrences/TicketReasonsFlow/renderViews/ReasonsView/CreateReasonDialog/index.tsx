@@ -10,13 +10,12 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
-
 import { useAuthStore } from "@/store/auth";
 import { useTicketReason } from "@/services/Tickets/useReasons";
 import { StepReason } from "./Steps/StepReason";
 import { StepReplies } from "./Steps/StepReplies";
 import { StepReplyActions } from "./Steps/StepReplyActions";
-import type { Reason, ReplyAction } from "@/interfaces/TicketData";
+import { Reason, ReplyAction } from "@/interfaces/TicketData";
 
 interface ReplyPayload {
   reply: string;
@@ -69,7 +68,7 @@ export function CreateReasonDialog() {
       expired_at: reasonData.expired_at ?? 7,
       description: reasonData.description ?? "",
       type_recipient: reasonData.type_recipient ?? "USER",
-      recipient: reasonData.recipient ?? "N1",
+      recipient: reasonData.recipient ?? 1,
       replies: reasonData.replies ?? [],
     };
 

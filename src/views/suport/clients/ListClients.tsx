@@ -8,12 +8,7 @@ import {
 } from "@/components/ui/table";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import { CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ArrowDown01,
-  ArrowUp01,
-  Download,
-  Search,
-} from "lucide-react";
+import { ArrowDown01, ArrowUp01, Download, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ClientsData } from "@/interfaces/ClientsData";
@@ -30,6 +25,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { dateFormat, documentFormat, timeFormat } from "@/lib/formatters";
+import { CardEmpty } from "@/components/CardEmpty";
 
 export default function ListClients() {
   const navigate = useNavigate();
@@ -105,7 +101,7 @@ export default function ListClients() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button className="w-14 h-12">
-                    <Download size={18} color="#fff"/>
+                    <Download size={18} color="#fff" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -146,6 +142,15 @@ export default function ListClients() {
           <TableBody>
             {isLoading ? (
               <SkeletonTable />
+            ) : data?.data?.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} className="h-64">
+                  <CardEmpty
+                    title="Nenhum cliente encontrado"
+                    subtitle=" Não foi possível encontrar nenhum cliente. Tente ajustar a pesquisa ou criar um novo."
+                  />
+                </TableCell>
+              </TableRow>
             ) : (
               data?.data?.map((client) => (
                 <TableRow
@@ -156,7 +161,10 @@ export default function ListClients() {
                   <TableCell>{client.name ?? "n/a"}</TableCell>
                   <TableCell>{documentFormat(client.document)}</TableCell>
                   <TableCell>{client.role}</TableCell>
-                  <TableCell>{dateFormat(client.created_at)} ás {timeFormat(client.created_at)}</TableCell>
+                  <TableCell>
+                    {dateFormat(client.created_at)} ás{" "}
+                    {timeFormat(client.created_at)}
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
                       <span

@@ -113,7 +113,7 @@ export type Reason = {
   expired_at: number;
   description: string;
   type_recipient: TypeRecipient;
-  recipient: string;
+  recipient: number;
 };
 
 export interface ReplyReason {
@@ -121,6 +121,8 @@ export interface ReplyReason {
   reason_id: number;
   reply: string;
   comment: boolean;
+  
+  reason_name?: string;
   actions?: ReplyAction[];
 }
 
@@ -137,19 +139,18 @@ export interface ReplyAction {
   action_type_id: number;
   data_email?: string | null;
   data_new_ticket_reason_id?: number | null;
-  data_new_ticket_assign_to_group?: Group | null;
+  data_new_ticket_assign_role?: number | null;
   action_type?: ActionsType;
 }
 
 export interface TicketReasonResponse {
   id: number;
   category_id: string;
-  type: string;
   reason: string;
   expired_at: number;
   description: string;
   type_recipient: TypeRecipient;
-  recipient: string;
+  recipient: number;
   replies: ReplyReason[];
 }
 

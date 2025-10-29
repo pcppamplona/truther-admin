@@ -1,3 +1,4 @@
+import { CardEmpty } from "@/components/CardEmpty";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import { CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
@@ -11,7 +12,6 @@ import {
 import { ActionsType } from "@/interfaces/TicketData";
 import { dateFormat } from "@/lib/formatters";
 import { useActionTypes } from "@/services/Tickets/useActionTypes";
-import { TriangleAlert } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export function ActionsTypesView() {
@@ -29,7 +29,8 @@ export function ActionsTypesView() {
           <div>
             <CardTitle className="text-2xl font-bold mb-2">Ações</CardTitle>
             <CardDescription>
-              Aqui estão os motivos ActionTypes. As ações que podem ser associadas a um reply, quando o mesmo for finalizado.
+              Aqui estão os motivos ActionTypes. As ações que podem ser
+              associadas a um reply, quando o mesmo for finalizado.
             </CardDescription>
           </div>
         </div>
@@ -51,24 +52,17 @@ export function ActionsTypesView() {
               <SkeletonTable />
             ) : actionsType.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-10">
-                  <div className="flex flex-col items-center justify-center text-center">
-                    <TriangleAlert className="text-muted-foreground mb-2" />
-                    <p className="text-lg font-semibold">
-                      Nenhum Ação encontrado
-                    </p>
-                    <p className="text-sm text-muted-foreground max-w-md">
-                      Não foi possível encontrar nenhuma ação. Tente atualizar
-                      a página ou criar uma nova.
-                    </p>
-                  </div>
+                <TableCell colSpan={7} className="h-64">
+                  <CardEmpty
+                    title="Nenhuma ação encontrado"
+                    subtitle=" Não foi possível encontrar nenhuma ação. Tente ajustar a pesquisa ou criar um novo."
+                  />
                 </TableCell>
               </TableRow>
             ) : (
               actionsType.map((action) => (
                 <TableRow
                   key={action.id}
-                  
                   className="cursor-pointer hover:bg-muted/50 transition-colors"
                 >
                   <TableCell>{action.id}</TableCell>

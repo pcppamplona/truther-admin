@@ -47,20 +47,6 @@ export function AppSidebar() {
             matchUrls: ["clients", "clientDetails", "clientEdit"],
           },
           {
-            title: "Envio de GAS",
-            url: "sendgas",
-          },
-          {
-            title: "Decodificar",
-            url: "decode",
-          },
-
-          // {
-          //   title: "Ocorrências",
-          //   url: "ocurrences",
-          //   matchUrls: ["ocurrences", "ocurrenceDetails"],
-          // },
-          {
             title: "Ocorrências",
             url: "ocurrences",
             matchUrls: ["ocurrences", "ocurrenceDetails"],
@@ -102,7 +88,8 @@ export function AppSidebar() {
       },
       {
         title: "Transações",
-        url: "transactions",
+        // url: "transactions",
+        url: "transactions/pix-in",
         icon: ArrowRightLeft,
         items: [
           {
@@ -114,6 +101,14 @@ export function AppSidebar() {
             title: "PIX Out",
             url: "transactions/pix-out",
             matchUrls: ["transactions/pix-out"],
+          },
+          {
+            title: "Envio de GAS",
+            url: "transactions/sendgas",
+          },
+          {
+            title: "Decodificar",
+            url: "transactions/decode",
           },
         ],
       },
