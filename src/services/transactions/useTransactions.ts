@@ -1,22 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 import { PaginateData } from "@/interfaces/PaginateData";
-import { PixInTransaction, PixOutTransaction } from "@/interfaces/Transactions";
-
-export interface PixOutQueryFilters {
-  txid?: string;
-  end2end?: string;
-  pixKey?: string;
-  receiverDocument?: string;
-  receiverName?: string;
-  wallet?: string;
-  status_px?: string;
-  status_bk?: string;
-  min_amount?: string;
-  max_amount?: string;
-  created_after?: string;
-  created_before?: string;
-}
+import { BilletCashoutQueryFilters, BilletCashoutTransaction, PixInQueryFilters, PixInTransaction, PixOutQueryFilters, PixOutTransaction } from "@/interfaces/Transactions";
 
 export const usePixOutTransactions = (
   page: number,
@@ -69,21 +54,6 @@ export const usePixOutTransactions = (
   });
 };
 
-export interface PixInQueryFilters {
-  txid?: string;
-  status_bank?: string;
-  status_blockchain?: string;
-  payer_document?: string;
-  payer_name?: string;
-  created_after?: string;
-  created_before?: string;
-  min_amount?: string;
-  max_amount?: string;
-  wallet?: string;
-  end2end?: string;
-  destinationKey?: string;
-  typeIn?: string;
-}
 
 export const usePixInTransactions = (
   page: number,
@@ -132,6 +102,53 @@ export const usePixInTransactions = (
 
       const { data } = await api.get<PaginateData<PixInTransaction>>(
         `/transactions/pix-in?${params.toString()}`
+      );
+      return data;
+    },
+    refetchOnWindowFocus: false,
+  });
+};
+
+
+export const useBilletCashoutTransactions = (
+  page: number,
+  limit: number,
+  filters: BilletCashoutQueryFilters = {}
+) => {
+  return useQuery<PaginateData<BilletCashoutTransaction>>({
+    queryKey: [
+      "transactions",
+      "billet-cashout",
+      page,
+      limit,
+      filters.status || "",
+      filters.receiverName || "",
+      filters.receiverDocument || "",
+      filters.min_amount ?? "",
+      filters.max_amount ?? "",
+      filters.banksId ?? "",
+      filters.orderId ?? "",
+      filters.created_after || "",
+      filters.created_before || "",
+    ],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+      });
+
+      if (filters.status) params.append("status", filters.status);
+      if (filters.receiverName) params.append("receiverName", filters.receiverName);
+      if (filters.receiverDocument) params.append("receiverDocument", filters.receiverDocument);
+      if (filters.min_amount !== undefined) params.append("min_amount", String(filters.min_amount));
+      if (filters.max_amount !== undefined) params.append("max_amount", String(filters.max_amount));
+      if (filters.banksId !== undefined) params.append("banksId", String(filters.banksId));
+      if (filters.orderId !== undefined) params.append("orderId", String(filters.orderId));
+      if (filters.created_after) params.append("created_after", filters.created_after);
+      if (filters.created_before) params.append("created_before", filters.created_before);
+
+      const { data } = await api.get<PaginateData<BilletCashoutTransaction>>(
+        `/transactions/billet-cashout?${params.toString()}`
       );
       return data;
     },

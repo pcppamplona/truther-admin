@@ -103,6 +103,10 @@ export function AppSidebar() {
             matchUrls: ["transactions/pix-out"],
           },
           {
+            title: "Boleto",
+            url: "transactions/billet-cashout",
+          },
+          {
             title: "Envio de GAS",
             url: "transactions/sendgas",
           },
