@@ -20,11 +20,11 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <div className="relative hidden bg-muted lg:block">
+       <div className="hidden md:flex items-center justify-center">
         <img
-          src="/banner.png"
-          alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:white"
+          src="/Truther-Celular1.png"
+          alt="Imagem do app Truther"
+          className="w-[400px] lg:w-[600px] h-auto object-contain"
         />
       </div>
     </div>

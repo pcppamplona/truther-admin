@@ -10,10 +10,10 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { TriangleAlert } from "lucide-react";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import CreateReplyReasonDialog from "./CreateReplyReason";
-import { Checkbox } from "@/components/ui/checkbox";
+import { CardEmpty } from "@/components/CardEmpty";
+import { Check, X } from "lucide-react";
 
 export function RepliesView() {
   const { data: allReplies, isLoading } = useAllReplies();
@@ -48,8 +48,11 @@ export function RepliesView() {
             <TableRow>
               <TableHead>ID</TableHead>
               <TableHead>Reason ID</TableHead>
+              <TableHead>Reason Name</TableHead>
               <TableHead>Reply</TableHead>
-              <TableHead className="flex justify-center items-center">Comment</TableHead>
+              <TableHead className="flex justify-center items-center">
+                Comment
+              </TableHead>
             </TableRow>
           </TableHeader>
 
@@ -58,17 +61,11 @@ export function RepliesView() {
               <SkeletonTable />
             ) : replies.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center py-10">
-                  <div className="flex flex-col items-center justify-center text-center">
-                    <TriangleAlert className="text-muted-foreground mb-2" />
-                    <p className="text-lg font-semibold">
-                      Nenhuma resposta encontrada
-                    </p>
-                    <p className="text-sm text-muted-foreground max-w-md">
-                      Não foi possível encontrar nenhuma reply. Tente atualizar
-                      a página ou criar uma nova.
-                    </p>
-                  </div>
+                <TableCell colSpan={7} className="h-64">
+                  <CardEmpty
+                    title="Nenhum reposta encontrado"
+                    subtitle=" Não foi possível encontrar nenhum reposta. Tente ajustar a pesquisa ou criar um novo."
+                  />
                 </TableCell>
               </TableRow>
             ) : (
@@ -79,9 +76,15 @@ export function RepliesView() {
                 >
                   <TableCell>{reply.id}</TableCell>
                   <TableCell>{reply.reason_id}</TableCell>
+                  <TableCell>{reply.reason_name}</TableCell>
                   <TableCell className="font-medium">{reply.reply}</TableCell>
-                  <TableCell className="flex justify-center items-center">
-                    <Checkbox id="comment" checked={reply.comment} />
+                  <TableCell className="flex justify-center items-center gap-2">
+                    {reply.comment ? (
+                      <Check className="text-primary" />
+                    ) : (
+                      <X className="text-destructive" />
+                    )}
+                    {reply.comment ? "Sim" : "Não"}
                   </TableCell>
                 </TableRow>
               ))

@@ -9,11 +9,11 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { ReasonCategory } from "@/interfaces/TicketData";
-import { TriangleAlert } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAllReasonCategories } from "@/services/Tickets/useReasonCategories";
 import { UpdateCategoryDialog } from "./components/UpdateCategoryDialog";
 import { CreateCategoryDialog } from "./components/CreateCategoryDialog";
+import { CardEmpty } from "@/components/CardEmpty";
 
 export function CategoriesView() {
   const { data: allReasonCategories, isLoading } = useAllReasonCategories();
@@ -62,16 +62,10 @@ export function CategoriesView() {
             ) : reasons.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-10">
-                  <div className="flex flex-col items-center justify-center text-center">
-                    <TriangleAlert className="text-muted-foreground mb-2" />
-                    <p className="text-lg font-semibold">
-                      Nenhuma categoria encontrada
-                    </p>
-                    <p className="text-sm text-muted-foreground max-w-md">
-                      Não foi possível encontrar nenhuma categoria. Tente
-                      atualizar a página ou criar um novo.
-                    </p>
-                  </div>
+                  <CardEmpty
+                    title="Nenhuma categoria encontrado"
+                    subtitle=" Não foi possível encontrar nenhuma categoria. Tente ajustar a pesquisa ou criar um novo."
+                  />
                 </TableCell>
               </TableRow>
             ) : (

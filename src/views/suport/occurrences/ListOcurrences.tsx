@@ -14,7 +14,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { ArrowDown01, ArrowUp01, Search, TriangleAlert } from "lucide-react";
+import { ArrowDown01, ArrowUp01, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTickets } from "@/services/Tickets/useTickets";
 import { useNavigate } from "react-router-dom";
@@ -33,9 +33,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import { RenderPagination } from "@/components/RenderPagination";
-import { RoleId, TicketData } from "@/interfaces/TicketData";
+import { RoleId, Status, TicketData } from "@/interfaces/TicketData";
 import { getColorRGBA, statusColors } from "@/lib/utils";
 import { ForbiddenCard } from "@/components/ForbiddenCard";
+import { CardEmpty } from "@/components/CardEmpty";
 
 export default function ListOcurrences() {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ export default function ListOcurrences() {
   const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
   const [filter, setFilter] = useState("Todas");
   const [assignedGroup, setAssignedGroup] = useState<number | undefined>();
+  const [status, setStatus] = useState<string | undefined>();
 
   const onlyAssigned = filter === "Meus Tickets";
 
@@ -63,7 +65,8 @@ export default function ListOcurrences() {
     sortBy,
     sortOrder,
     onlyAssigned,
-    assignedGroup
+    assignedGroup,
+    status 
   );
 
   const handleRowClick = (ticket: TicketData) => {
@@ -93,6 +96,27 @@ export default function ListOcurrences() {
           </div>
 
           <div className="flex items-center gap-2">
+            <Select
+              value={status}
+              onValueChange={(val) => setStatus(val as Status | undefined)}
+            >
+              <SelectTrigger className="w-[180px] py-4">
+                <SelectValue/>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="PENDENTE">PENDENTE</SelectItem>
+                <SelectItem value="PENDENTE EXPIRADO">PENDENTE EXPIRADO</SelectItem>
+                <SelectItem value="EM ANDAMENTO">EM ANDAMENTO</SelectItem>
+                <SelectItem value="EM ANDAMENTO EXPIRADO">EM ANDAMENTO EXPIRADO</SelectItem>
+                <SelectItem value="FINALIZADO">FINALIZADO</SelectItem>
+                <SelectItem value="FINALIZADO EXPIRADO">FINALIZADO EXPIRADO</SelectItem>
+                <SelectItem value="AGUARDANDO RESPOSTA DO CLIENTE">
+                  AGUARDANDO RESPOSTA DO CLIENTE
+                </SelectItem>
+                <SelectItem value={undefined as any}>Todos</SelectItem>
+              </SelectContent>
+            </Select>
+
             <Select value={filter} onValueChange={setFilter}>
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="Todas" />
@@ -105,7 +129,9 @@ export default function ListOcurrences() {
 
             <Select
               value={assignedGroup?.toString() ?? ""}
-              onValueChange={(val) => setAssignedGroup(val ? Number(val) : undefined)}
+              onValueChange={(val) =>
+                setAssignedGroup(val ? Number(val) : undefined)
+              }
             >
               <SelectTrigger className="w-[100px]">
                 <SelectValue placeholder="Grupo" />
@@ -181,19 +207,11 @@ export default function ListOcurrences() {
                 <SkeletonTable />
               ) : data?.data?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-10">
-                    <div className="flex flex-col items-center justify-center text-center">
-                      <TriangleAlert className="text-muted-foreground" />
-                      <p className="text-lg font-semibold">
-                        Nenhum ticket encontrado
-                      </p>
-                      <p className="text-sm text-muted-foreground max-w-md">
-                        Não foi possível encontrar nenhum ticket. Tente ajustar
-                        a
-                        <br />
-                        pesquisa ou criar um novo.
-                      </p>
-                    </div>
+                  <TableCell colSpan={7} className="h-64">
+                    <CardEmpty
+                      title="Nenhum ticket encontrado"
+                      subtitle="Não foi possível encontrar nenhum ticket. Tente ajustar a pesquisa ou criar um novo."
+                    />
                   </TableCell>
                 </TableRow>
               ) : (

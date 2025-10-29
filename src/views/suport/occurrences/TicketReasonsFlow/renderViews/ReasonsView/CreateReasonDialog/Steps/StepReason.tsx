@@ -23,7 +23,6 @@ export function StepReason({ onChange, onNext }: StepReasonProps) {
 
   const [form, setForm] = useState({
     category_id: "",
-    type: "",
     reason: "",
     expired_at: "",
     description: "",
@@ -66,15 +65,6 @@ export function StepReason({ onChange, onNext }: StepReasonProps) {
             ))}
           </SelectContent>
         </Select>
-      </div>
-
-      <div>
-        <Label className="mb-2 mt-6">Tipo</Label>
-        <Input
-          value={form.type}
-          onChange={(e) => handleChange("type", e.target.value)}
-          placeholder="Ex: Novo fluxo"
-        />
       </div>
 
       <div>
@@ -134,18 +124,18 @@ export function StepReason({ onChange, onNext }: StepReasonProps) {
         </div>
 
         {form.type_recipient === "GROUP" && (
-          <div>
+          <div className="flex-1">
             <Label className="mb-2 mt-6">Destinatário (Grupo)</Label>
             <Select
-              value={form.recipient}
-              onValueChange={(v) => handleChange("recipient", v)}
+              value={form.recipient ? String(form.recipient) : ""}
+              onValueChange={(v) => handleChange("recipient", Number(v))}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecione o grupo" />
               </SelectTrigger>
               <SelectContent>
                 {(Object.keys(groupHierarchy) as Group[]).map((g) => (
-                  <SelectItem key={g} value={g}>
+                  <SelectItem key={g} value={String(groupHierarchy[g])}>
                     {g}
                   </SelectItem>
                 ))}

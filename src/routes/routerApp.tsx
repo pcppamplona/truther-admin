@@ -1,3 +1,5 @@
+import { Route, Routes } from "react-router";
+
 import AuditLog from "@/views/audit";
 import Dashboard from "@/views/dashboard";
 import Financier from "@/views/financier";
@@ -9,16 +11,17 @@ import Notifications from "@/views/marketing/notifications";
 import Suport from "@/views/suport";
 import Clients from "@/views/suport/clients";
 import ClientDetails from "@/views/suport/clients/ClientDetails";
-import Decode from "@/views/suport/decode";
+
 import Ocurrences from "@/views/suport/occurrences";
 import OcurrenceDetails from "@/views/suport/occurrences/OcurrenceDetails";
 import TicketReasonsFlow from "@/views/suport/occurrences/TicketReasonsFlow";
-import SendGas from "@/views/suport/sendGas";
+
 import Users from "@/views/users";
 import Transactions from "@/views/transactions";
 import PixInPage from "@/views/transactions/pixIn";
 import PixOutPage from "@/views/transactions/pixOut";
-import { Route, Routes } from "react-router";
+import SendGas from "@/views/transactions/sendGas";
+import Decode from "@/views/transactions/decode";
 
 export default function RoutesApp() {
   return (
@@ -29,8 +32,6 @@ export default function RoutesApp() {
       <Route path="/suport" element={<Suport />} />
       <Route path="/clients" element={<Clients />} />
       <Route path="/clientDetails" element={<ClientDetails />} />
-      <Route path="/sendgas" element={<SendGas />} />
-      <Route path="/decode" element={<Decode />} />
       <Route path="/ocurrences" element={<Ocurrences />} />
       <Route path="/ocurrenceDetails" element={<OcurrenceDetails />} />
       <Route path="/ticketReasons" element={<TicketReasonsFlow />} />
@@ -48,6 +49,8 @@ export default function RoutesApp() {
       <Route path="/transactions" element={<Transactions />} />
       <Route path="/transactions/pix-in" element={<PixInPage />} />
       <Route path="/transactions/pix-out" element={<PixOutPage />} />
+       <Route path="/transactions/sendgas" element={<SendGas />} />
+      <Route path="/transactions/decode" element={<Decode />} />
 
       <Route path="/auditLog" element={<AuditLog />} />
     </Routes>

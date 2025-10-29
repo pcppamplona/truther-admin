@@ -43,7 +43,7 @@ export default function CreateReplyReasonDialog() {
       action_type_id: number;
       data_email: string | null;
       data_new_ticket_reason_id: number | null;
-      data_new_ticket_assign_to_group: Group | null;
+      data_new_ticket_assign_role: number | null;
     }[]
   >([]);
 
@@ -63,7 +63,7 @@ export default function CreateReplyReasonDialog() {
         action_type_id: newActionTypeId,
         data_email: null,
         data_new_ticket_reason_id: null,
-        data_new_ticket_assign_to_group: null,
+        data_new_ticket_assign_role: null,
       },
     ]);
     setNewActionTypeId(null);
@@ -142,8 +142,8 @@ export default function CreateReplyReasonDialog() {
       case "criar novo ticket":
       case "new_ticket":
         return (
-          <div className="space-y-3">
-            <div>
+          <div className="flex flex-row justify-between gap-4">
+            <div className="flex-1">
               <Label className="mb-2 mt-6">Reason do novo ticket</Label>
               <Select
                 value={
@@ -155,7 +155,7 @@ export default function CreateReplyReasonDialog() {
                   handleChangeField(i, "data_new_ticket_reason_id", Number(v))
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Selecione um reason" />
                 </SelectTrigger>
                 <SelectContent>
@@ -168,24 +168,28 @@ export default function CreateReplyReasonDialog() {
               </Select>
             </div>
 
-            <div>
-              <Label className="mb-2 mt-6">Grupo de destino</Label>
+            <div className="flex-1">
+              <Label className="mb-2 mt-6">Role de destino</Label>
               <Select
-                value={a.data_new_ticket_assign_to_group ?? ""}
-                onValueChange={(value) =>
+                value={
+                  a.data_new_ticket_assign_role
+                    ? String(a.data_new_ticket_assign_role)
+                    : ""
+                }
+                onValueChange={(value) => {
                   handleChangeField(
                     i,
-                    "data_new_ticket_assign_to_group",
-                    value as Group
-                  )
-                }
+                    "data_new_ticket_assign_role",
+                    Number(value)
+                  );
+                }}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Selecione o grupo" />
                 </SelectTrigger>
                 <SelectContent>
                   {(Object.keys(groupHierarchy) as Group[]).map((g) => (
-                    <SelectItem key={g} value={g}>
+                    <SelectItem key={g} value={String(groupHierarchy[g])}>
                       {g}
                     </SelectItem>
                   ))}
@@ -212,7 +216,7 @@ export default function CreateReplyReasonDialog() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-h-[80vh] w-full overflow-y-auto p-6">
+      {/* <DialogContent className="max-h-[80vh] w-full overflow-y-auto p-6">
         <DialogHeader>
           <DialogTitle>Novo Reply</DialogTitle>
           <DialogDescription>
@@ -306,30 +310,175 @@ export default function CreateReplyReasonDialog() {
           )}
         </div>
 
-        {actions.map((a, i) => (
-          <div
-            key={i}
-            className="border border-border border-l-primary border-l-3 p-4 rounded-md shadow-sm bg-background"
-          >
-            <div className="flex justify-between items-center">
-              <Label className="font-medium">
-                Ação {i + 1} —{" "}
-                {actionTypes?.find((t) => t.id === a.action_type_id)?.type}
-              </Label>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleRemoveAction(i)}
-                className="text-destructive hover:text-destructive"
-              >
-                <Trash size={16} />
-              </Button>
-            </div>
-            <div className="space-y-3">{renderActionFields(a, i)}</div>
+        {actions.length === 0 ? (
+          <div className="text-sm text-muted-foreground text-center py-4 border rounded-md mt-4">
+            Nenhuma ação adicionada para este reply.
           </div>
-        ))}
+        ) : (
+          actions.map((a, i) => (
+            <div
+              key={i}
+              className="border border-border border-l-primary border-l-3 p-4 rounded-md shadow-sm bg-background mt-4"
+            >
+              <div className="flex justify-between items-center">
+                <Label className="font-medium">
+                  Ação {i + 1} —{" "}
+                  {actionTypes?.find((t) => t.id === a.action_type_id)?.type}
+                </Label>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleRemoveAction(i)}
+                  className="text-destructive hover:text-destructive"
+                >
+                  <Trash size={16} />
+                </Button>
+              </div>
+              <div className="space-y-3">{renderActionFields(a, i)}</div>
+            </div>
+          ))
+        )}
 
         <DialogFooter className="mt-6">
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            Cancelar
+          </Button>
+          <Button onClick={handleSubmit} disabled={createReply.isPending}>
+            {createReply.isPending ? "Salvando..." : "Salvar Reply"}
+          </Button>
+        </DialogFooter>
+      </DialogContent> */}
+      <DialogContent className="max-h-[80vh] w-full overflow-y-auto p-6 space-y-6">
+        <DialogHeader>
+          <DialogTitle className="text-lg font-semibold">
+            Novo Reply
+          </DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
+            Adicione um novo reply vinculado a um motivo existente.
+          </DialogDescription>
+        </DialogHeader>
+
+        {/* Reason */}
+        <div className="space-y-2">
+          <Label className="font-medium">Reason</Label>
+          <Select
+            value={reasonId ? String(reasonId) : ""}
+            onValueChange={(v) => setReasonId(Number(v))}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Selecione um reason" />
+            </SelectTrigger>
+            <SelectContent>
+              {reasons?.map((r) => (
+                <SelectItem key={r.id} value={String(r.id)}>
+                  {r.reason}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Texto do Reply */}
+        <div className="space-y-2">
+          <Label className="font-medium">Texto do Reply</Label>
+          <Input
+            placeholder="Digite o texto da resposta"
+            value={replyText}
+            onChange={(e) => setReplyText(e.target.value)}
+          />
+        </div>
+
+        {/* Checkbox Comentário */}
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="comment"
+            checked={comment}
+            onCheckedChange={(checked) => setComment(!!checked)}
+          />
+          <Label htmlFor="comment">Precisa de comentário</Label>
+        </div>
+
+        {/* Ações */}
+        <div className="border border-border rounded-md p-4 space-y-4">
+          <div className="flex justify-between items-center">
+            <Label className="font-semibold flex items-center gap-2 text-sm">
+              <ListTree size={16} />
+              Ações para este Reply
+            </Label>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type="button"
+                    className="w-8 h-8 rounded-full flex items-center justify-center bg-primary text-white hover:bg-primary/90"
+                    onClick={() => setShowActionSelect((v) => !v)}
+                  >
+                    <Plus size={18} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Adicionar Ação</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+
+          {showActionSelect && (
+            <div className="flex gap-2 items-center">
+              <Select
+                value={newActionTypeId ? String(newActionTypeId) : ""}
+                onValueChange={(v) => setNewActionTypeId(Number(v))}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Selecione uma ação" />
+                </SelectTrigger>
+                <SelectContent>
+                  {actionTypes?.map((act) => (
+                    <SelectItem key={act.id} value={String(act.id)}>
+                      {act.type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant="outline"
+                onClick={handleAddAction}
+                disabled={!newActionTypeId}
+              >
+                Confirmar
+              </Button>
+            </div>
+          )}
+
+          {actions.length === 0 ? (
+            <div className="text-sm text-muted-foreground text-center py-4 border rounded-md bg-muted/10">
+              Nenhuma ação adicionada para este reply.
+            </div>
+          ) : (
+            actions.map((a, i) => (
+              <div
+                key={i}
+                className="border border-border border-l-primary border-l-4 p-4 rounded-md bg-background shadow-sm"
+              >
+                <div className="flex justify-between items-center mb-3">
+                  <Label className="font-medium text-sm">
+                    Ação {i + 1} —{" "}
+                    {actionTypes?.find((t) => t.id === a.action_type_id)?.type}
+                  </Label>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleRemoveAction(i)}
+                    className="text-destructive hover:text-destructive"
+                  >
+                    <Trash size={16} />
+                  </Button>
+                </div>
+                <div className="space-y-3">{renderActionFields(a, i)}</div>
+              </div>
+            ))
+          )}
+        </div>
+
+        <DialogFooter className="mt-4 flex justify-end gap-2">
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancelar
           </Button>

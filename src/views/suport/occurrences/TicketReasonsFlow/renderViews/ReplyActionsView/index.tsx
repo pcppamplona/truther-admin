@@ -10,8 +10,8 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { TriangleAlert } from "lucide-react";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
+import { CardEmpty } from "@/components/CardEmpty";
 
 export function ReplyActionsView() {
   const { data: allReplyActions, isLoading } = useAllReplyActions();
@@ -51,7 +51,7 @@ export function ReplyActionsView() {
               <TableHead>Action Type</TableHead>
               <TableHead>Data Email</TableHead>
               <TableHead>Data Ticket Reason</TableHead>
-              <TableHead>Data Ticket Assign Group</TableHead>
+              <TableHead>Data Ticket Assign Role</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -60,17 +60,11 @@ export function ReplyActionsView() {
               <SkeletonTable />
             ) : replyActions.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-10">
-                  <div className="flex flex-col items-center justify-center text-center">
-                    <TriangleAlert className="text-muted-foreground mb-2" />
-                    <p className="text-lg font-semibold">
-                      Nenhuma Ação encontrada
-                    </p>
-                    <p className="text-sm text-muted-foreground max-w-md">
-                      Não foi possível encontrar nenhuma action reply. Tente
-                      atualizar a página ou criar um nova se possível.
-                    </p>
-                  </div>
+                <TableCell colSpan={7} className="h-64">
+                  <CardEmpty
+                    title="Nenhum ação encontrado"
+                    subtitle=" Não foi possível encontrar nenhum ação. Tente ajustar a pesquisa ou criar um novo."
+                  />
                 </TableCell>
               </TableRow>
             ) : (
@@ -87,9 +81,7 @@ export function ReplyActionsView() {
                   <TableCell>{reason.action_type_id}</TableCell>
                   <TableCell>{reason.data_email}</TableCell>
                   <TableCell>{reason.data_new_ticket_reason_id}</TableCell>
-                  <TableCell>
-                    {reason.data_new_ticket_assign_to_group}
-                  </TableCell>
+                  <TableCell>{reason.data_new_ticket_assign_role}</TableCell>
                 </TableRow>
               ))
             )}
