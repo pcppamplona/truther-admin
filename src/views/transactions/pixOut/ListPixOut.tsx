@@ -9,8 +9,10 @@ import { getPaginationSettings, setPaginationSettings } from "@/lib/paginationSt
 import { usePixOutTransactions } from "@/services/transactions/useTransactions";
 import { Info } from "@/components/info";
 import { PixOutFilters, PixOutFiltersValues } from "../components/PixOutFilters";
+import { useI18n } from "@/i18n";
 
 export default function ListPixOut() {
+  const { t } = useI18n();
   const { page: savedPage, limit: savedLimit } = getPaginationSettings("transactions-pix-out");
 
   const [page, setPage] = useState(savedPage);
@@ -57,7 +59,7 @@ export default function ListPixOut() {
   return (
     <>
       <CardHeader>
-        <CardTitle className="text-2xl font-bold mb-4">Transações PIX OUT</CardTitle>
+        <CardTitle className="text-2xl font-bold mb-4">{t("transactions.pixOut.title")}</CardTitle>
         <PixOutFilters
           txid={filters.txid}
           end2end={filters.end2end}
@@ -71,7 +73,7 @@ export default function ListPixOut() {
           max_amount={filters.max_amount}
           created_after={filters.created_after}
           created_before={filters.created_before}
-          setValues={(next) => setFilters((prev) => ({ ...prev, ...next }))}
+          setValues={(next: Partial<PixOutFiltersValues>) => setFilters((prev: PixOutFiltersValues) => ({ ...prev, ...next }))}
           setPage={setPage}
         />
       </CardHeader>
@@ -80,14 +82,14 @@ export default function ListPixOut() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell>TXID</TableCell>
-              <TableCell>Remetente</TableCell>
-              <TableCell>Nome Remetente</TableCell>
-              <TableCell>Nome Recebedor</TableCell>
-              <TableCell>Status Bank</TableCell>
-              <TableCell>Status Blockchain</TableCell>
-              <TableCell>Criado Em</TableCell>
-              <TableCell>Token</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.txid")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.sender")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.senderName")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.receiverName")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.statusBank")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.statusBlockchain")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.createdAt")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.token")}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHeader>
@@ -127,25 +129,25 @@ export default function ListPixOut() {
                           >
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>ID</strong>} value={tx.id} />
+                                <Info label={<strong>{t("transactions.pixOut.details.id")}</strong>} value={tx.id} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>End To End</strong>} value={tx.end2end ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixOut.details.end2end")}</strong>} value={tx.end2end ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Documento Remetente</strong>} value={tx.sender_document ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixOut.details.senderDocument")}</strong>} value={tx.sender_document ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Valor (BRL)</strong>} value={tx.amount_brl ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixOut.details.amountBrl")}</strong>} value={tx.amount_brl ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Data da Operação</strong>} value={tx.date_op ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixOut.details.dateOp")}</strong>} value={tx.date_op ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Documento Recebedor</strong>} value={tx.receiver_document ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixOut.details.receiverDocument")}</strong>} value={tx.receiver_document ?? "-"} />
                               </div>
                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>Chave Pix</strong>} value={tx.pixKey ?? "-"} />
+                                <Info label={<strong>{t("transactions.pixOut.details.pixKey")}</strong>} value={tx.pixKey ?? "-"} />
                               </div>
                             </div>
                           </motion.div>

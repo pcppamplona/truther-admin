@@ -1,9 +1,11 @@
 import { SidebarLayout } from "@/components/layouts/SidebarLayout";
 import ListPixOut from "./ListPixOut";
+import { useI18n } from "@/i18n";
 
 export default function PixOutPage() {
+  const { t } = useI18n();
   return (
-    <SidebarLayout current="Transações - PIX OUT">
+    <SidebarLayout current={`${t("transactions.breadcrumb")} - ${t("transactions.pixOut.short")}`}>
       <div className="flex flex-1 flex-col">
         <div className="@container/main flex flex-1 flex-col gap-2">
           <ListPixOut />

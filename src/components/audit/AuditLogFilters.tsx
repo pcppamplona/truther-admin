@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { methodType } from "@/interfaces/AuditLogData";
 import {useRef, useState} from "react";
+import { useI18n } from "@/i18n";
 
 type actionType = 'security' | 'listing' | 'alter' | 'crm';
 
@@ -71,6 +72,7 @@ export function AuditLogFilters({
   setPage,
   methodColors,
 }: AuditLogFiltersProps) {
+  const { t } = useI18n();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [drawerSearch, setDrawerSearch] = useState("");
   const [drawerDescriptionSearch, setDrawerDescriptionSearch] = useState("");
@@ -181,9 +183,9 @@ export function AuditLogFilters({
           data-[vaul-drawer-direction=right]:sm:max-w-[70vw]
         ">
         <DrawerHeader>
-          <DrawerTitle>Filtros</DrawerTitle>
+          <DrawerTitle>{t("audit.filters.title")}</DrawerTitle>
           <DrawerDescription>
-            Filtre os registros de auditoria
+            {t("audit.filters.description")}
           </DrawerDescription>
         </DrawerHeader>
         
@@ -192,13 +194,13 @@ export function AuditLogFilters({
             <div className="space-y-2 flex-1">
               <div className="flex items-center gap-2 mb-1">
                 <MessageSquareText size={18} />
-                <strong>Mensagem</strong>
+                <strong>{t("audit.filters.message.label")}</strong>
               </div>
               <div className="flex items-center border border-border rounded-lg px-3 py-3 w-full">
                 <Search size={16} className="mr-2 text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="Pesquisar mensagem"
+                  placeholder={t("audit.filters.message.placeholder")}
                   className="outline-none text-sm w-full"
                   value={drawerSearch}
                   onChange={(e) => setDrawerSearch(e.target.value)}
@@ -209,13 +211,13 @@ export function AuditLogFilters({
             <div className="space-y-2 flex-1">
               <div className="flex items-center gap-2 mb-1">
                 <ScrollText size={18} />
-                <strong>Descrição</strong>
+                <strong>{t("audit.filters.descriptionField.label")}</strong>
               </div>
               <div className="flex items-center border border-border rounded-lg px-3 py-3 w-full">
                 <Search size={16} className="mr-2 text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="Pesquisar descrição"
+                  placeholder={t("audit.filters.descriptionField.placeholder")}
                   className="outline-none text-sm w-full"
                   value={drawerDescriptionSearch}
                   onChange={(e) => setDrawerDescriptionSearch(e.target.value)}
@@ -228,12 +230,12 @@ export function AuditLogFilters({
             <div className="space-y-2 flex-1">
               <div className="flex items-center gap-2 mb-1">
                 <FileText size={18} />
-                <strong>Método Http</strong>
+                <strong>{t("audit.filters.method.label")}</strong>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="w-full justify-between">
-                    {drawerSelectedMethod || "Selecione um método"}
+                    {drawerSelectedMethod || t("audit.filters.method.placeholder")}
                     <ChevronDown size={16} />
                   </Button>
                 </DropdownMenuTrigger>
@@ -242,7 +244,7 @@ export function AuditLogFilters({
                     onClick={() => setDrawerSelectedMethod("")}
                     className="cursor-pointer"
                   >
-                    Todos
+                    {t("common.actions.all")}
                   </DropdownMenuItem>
                   {["POST", "DELETE", "GET", "PUT", "PATCH"].map((method) => (
                     <DropdownMenuItem 
@@ -262,12 +264,12 @@ export function AuditLogFilters({
             <div className="space-y-2 flex-1">
               <div className="flex items-center gap-2 mb-1">
                 <Shield size={18} />
-                <strong>Ação</strong>
+                <strong>{t("audit.filters.action.label")}</strong>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="w-full justify-between">
-                    {drawerSelectedAction || "Selecione uma ação"}
+                    {drawerSelectedAction || t("audit.filters.action.placeholder")}
                     <ChevronDown size={16} />
                   </Button>
                 </DropdownMenuTrigger>
@@ -276,7 +278,7 @@ export function AuditLogFilters({
                     onClick={() => setDrawerSelectedAction("")}
                     className="cursor-pointer"
                   >
-                    Todos
+                    {t("common.actions.all")}
                   </DropdownMenuItem>
                   {["security", "listing", "alter", "crm"].map((action) => (
                     <DropdownMenuItem 
@@ -295,13 +297,13 @@ export function AuditLogFilters({
           <div className="space-y-2">
             <div className="flex items-center gap-2 mb-1">
               <CalendarIcon size={18} />
-              <strong>Data de criação</strong>
+              <strong>{t("audit.filters.createdAt.label")}</strong>
             </div>
             
             <div className="flex flex-row gap-4">
               <div className="flex flex-col gap-3 flex-1">
                 <Label htmlFor="created_after" className="px-1">
-                  Criado após
+                  {t("audit.filters.createdAt.createdAfter")}
                 </Label>
                 <Popover open={openAfterCalendar} onOpenChange={setOpenAfterCalendar}>
                   <PopoverTrigger asChild>
@@ -310,10 +312,10 @@ export function AuditLogFilters({
                       id="created_after"
                       className="w-full justify-between font-normal"
                       type="button"
-                      aria-label="Selecionar data - Criado depois de"
+                      aria-label={t("audit.filters.createdAt.ariaAfter")}
                     >
                       <span>
-                        {drawerCreatedAfter ? formatDateToYYYYMMDD(drawerCreatedAfter) : "Selecione a data"}
+                        {drawerCreatedAfter ? formatDateToYYYYMMDD(drawerCreatedAfter) : t("common.actions.selectDate")}
                       </span>
                       
                       <span className="flex items-center gap-1">
@@ -322,7 +324,7 @@ export function AuditLogFilters({
                             type="button"
                             size="icon"
                             variant="ghost"
-                            aria-label="Limpar data 'Criado depois de'"
+                            aria-label={t("audit.filters.calendar.clear")}
                             onClick={handleClearAfterClick}
                           >
                             <X className="h-4 w-4" />
@@ -354,11 +356,11 @@ export function AuditLogFilters({
                             setOpenAfterCalendar(false);
                           }}
                         >
-                          Limpar
+                          {t("audit.filters.calendar.clear")}
                         </Button>
                       )}
                       <Button size="sm" onClick={() => setOpenAfterCalendar(false)}>
-                        OK
+                        {t("audit.filters.calendar.ok")}
                       </Button>
                     </div>
                   </PopoverContent>
@@ -367,7 +369,7 @@ export function AuditLogFilters({
 
               <div className="flex flex-col gap-3 flex-1">
                 <Label htmlFor="created_before" className="px-1">
-                  Criado antes
+                  {t("audit.filters.createdAt.createdBefore")}
                 </Label>
                 <Popover open={openBeforeCalendar} onOpenChange={setOpenBeforeCalendar}>
                   <PopoverTrigger asChild>
@@ -376,10 +378,10 @@ export function AuditLogFilters({
                       id="created_before"
                       className="w-full justify-between font-normal"
                       type="button"
-                      aria-label="Selecionar data - Criado antes de"
+                      aria-label={t("audit.filters.createdAt.ariaBefore")}
                     >
                       <span>
-                        {drawerCreatedBefore ? formatDateToYYYYMMDD(drawerCreatedBefore) : "Selecione a data"}
+                        {drawerCreatedBefore ? formatDateToYYYYMMDD(drawerCreatedBefore) : t("common.actions.selectDate")}
                       </span>
                       
                       <span className="flex items-center gap-1">
@@ -388,7 +390,7 @@ export function AuditLogFilters({
                             type="button"
                             size="icon"
                             variant="ghost"
-                            aria-label="Limpar data 'Criado antes de'"
+                            aria-label={t("audit.filters.calendar.clear")}
                             onClick={handleClearBeforeClick}
                           >
                             <X className="h-4 w-4" />
@@ -420,11 +422,11 @@ export function AuditLogFilters({
                             setOpenBeforeCalendar(false);
                           }}
                         >
-                          Limpar
+                          {t("audit.filters.calendar.clear")}
                         </Button>
                       )}
                       <Button size="sm" onClick={() => setOpenBeforeCalendar(false)}>
-                        OK
+                        {t("audit.filters.calendar.ok")}
                       </Button>
                     </div>
                   </PopoverContent>
@@ -439,12 +441,12 @@ export function AuditLogFilters({
             variant="outline" 
             onClick={handleClear}
           >
-            Limpar
+            {t("common.actions.clear")}
           </Button>
           <Button 
             onClick={handleApply}
           >
-            Aplicar
+            {t("common.actions.apply")}
           </Button>
         </DrawerFooter>
       </DrawerContent>
