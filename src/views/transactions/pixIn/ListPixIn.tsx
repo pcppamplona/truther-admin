@@ -8,7 +8,7 @@ import { RenderPagination } from "@/components/RenderPagination";
 import { getPaginationSettings, setPaginationSettings } from "@/lib/paginationStorage";
 import { usePixInTransactions } from "@/services/transactions/useTransactions";
 import { Info } from "@/components/info";
-import { PixInFilters, PixInFiltersValues } from "./components/PixInFilters";
+import { PixInFilters, PixInFiltersValues } from "../components/PixInFilters.tsx";
 import { useI18n } from "@/i18n";
 
 export default function ListPixIn() {

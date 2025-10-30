@@ -49,7 +49,7 @@ export function AppSidebar() {
             matchUrls: ["clients", "clientDetails", "clientEdit"],
           },
           {
-            title: "Ocorrências",
+            title: t("sidebar.support.occurrences.title"),
             url: "ocurrences",
             matchUrls: ["ocurrences", "ocurrenceDetails"],
             items: [
