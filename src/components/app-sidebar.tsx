@@ -20,85 +20,87 @@ import {
   FlagTriangleRight,
   ArrowRightLeft
 } from "lucide-react";
+import { useI18n } from "@/i18n";
 
 export function AppSidebar() {
   const user = useAuthStore((state) => state.user);
+  const { t } = useI18n();
 
   const data = {
     user: {
-      name: user?.name ?? "Usuário",
+      name: user?.name ?? t("sidebar.anonymousUser"),
       email: user?.username ?? null,
       avatar: "/avatars/shadcn.jpg",
     },
     navMain: [
       {
-        title: "Dashboard",
+        title: t("sidebar.dashboard"),
         url: "dashboard",
         icon: House,
       },
       {
-        title: "Suporte",
-        url: "clients",//suport
+        title: t("sidebar.support.title"),
+        url: "clients", // suport
         icon: BotMessageSquare,
         items: [
           {
-            title: "Clientes",
+            title: t("sidebar.support.clients"),
             url: "clients",
             matchUrls: ["clients", "clientDetails", "clientEdit"],
           },
           {
-            title: "Ocorrências",
+            title: t("sidebar.support.occurrences.title"),
             url: "ocurrences",
             matchUrls: ["ocurrences", "ocurrenceDetails"],
             items: [
-              { title: "Motivos", url: "ticketReasons" },
+              { title: t("sidebar.support.occurrences.ticketReasons"), url: "ticketReasons" },
             ],
           },
           {
-            title: "Reportes",
+            title: t("sidebar.support.reports"),
             url: "report",
           },
         ],
       },
       {
-        title: "Marketing",
-        url: "notifications", //marketing
+        title: t("sidebar.marketing.title"),
+        url: "notifications", // marketing
         icon: Presentation,
         items: [
           {
-            title: "Notificações",
+            title: t("sidebar.marketing.notifications"),
             url: "notifications",
           },
         ],
       },
       {
-        title: "Financeiro",
-        url: "refund", //financier
+        title: t("sidebar.finance.title"),
+        url: "refund", // financier
         icon: DollarSign,
         items: [
           {
-            title: "Reembolso",
+            title: t("sidebar.finance.refund"),
             url: "refund",
           },
           {
-            title: "Saque",
+            title: t("sidebar.finance.cashout"),
             url: "cashout",
           },
         ],
       },
       {
-        title: "Transações",
+        title: t("sidebar.transactions.title"),
         // url: "transactions",
         url: "transactions/pix-in",
         icon: ArrowRightLeft,
         items: [
           {
-            title: "PIX In",
+            title: t("transactions.pixIn.short"),
             url: "transactions/pix-in",
             matchUrls: ["transactions/pix-in"],
           },
           {
-            title: "PIX Out",
+            title: t("transactions.pixOut.short"),
             url: "transactions/pix-out",
             matchUrls: ["transactions/pix-out"],
           },
@@ -121,12 +123,12 @@ export function AppSidebar() {
         ],
       },
       {
-        title: "Usuários",
+        title: t("sidebar.users"),
         url: "users",
         icon: User,
       },
       {
-        title: "Auditoria",
+        title: t("sidebar.audit"),
         url: "auditLog",
         icon: FlagTriangleRight,
       },

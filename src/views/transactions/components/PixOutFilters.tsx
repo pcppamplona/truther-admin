@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useI18n } from "@/i18n";
 import { Funnel, Calendar as CalendarIcon, X, ListFilter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -73,6 +74,7 @@ export function formatFilterLabel(key: string, value: any): string {
 }
 
 export function PixOutFilters(props: PixOutFiltersProps) {
+  const { t } = useI18n();
   const {
     txid,
     end2end,
@@ -212,7 +214,7 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             <DrawerHeader className="col-span-full">
               <DrawerTitle className="flex flex-row items-center gap-2">
                 <ListFilter />
-                Filtros PIX OUT
+                {t("transactions.pixOut.filters.title")}
               </DrawerTitle>
             </DrawerHeader>
 
@@ -228,7 +230,7 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="wallet">Wallet do remetente</Label>
+              <Label htmlFor="wallet">{t("transactions.common.senderWalletLabel")}</Label>
               <input
                 id="wallet"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -239,11 +241,11 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="receiverName">Nome do beneficiário</Label>
+              <Label htmlFor="receiverName">{t("transactions.common.receiverNameLabel")}</Label>
               <input
                 id="receiverName"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
-                placeholder="contém..."
+                placeholder={t("transactions.common.containsPlaceholder")}
                 value={localReceiverName}
                 onChange={(e) => setLocalReceiverName(e.target.value)}
               />
@@ -251,30 +253,30 @@ export function PixOutFilters(props: PixOutFiltersProps) {
 
             <div className="mt-2">
               <Label htmlFor="receiverDocument">
-                Documento do beneficiário
+                {t("transactions.common.receiverDocumentLabel")}
               </Label>
               <input
                 id="receiverDocument"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
-                placeholder="Somente números"
+                placeholder={t("transactions.common.numbersOnlyPlaceholder")}
                 value={localReceiverDocument}
                 onChange={(e) => setLocalReceiverDocument(e.target.value)}
               />
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="pixKey">Chave PIX</Label>
+              <Label htmlFor="pixKey">{t("transactions.common.pixKeyLabel")}</Label>
               <input
                 id="pixKey"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
-                placeholder="Chave PIX"
+                placeholder={t("transactions.common.pixKeyLabel")}
                 value={localPixKey}
                 onChange={(e) => setLocalPixKey(e.target.value)}
               />
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="end2end">EndToEnd</Label>
+              <Label htmlFor="end2end">{t("transactions.common.endToEndLabel")}</Label>
               <input
                 id="end2end"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -285,7 +287,7 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label>Status Blockchain</Label>
+              <Label>{t("transactions.common.statusBlockchainLabel")}</Label>
               <Select
                 value={localStatusBk || "ALL"}
                 onValueChange={(v) => setLocalStatusBk(v === "ALL" ? "" : v)}
@@ -305,16 +307,16 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label>Status Bank</Label>
+              <Label>{t("transactions.common.statusBankLabel")}</Label>
               <Select
                 value={localStatusPx || "ALL"}
                 onValueChange={(v) => setLocalStatusPx(v === "ALL" ? "" : v)}
               >
                 <SelectTrigger className="mt-1">
-                  <SelectValue placeholder="Status Bank" />
+                  <SelectValue placeholder={t("transactions.common.statusBankLabel")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ALL">Status Bank</SelectItem>
+                  <SelectItem value="ALL">{t("transactions.common.allOption")}</SelectItem>
                   <SelectItem value="NEW">NEW</SelectItem>
                   <SelectItem value="PROCESSING">PROCESSING</SelectItem>
                   <SelectItem value="CONFIRMED">CONFIRMED</SelectItem>
@@ -326,7 +328,7 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="min_amount">Valor mínimo (ex: 9.99)</Label>
+              <Label htmlFor="min_amount">{t("transactions.common.minAmount")}</Label>
               <input
                 id="min_amount"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -336,7 +338,7 @@ export function PixOutFilters(props: PixOutFiltersProps) {
               />
             </div>
             <div className="mt-2">
-              <Label htmlFor="max_amount">Valor máximo (ex: 9.99)</Label>
+              <Label htmlFor="max_amount">{t("transactions.common.maxAmount")}</Label>
               <input
                 id="max_amount"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -347,7 +349,7 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             </div>
 
             <div className="flex flex-col mt-2">
-              <Label>Data início</Label>
+              <Label>{t("transactions.common.dateStart")}</Label>
               <Popover
                 open={openAfterCalendar}
                 onOpenChange={setOpenAfterCalendar}
@@ -360,7 +362,7 @@ export function PixOutFilters(props: PixOutFiltersProps) {
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {localCreatedAfter
                       ? localCreatedAfter.toLocaleDateString()
-                      : "Selecionar"}
+                      : t("common.actions.selectDate")}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent
@@ -382,7 +384,7 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             </div>
 
             <div className="flex flex-col mt-2">
-              <Label>Data fim</Label>
+              <Label>{t("transactions.common.dateEnd")}</Label>
               <Popover
                 open={openBeforeCalendar}
                 onOpenChange={setOpenBeforeCalendar}
@@ -395,7 +397,7 @@ export function PixOutFilters(props: PixOutFiltersProps) {
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {localCreatedBefore
                       ? localCreatedBefore.toLocaleDateString()
-                      : "Selecionar"}
+                      : t("common.actions.selectDate")}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent
@@ -419,9 +421,9 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             <DrawerFooter className="col-span-full">
               <div className="flex items-center justify-end gap-2">
                 <Button variant="ghost" onClick={clearAll}>
-                  <X size={16} className="mr-1" /> Limpar
+                  <X size={16} className="mr-1" /> {t("common.actions.clear")}
                 </Button>
-                <Button onClick={apply}>Aplicar</Button>
+                <Button onClick={apply}>{t("common.actions.apply")}</Button>
               </div>
             </DrawerFooter>
           </div>

@@ -25,8 +25,10 @@ import {
 import { getColorRGBA, poColors } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { useI18n } from "@/i18n";
 
 export default function ListPixOut() {
+  const { t } = useI18n();
   const { page: savedPage, limit: savedLimit } = getPaginationSettings(
     "transactions-pix-out"
   );
@@ -76,7 +78,7 @@ export default function ListPixOut() {
     <>
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
-          Transações PIX OUT
+          {t("transactions.pixOut.title")}
         </CardTitle>
         <PixOutFilters
           txid={filters.txid}
@@ -91,7 +93,7 @@ export default function ListPixOut() {
           max_amount={filters.max_amount}
           created_after={filters.created_after}
           created_before={filters.created_before}
-          setValues={(next) => setFilters((prev) => ({ ...prev, ...next }))}
+          setValues={(next: Partial<PixOutFiltersValues>) => setFilters((prev: PixOutFiltersValues) => ({ ...prev, ...next }))}
           setPage={setPage}
         />
 
@@ -250,31 +252,27 @@ export default function ListPixOut() {
                             className="overflow-hidden p-4 text-sm"
                           >
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <Info label="ID" value={tx.id} />
-                              <Info
-                                label="End To End"
-                                value={tx.end2end ?? "-"}
-                              />
-                              <Info
-                                label="Documento Remetente"
-                                value={tx.sender_document ?? "-"}
-                              />
-                              <Info
-                                label="Valor (BRL)"
-                                value={tx.amount_brl ?? "-"}
-                              />
-                              <Info
-                                label="Data da Operação"
-                                value={tx.date_op ?? "-"}
-                              />
-                              <Info
-                                label="Documento Recebedor"
-                                value={tx.receiver_document ?? "-"}
-                              />
-                              <Info
-                                label="Chave Pix"
-                                value={tx.pixKey ?? "-"}
-                              />
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixOut.details.id")}</strong>} value={tx.id} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixOut.details.end2end")}</strong>} value={tx.end2end ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixOut.details.senderDocument")}</strong>} value={tx.sender_document ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixOut.details.amountBrl")}</strong>} value={tx.amount_brl ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixOut.details.dateOp")}</strong>} value={tx.date_op ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixOut.details.receiverDocument")}</strong>} value={tx.receiver_document ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixOut.details.pixKey")}</strong>} value={tx.pixKey ?? "-"} />
+                              </div>
                             </div>
                           </motion.div>
                         </TableCell>

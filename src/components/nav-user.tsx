@@ -20,10 +20,13 @@ import { getInitials } from "@/lib/formatters";
 import { ToggleThemeButton } from "./toggle-button-theme";
 import { useAuthStore } from "@/store/auth";
 import { useNavigate } from "react-router";
+import { LanguageMenu } from "@/components/i18n/LanguageMenu";
+import { useI18n } from "@/i18n";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { logout, user } = useAuthStore();
+  const { t } = useI18n();
 
   const navigate = useNavigate();
 
@@ -78,18 +81,19 @@ export function NavUser() {
               <DropdownMenuItem>
                 <ToggleThemeButton />
               </DropdownMenuItem>
+              <LanguageMenu />
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Conta
+                {t("navUser.account")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
-              Sair
+              {t("navUser.logout")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

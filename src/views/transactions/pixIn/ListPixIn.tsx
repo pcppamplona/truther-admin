@@ -21,12 +21,14 @@ import {
   formatPixInFilterLabel,
   PixInFilters,
   PixInFiltersValues,
-} from "../components/PixInFilters";
+} from "../components/PixInFilters.tsx";
+import { useI18n } from "@/i18n";
 import { getColorRGBA, poColors } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 
 export default function ListPixIn() {
+  const { t } = useI18n();
   const { page: savedPage, limit: savedLimit } = getPaginationSettings(
     "transactions-pix-in"
   );
@@ -78,7 +80,7 @@ export default function ListPixIn() {
     <>
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
-          Transações PIX IN
+          {t("transactions.pixIn.title")}
         </CardTitle>
         <PixInFilters
           txid={filters.txid}
@@ -157,14 +159,14 @@ export default function ListPixIn() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell>TXID</TableCell>
-              <TableCell>Status Bank</TableCell>
-              <TableCell>Status Blockchain</TableCell>
-              <TableCell>Wallet</TableCell>
-              <TableCell>Nome</TableCell>
-              <TableCell>Nome Pagador</TableCell>
-              <TableCell>Criado Em</TableCell>
-              <TableCell>Token</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.txid")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.wallet")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.name")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.payerName")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.statusBank")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.statusBlockchain")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.createdAt")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.token")}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHeader>
@@ -252,40 +254,36 @@ export default function ListPixIn() {
                             className="overflow-hidden p-4 text-sm"
                           >
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <Info label="ID" value={tx.id} />
-                              <Info
-                                label="Wallet ID"
-                                value={tx.wallet_id ?? "-"}
-                              />
-                              <Info
-                                label="Documento Destinatário"
-                                value={tx.receive_doc ?? "-"}
-                              />
-                              <Info
-                                label="Chave de Destino"
-                                value={tx.destinationKey ?? "-"}
-                              />
-                              <Info
-                                label="End To End"
-                                value={tx.end2end ?? "-"}
-                              />
-                              <Info
-                                label="Documento Pagador"
-                                value={tx.payer_document ?? "-"}
-                              />
-                              <Info label="Valor" value={tx.amount ?? "-"} />
-                              <Info
-                                label="Erro Blockchain"
-                                value={tx.msg_error_blockchain ?? "-"}
-                              />
-                              <Info
-                                label="Erro Banco"
-                                value={tx.msg_error_bank ?? "-"}
-                              />
-                              <Info
-                                label="Tipo de Entrada"
-                                value={tx.typeIn ?? "-"}
-                              />
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixIn.details.id")}</strong>} value={tx.id} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixIn.details.walletId")}</strong>} value={tx.wallet_id ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixIn.details.recipientDocument")}</strong>} value={tx.receive_doc ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixIn.details.destinationKey")}</strong>} value={tx.destinationKey ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixIn.details.end2end")}</strong>} value={tx.end2end ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixIn.details.payerDocument")}</strong>} value={tx.payer_document ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixIn.details.amount")}</strong>} value={tx.amount ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixIn.details.errorBlockchain")}</strong>} value={tx.msg_error_blockchain ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixIn.details.errorBank")}</strong>} value={tx.msg_error_bank ?? "-"} />
+                              </div>
+                              <div className="border-l-2 border-[#818181] p-2">
+                                <Info label={<strong>{t("transactions.pixIn.details.typeIn")}</strong>} value={tx.typeIn ?? "-"} />
+                              </div>
                             </div>
                           </motion.div>
                         </TableCell>

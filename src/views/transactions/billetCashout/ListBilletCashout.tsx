@@ -67,8 +67,8 @@ export default function ListBilletCashout() {
             <div className="flex-1">
               <BilletCashoutFilters
                 {...filters}
-                setValues={(next) =>
-                  setFilters((prev) => ({ ...prev, ...next }))
+                setValues={(next: Partial<BilletCashoutFiltersValues>) =>
+                  setFilters((prev: BilletCashoutFiltersValues) => ({ ...prev, ...next }))
                 }
                 setPage={setPage}
               />

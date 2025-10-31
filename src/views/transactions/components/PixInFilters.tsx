@@ -3,26 +3,11 @@ import { Calendar as CalendarIcon, Funnel, ListFilter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { poStatusBlockchain } from "@/interfaces/Transactions";
+import { useI18n } from "@/i18n";
 
 export interface PixInFiltersValues {
   txid: string;
@@ -74,6 +59,7 @@ export function formatPixInFilterLabel(key: string, value: any): string {
 }
 
 export function PixInFilters(props: PixInFiltersProps) {
+  const { t } = useI18n();
   const {
     txid,
     status_bank,
@@ -217,7 +203,7 @@ export function PixInFilters(props: PixInFiltersProps) {
           <div className="grid grid-cols-2 gap-4 p-4">
             <DrawerHeader className="col-span-full">
               <DrawerTitle className="flex flex-row items-center gap-2">
-                <ListFilter />Filtros PIX IN</DrawerTitle>
+                <ListFilter />{t("transactions.pixIn.filters.title")}</DrawerTitle>
             </DrawerHeader>
 
             <div className="mt-2">
@@ -232,7 +218,7 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="wallet">Wallet</Label>
+              <Label htmlFor="wallet">{t("transactions.common.walletLabel")}</Label>
               <input
                 id="wallet"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -243,40 +229,40 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="payer_document">Documento do pagador</Label>
+              <Label htmlFor="payer_document">{t("transactions.common.payerDocumentLabel")}</Label>
               <input
                 id="payer_document"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
-                placeholder="Somente números"
+                placeholder={t("transactions.common.numbersOnlyPlaceholder")}
                 value={localPayerDocument}
                 onChange={(e) => setLocalPayerDocument(e.target.value)}
               />
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="payer_name">Nome do pagador</Label>
+              <Label htmlFor="payer_name">{t("transactions.common.payerNameLabel")}</Label>
               <input
                 id="payer_name"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
-                placeholder="contém..."
+                placeholder={t("transactions.common.containsPlaceholder")}
                 value={localPayerName}
                 onChange={(e) => setLocalPayerName(e.target.value)}
               />
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="destinationKey">Destination Key</Label>
+              <Label htmlFor="destinationKey">{t("transactions.common.destinationKeyLabel")}</Label>
               <input
                 id="destinationKey"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
-                placeholder="Chave PIX"
+                placeholder={t("transactions.common.pixKeyLabel")}
                 value={localDestinationKey}
                 onChange={(e) => setLocalDestinationKey(e.target.value)}
               />
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="end2end">EndToEnd</Label>
+              <Label htmlFor="end2end">{t("transactions.common.endToEndLabel")}</Label>
               <input
                 id="end2end"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -287,16 +273,16 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label>Status Banco</Label>
+              <Label>{t("transactions.common.statusBankLabel")}</Label>
               <Select
                 value={localStatusBank || "ALL"}
                 onValueChange={(v) => setLocalStatusBank(v === "ALL" ? "" : v)}
               >
                 <SelectTrigger className="mt-1 w-full">
-                  <SelectValue placeholder="Status Banco" />
+                  <SelectValue placeholder={t("transactions.common.statusBankLabel")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ALL">Status Banco</SelectItem>
+                  <SelectItem value="ALL">{t("transactions.common.allOption")}</SelectItem>
                   <SelectItem value="NEW">NEW</SelectItem>
                   <SelectItem value="CONFIRMED">CONFIRMED</SelectItem>
                   <SelectItem value="REFUNDED">REFUNDED</SelectItem>
@@ -307,7 +293,7 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label>Status Blockchain</Label>
+              <Label>{t("transactions.common.statusBlockchainLabel")}</Label>
               <Select
                 value={localStatusBlockchain || "ALL"}
                 onValueChange={(v) =>
@@ -329,7 +315,7 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="min_amount">Valor mínimo (ex: 9.99)</Label>
+              <Label htmlFor="min_amount">{t("transactions.common.minAmount")}</Label>
               <input
                 id="min_amount"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -339,7 +325,7 @@ export function PixInFilters(props: PixInFiltersProps) {
               />
             </div>
             <div className="mt-2">
-              <Label htmlFor="max_amount">Valor máximo (ex: 9.99)</Label>
+              <Label htmlFor="max_amount">{t("transactions.common.maxAmount")}</Label>
               <input
                 id="max_amount"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -350,7 +336,7 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="flex flex-col mt-2">
-              <Label>Data início</Label>
+              <Label>{t("transactions.common.dateStart")}</Label>
               <Popover
                 open={openAfterCalendar}
                 onOpenChange={setOpenAfterCalendar}
@@ -363,7 +349,7 @@ export function PixInFilters(props: PixInFiltersProps) {
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {localCreatedAfter
                       ? localCreatedAfter.toLocaleDateString()
-                      : "Selecionar"}
+                      : t("common.actions.selectDate")}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent
@@ -385,7 +371,7 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="flex flex-col mt-2">
-              <Label>Data fim</Label>
+              <Label>{t("transactions.common.dateEnd")}</Label>
               <Popover
                 open={openBeforeCalendar}
                 onOpenChange={setOpenBeforeCalendar}
@@ -398,7 +384,7 @@ export function PixInFilters(props: PixInFiltersProps) {
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {localCreatedBefore
                       ? localCreatedBefore.toLocaleDateString()
-                      : "Selecionar"}
+                      : t("common.actions.selectDate")}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent
@@ -420,7 +406,7 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label>Tipo</Label>
+              <Label>{t("transactions.common.typeLabel")}</Label>
               <Select
                 value={localTypeIn || "ALL"}
                 onValueChange={(v) => setLocalTypeIn(v === "ALL" ? "" : v)}
