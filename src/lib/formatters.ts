@@ -51,7 +51,11 @@ export function dateFormat(dateStr: string) {
 
 export function timeFormat(dateStr: string) {
   const date = new Date(dateStr);
-  return `${String(date.getHours()).padStart(2, "0")}h${String(
-    date.getMinutes(),
-  ).padStart(2, "0")}`;
+
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+
+  return `${hours}h ${minutes}m ${seconds}s`;
 }
+

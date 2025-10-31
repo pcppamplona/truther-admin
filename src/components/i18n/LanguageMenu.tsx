@@ -3,8 +3,8 @@ import { Languages } from "lucide-react";
 import { useI18n, LocaleKey } from "@/i18n";
 import {
   DropdownMenuSub,
-  DropdownMenuSubContent,
   DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
@@ -14,12 +14,20 @@ export const LanguageMenu: React.FC = () => {
 
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger>
-        <Languages />
-        {t("common.language")}
+      <DropdownMenuSubTrigger
+        className="flex items-center justify-between w-full px-2 py-1.5 text-sm cursor-pointer"
+      >
+        <div className="flex items-center gap-2">
+          <Languages />
+          <span>{t("common.language")}</span>
+        </div>
       </DropdownMenuSubTrigger>
-      <DropdownMenuSubContent className="min-w-40">
-        <DropdownMenuRadioGroup value={lang} onValueChange={(v) => setLang(v as LocaleKey)}>
+
+      <DropdownMenuSubContent className="w-40">
+        <DropdownMenuRadioGroup
+          value={lang}
+          onValueChange={(v) => setLang(v as LocaleKey)}
+        >
           <DropdownMenuRadioItem value="en">English</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="pt">Português</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="es">Español</DropdownMenuRadioItem>

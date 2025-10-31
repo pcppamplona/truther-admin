@@ -24,7 +24,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useUsers } from "@/services/users/useUsers";
-import { dateFormat } from "@/lib/formatters";
 import { RenderPagination } from "@/components/RenderPagination";
 import { getPaginationSettings, setPaginationSettings } from "@/lib/paginationStorage";
 import { useEffect, useState } from "react";
@@ -47,7 +46,7 @@ export default function ListClients() {
     <>
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
-          Todos os Clientes
+          Todos os Usuários
         </CardTitle>
 
         <div className="flex items-center justify-between gap-4">
@@ -124,12 +123,11 @@ export default function ListClients() {
                 Nome
               </TableCell>
               <TableCell>E-mail</TableCell>
-              <TableCell>Data Criação</TableCell>
-              <TableCell>Role</TableCell>
               <TableCell>uuid</TableCell>
-              <TableCell>Remover</TableCell>
+              <TableCell>Role</TableCell>
+              <TableCell></TableCell>
 
-              <TableCell>Editar</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -145,7 +143,7 @@ export default function ListClients() {
                     <div className="flex items-center gap-3">
                       <span
                         className={`w-2.5 h-2.5 rounded-full ${
-                          user.active ? "bg-[#00E588]" : "bg-[#EA6565]"
+                          user.active ? "bg-primary" : "bg-destructive"
                         }`}
                       />
                       {user.id}
@@ -154,9 +152,9 @@ export default function ListClients() {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.username}</TableCell>
 
-                  <TableCell>{dateFormat(user.createdAt)}</TableCell>
-                  <TableCell>{user.typeAuth}</TableCell>
+                
                   <TableCell>{user.uuid}</TableCell>
+                  <TableCell>{user.role_id}</TableCell>
                   <TableCell>
                     <Button className="bg-destructive text-background">
                       <Trash />
