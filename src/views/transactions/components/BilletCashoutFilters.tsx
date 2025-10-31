@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Funnel, Calendar as CalendarIcon, X } from "lucide-react";
+import { Funnel, Calendar as CalendarIcon, X, ListFilter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
@@ -23,6 +23,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { BcStatusBillet } from "@/interfaces/Transactions";
 
 export interface BilletCashoutFiltersValues {
   orderId?: string;
@@ -74,6 +75,7 @@ export function formatFilterLabel(key: string, value: any): string {
   return `${map[key] ?? key}: ${value}`;
 }
 
+const statuses: BcStatusBillet[] = ["CONFIRMED", "DROP", "QUEUED", "REFUNDED"];
 
 export function BilletCashoutFilters(props: BilletCashoutFiltersProps) {
   const {
@@ -186,102 +188,120 @@ export function BilletCashoutFilters(props: BilletCashoutFiltersProps) {
         </DrawerTrigger>
         <DrawerContent
           ref={drawerRef}
-          className="p-4 data-[vaul-drawer-direction=right]:w-[700px] data-[vaul-drawer-direction=right]:max-w-[70vw] data-[vaul-drawer-direction=right]:sm:max-w-[70vw]"
+          className="p-4 data-[vaul-drawer-direction=right]:w-[500px] data-[vaul-drawer-direction=right]:max-w-[70vw] data-[vaul-drawer-direction=right]:sm:max-w-[70vw]"
         >
           <div className="grid grid-cols-2 gap-4 p-4">
             <DrawerHeader className="col-span-full">
-              <DrawerTitle>Filtros Billet Cashout</DrawerTitle>
+              <DrawerTitle className="flex flex-row items-center gap-2">
+                <ListFilter />
+                Filtros Billet Cashout
+              </DrawerTitle>
             </DrawerHeader>
 
-            <div>
+            <div className="mt-2">
               <Label htmlFor="orderId">ID do Pedido</Label>
               <input
                 id="orderId"
-                className="mt-1 w-full border rounded px-3 py-2 bg-transparent font-mono text-xs"
+                className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
                 placeholder="ID do pedido"
                 value={localOrderId}
                 onChange={(e) => setLocalOrderId(e.target.value)}
               />
             </div>
 
-            <div>
+            <div className="mt-2">
               <Label htmlFor="receiverName">Nome do beneficiário</Label>
               <input
                 id="receiverName"
-                className="mt-1 w-full border rounded px-3 py-2 bg-transparent"
+                className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
                 placeholder="contém..."
                 value={localReceiverName}
                 onChange={(e) => setLocalReceiverName(e.target.value)}
               />
             </div>
 
-            <div>
+            <div className="mt-2">
               <Label htmlFor="receiverDocument">
                 Documento do beneficiário
               </Label>
               <input
                 id="receiverDocument"
-                className="mt-1 w-full border rounded px-3 py-2 bg-transparent"
+                className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
                 placeholder="Somente números"
                 value={localReceiverDocument}
                 onChange={(e) => setLocalReceiverDocument(e.target.value)}
               />
             </div>
 
-            <div>
-              <Label>Status</Label>
-              <Select
-                value={localStatus || "ALL"}
-                onValueChange={(v) => setLocalStatus(v === "ALL" ? "" : v)}
-              >
-                <SelectTrigger className="mt-1">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ALL">Todos</SelectItem>
-                  <SelectItem value="NEW">NEW</SelectItem>
-                  <SelectItem value="PROCESSING">PROCESSING</SelectItem>
-                  <SelectItem value="CONFIRMED">CONFIRMED</SelectItem>
-                  <SelectItem value="CANCEL">CANCEL</SelectItem>
-                  <SelectItem value="FAILED">FAILED</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="banksId">Banco</Label>
-              <input
-                id="banksId"
-                className="mt-1 w-full border rounded px-3 py-2 bg-transparent"
-                placeholder="ID ou nome do banco"
-                value={localBanksId}
-                onChange={(e) => setLocalBanksId(e.target.value)}
-              />
-            </div>
-
-            <div>
+            <div className="mt-2">
               <Label htmlFor="min_amount">Valor mínimo</Label>
               <input
                 id="min_amount"
-                className="mt-1 w-full border rounded px-3 py-2 bg-transparent"
+                className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
                 placeholder="9.99"
                 value={localMinAmount}
                 onChange={(e) => setLocalMinAmount(e.target.value)}
               />
             </div>
 
-            <div>
+            <div className="mt-2">
+              <Label htmlFor="banksId">Banco</Label>
+              <input
+                id="banksId"
+                className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
+                placeholder="ID ou nome do banco"
+                value={localBanksId}
+                onChange={(e) => setLocalBanksId(e.target.value)}
+              />
+            </div>
+
+            <div className="mt-2">
               <Label htmlFor="max_amount">Valor máximo</Label>
               <input
                 id="max_amount"
-                className="mt-1 w-full border rounded px-3 py-2 bg-transparent"
+                className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
                 placeholder="9.99"
                 value={localMaxAmount}
                 onChange={(e) => setLocalMaxAmount(e.target.value)}
               />
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col mt-2">
+              <Label>Data fim</Label>
+              <Popover
+                open={openBeforeCalendar}
+                onOpenChange={setOpenBeforeCalendar}
+              >
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={"justify-start text-left font-normal mt-1"}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {localCreatedBefore
+                      ? localCreatedBefore.toLocaleDateString()
+                      : "Selecionar"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  container={drawerRef.current}
+                  className="w-auto p-0"
+                  align="start"
+                >
+                  <Calendar
+                    mode="single"
+                    selected={localCreatedBefore}
+                    onSelect={(date) => {
+                      setLocalCreatedBefore(date ?? undefined);
+                      setOpenBeforeCalendar(false);
+                    }}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="flex flex-col mt-2">
               <Label>Data início</Label>
               <Popover
                 open={openAfterCalendar}
@@ -316,39 +336,24 @@ export function BilletCashoutFilters(props: BilletCashoutFiltersProps) {
               </Popover>
             </div>
 
-            <div className="flex flex-col">
-              <Label>Data fim</Label>
-              <Popover
-                open={openBeforeCalendar}
-                onOpenChange={setOpenBeforeCalendar}
+            <div className="mt-2">
+              <Label>Status</Label>
+              <Select
+                value={localStatus || "ALL"}
+                onValueChange={(v) => setLocalStatus(v === "ALL" ? "" : v)}
               >
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={"justify-start text-left font-normal mt-1"}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {localCreatedBefore
-                      ? localCreatedBefore.toLocaleDateString()
-                      : "Selecionar"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent
-                  container={drawerRef.current}
-                  className="w-auto p-0"
-                  align="start"
-                >
-                  <Calendar
-                    mode="single"
-                    selected={localCreatedBefore}
-                    onSelect={(date) => {
-                      setLocalCreatedBefore(date ?? undefined);
-                      setOpenBeforeCalendar(false);
-                    }}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+                <SelectTrigger className="mt-1 w-full">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ALL">Todos</SelectItem>
+                  {statuses.map((s) => (
+                    <SelectItem key={s} value={s}>
+                      {s}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <DrawerFooter className="col-span-full">

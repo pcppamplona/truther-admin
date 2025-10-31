@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 import { PaginateData } from "@/interfaces/PaginateData";
-import { BilletCashoutQueryFilters, BilletCashoutTransaction, PixInQueryFilters, PixInTransaction, PixOutQueryFilters, PixOutTransaction } from "@/interfaces/Transactions";
+import { BilletCashoutQueryFilters, BilletCashoutTransaction, BridgeQueryFilters, BridgeTransaction, PixInQueryFilters, PixInTransaction, PixOutQueryFilters, PixOutTransaction } from "@/interfaces/Transactions";
 
 export const usePixOutTransactions = (
   page: number,
@@ -150,6 +150,46 @@ export const useBilletCashoutTransactions = (
       const { data } = await api.get<PaginateData<BilletCashoutTransaction>>(
         `/transactions/billet-cashout?${params.toString()}`
       );
+      return data;
+    },
+    refetchOnWindowFocus: false,
+  });
+};
+
+
+export const useBridgeTransactions = (
+  page: number,
+  limit: number,
+  filters: BridgeQueryFilters = {}
+) => {
+  return useQuery<PaginateData<BridgeTransaction>>({
+    queryKey: [
+      "transactions",
+      "bridges",
+      page,
+      limit,
+      filters.user_id ?? "",
+      filters.wallet_id ?? "",
+      filters.status ?? "",
+      filters.created_after ?? "",
+      filters.created_before ?? "",
+    ],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+      });
+
+      if (filters.user_id) params.append("user_id", String(filters.user_id));
+      if (filters.wallet_id) params.append("wallet_id", String(filters.wallet_id));
+      if (filters.status) params.append("status", filters.status);
+      if (filters.created_after) params.append("created_after", filters.created_after);
+      if (filters.created_before) params.append("created_before", filters.created_before);
+
+      const { data } = await api.get<PaginateData<BridgeTransaction>>(
+        `/transactions/bridges?${params.toString()}`
+      );
+
       return data;
     },
     refetchOnWindowFocus: false,
