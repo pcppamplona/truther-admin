@@ -155,15 +155,14 @@ export default function ListPixOut() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell>TXID</TableCell>
-              <TableCell>Status Bank</TableCell>
-              <TableCell>Status Blockchain</TableCell>
-              <TableCell>Remetente</TableCell>
-              <TableCell>Nome Remetente</TableCell>
-              <TableCell>Nome Recebedor</TableCell>
-
-              <TableCell>Criado Em</TableCell>
-              <TableCell>Token</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.txid")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.sender")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.senderName")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.receiverName")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.statusBank")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.statusBlockchain")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.createdAt")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.token")}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHeader>
@@ -252,27 +251,13 @@ export default function ListPixOut() {
                             className="overflow-hidden p-4 text-sm"
                           >
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>{t("transactions.pixOut.details.id")}</strong>} value={tx.id} />
-                              </div>
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>{t("transactions.pixOut.details.end2end")}</strong>} value={tx.end2end ?? "-"} />
-                              </div>
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>{t("transactions.pixOut.details.senderDocument")}</strong>} value={tx.sender_document ?? "-"} />
-                              </div>
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>{t("transactions.pixOut.details.amountBrl")}</strong>} value={tx.amount_brl ?? "-"} />
-                              </div>
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>{t("transactions.pixOut.details.dateOp")}</strong>} value={tx.date_op ?? "-"} />
-                              </div>
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>{t("transactions.pixOut.details.receiverDocument")}</strong>} value={tx.receiver_document ?? "-"} />
-                              </div>
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info label={<strong>{t("transactions.pixOut.details.pixKey")}</strong>} value={tx.pixKey ?? "-"} />
-                              </div>
+                              <Info label={t("transactions.pixOut.details.id")} value={tx.id} />
+                              <Info label={t("transactions.pixOut.details.end2end")} value={tx.end2end ?? "-"} />
+                              <Info label={t("transactions.pixOut.details.senderDocument")} value={tx.sender_document ?? "-"} />
+                              <Info label={t("transactions.pixOut.details.amountBrl")} value={tx.amount_brl ?? "-"} />
+                              <Info label={t("transactions.pixOut.details.dateOp")} value={tx.date_op ?? "-"} />
+                              <Info label={t("transactions.pixOut.details.receiverDocument")} value={tx.receiver_document ?? "-"} />
+                              <Info label={t("transactions.pixOut.details.pixKey")} value={tx.pixKey ?? "-"} />
                             </div>
                           </motion.div>
                         </TableCell>
