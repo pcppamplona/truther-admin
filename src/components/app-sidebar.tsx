@@ -122,6 +122,7 @@ export function AppSidebar() {
           },
         ],
       },
+      
       {
         title: t("sidebar.users"),
         url: "users",
