@@ -37,8 +37,11 @@ import { RoleId, Status, TicketData } from "@/interfaces/TicketData";
 import { getColorRGBA, statusColors } from "@/lib/utils";
 import { ForbiddenCard } from "@/components/ForbiddenCard";
 import { CardEmpty } from "@/components/CardEmpty";
+import { useI18n } from "@/i18n";
+import { Label } from "@/components/ui/label";
 
 export default function ListOcurrences() {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const { page: savedPage, limit: savedLimit } =
     getPaginationSettings("tickets");
@@ -78,6 +81,7 @@ export default function ListOcurrences() {
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
           Ocorrências - Tickets
+          {t("transactions.pixIn.title")}
         </CardTitle>
 
         <div className="flex items-center justify-between gap-4">
@@ -96,54 +100,64 @@ export default function ListOcurrences() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Select
-              value={status}
-              onValueChange={(val) => setStatus(val as Status | undefined)}
-            >
-              <SelectTrigger className="w-[180px] py-4">
-                <SelectValue/>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="PENDENTE">PENDENTE</SelectItem>
-                <SelectItem value="PENDENTE EXPIRADO">PENDENTE EXPIRADO</SelectItem>
-                <SelectItem value="EM ANDAMENTO">EM ANDAMENTO</SelectItem>
-                <SelectItem value="EM ANDAMENTO EXPIRADO">EM ANDAMENTO EXPIRADO</SelectItem>
-                <SelectItem value="FINALIZADO">FINALIZADO</SelectItem>
-                <SelectItem value="FINALIZADO EXPIRADO">FINALIZADO EXPIRADO</SelectItem>
-                <SelectItem value="AGUARDANDO RESPOSTA DO CLIENTE">
-                  AGUARDANDO RESPOSTA DO CLIENTE
-                </SelectItem>
-                <SelectItem value={undefined as any}>Todos</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={filter} onValueChange={setFilter}>
-              <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Todas" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Todas">Todas</SelectItem>
-                <SelectItem value="Meus Tickets">Meus Tickets</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select
-              value={assignedGroup?.toString() ?? ""}
-              onValueChange={(val) =>
-                setAssignedGroup(val ? Number(val) : undefined)
-              }
-            >
-              <SelectTrigger className="w-[100px]">
-                <SelectValue placeholder="Grupo" />
-              </SelectTrigger>
-              <SelectContent>
-                {RoleId.map((g) => (
-                  <SelectItem key={g.id} value={g.id.toString()}>
-                    {g.name}
+            <div>
+              <Label className="text-xs">Status</Label>
+              <Select
+                value={status ?? "ALL"}
+                onValueChange={(val) => setStatus(val === "ALL" ? undefined : (val as Status))}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="PENDENTE">PENDENTE</SelectItem>
+                  <SelectItem value="PENDENTE EXPIRADO">PENDENTE EXPIRADO</SelectItem>
+                  <SelectItem value="EM ANDAMENTO">EM ANDAMENTO</SelectItem>
+                  <SelectItem value="EM ANDAMENTO EXPIRADO">EM ANDAMENTO EXPIRADO</SelectItem>
+                  <SelectItem value="FINALIZADO">FINALIZADO</SelectItem>
+                  <SelectItem value="FINALIZADO EXPIRADO">FINALIZADO EXPIRADO</SelectItem>
+                  <SelectItem value="AGUARDANDO RESPOSTA DO CLIENTE">
+                    AGUARDANDO RESPOSTA DO CLIENTE
                   </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                  <SelectItem value="ALL">Todos</SelectItem>
+                </SelectContent>
+              </Select>
+
+            </div>
+
+            <div>
+              <Label className="text-xs">Assigned</Label>
+              <Select value={filter} onValueChange={setFilter}>
+                <SelectTrigger className="w-[150px]">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Todas">Todas</SelectItem>
+                  <SelectItem value="Meus Tickets">Meus Tickets</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label className="text-xs">Grupo</Label>
+              <Select
+                value={assignedGroup?.toString() ?? ""}
+                onValueChange={(val) =>
+                  setAssignedGroup(val ? Number(val) : undefined)
+                }
+              >
+                <SelectTrigger className="w-[100px]">
+                  <SelectValue placeholder="Grupo" />
+                </SelectTrigger>
+                <SelectContent>
+                  {RoleId.map((g) => (
+                    <SelectItem key={g.id} value={g.id.toString()}>
+                      {g.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
             <TooltipProvider>
               <Tooltip>
