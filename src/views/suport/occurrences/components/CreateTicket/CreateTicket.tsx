@@ -45,7 +45,7 @@ export function CreateTicket() {
     const payload: TicketTyped = {
       created_by: user.id,
       client_id: ticketData.client_id ?? null,
-      assigned_group: ticketData.assigned_group ?? null,
+      assigned_role: ticketData.assigned_role ?? null,
       assigned_user: ticketData.assigned_user ?? null,
       reason_id: ticketData.reason_id,
       status: "PENDENTE",
