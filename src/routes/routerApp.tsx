@@ -23,6 +23,7 @@ import SendGas from "@/views/transactions/sendGas";
 import Decode from "@/views/transactions/decode";
 import PixOutPage from "@/views/transactions/pixOut";
 import BilletCashout from "@/views/transactions/billetCashout";
+import Bridges from "@/views/transactions/bridges";
 
 export default function RoutesApp() {
   return (
@@ -51,6 +52,7 @@ export default function RoutesApp() {
       <Route path="/transactions/pix-in" element={<PixInPage />} />
       <Route path="/transactions/pix-out" element={<PixOutPage />} />
       <Route path="/transactions/billet-cashout" element={<BilletCashout />} />
+      <Route path="/transactions/bridges" element={<Bridges />} />
       <Route path="/transactions/sendgas" element={<SendGas />} />
       <Route path="/transactions/decode" element={<Decode />} />
 

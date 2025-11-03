@@ -21,6 +21,8 @@ import { CardEmpty } from "@/components/CardEmpty";
 import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { bcStatusBilletColors, getColorRGBA } from "@/lib/utils";
+import { dateFormat, timeFormat } from "@/lib/formatters";
 
 export default function ListBilletCashout() {
   const { page: savedPage, limit: savedLimit } = getPaginationSettings(
@@ -71,11 +73,10 @@ export default function ListBilletCashout() {
                 setPage={setPage}
               />
 
-              {/* Badges com filtros ativos */}
               {Object.values(filters).some(
                 (v) => v !== "" && v !== undefined
               ) && (
-                <div className="mt-4">
+                <div>
                   <Label className="mb-2 block text-sm font-medium text-muted-foreground">
                     Filtros aplicados:
                   </Label>
@@ -142,7 +143,8 @@ export default function ListBilletCashout() {
                 <TableHead>Valor</TableHead>
                 <TableHead>Banco</TableHead>
                 <TableHead>Order ID</TableHead>
-                <TableHead>Criado em</TableHead>
+                <TableHead>Data</TableHead>
+                <TableHead>Hora</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -151,7 +153,7 @@ export default function ListBilletCashout() {
                 <SkeletonTable />
               ) : data && data.data.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="h-64">
+                  <TableCell colSpan={9} className="h-64">
                     <CardEmpty
                       title="Nenhuma transação encontrada"
                       subtitle="Não foi possível encontrar nenhuma transação. Tente ajustar os filtros ou criar uma nova."
@@ -162,20 +164,39 @@ export default function ListBilletCashout() {
                 data?.data.map((tx) => (
                   <TableRow key={tx.id}>
                     <TableCell>{tx.id}</TableCell>
-                    <TableCell className="font-medium">{tx.status}</TableCell>
-                    <TableCell>{tx.receiverName}</TableCell>
-                    <TableCell>{tx.receiverDocument}</TableCell>
+                    <TableCell>
+                      <div
+                        className="px-3 py-2 rounded-lg text-xs font-semibold uppercase"
+                        style={{
+                          backgroundColor: getColorRGBA(
+                            tx.status,
+                            bcStatusBilletColors,
+                            0.1
+                          ),
+                          color: getColorRGBA(
+                            tx.status,
+                            bcStatusBilletColors,
+                            0.9
+                          ),
+                          width: "fit-content",
+                        }}
+                      >
+                        {tx.status}
+                      </div>
+                    </TableCell>
+                    <TableCell>{tx.receiverName ?? "-"}</TableCell>
+                    <TableCell>{tx.receiverDocument ?? "-"}</TableCell>
                     <TableCell>
                       {tx.amount.toLocaleString("pt-BR", {
                         style: "currency",
                         currency: "BRL",
                       })}
                     </TableCell>
-                    <TableCell>{tx.banksId}</TableCell>
-                    <TableCell>{tx.orderId}</TableCell>
-                    <TableCell>
-                      {new Date(tx.createdAt).toLocaleString("pt-BR")}
-                    </TableCell>
+                    <TableCell>{tx.banksId ?? "-"}</TableCell>
+                    <TableCell>{tx.orderId ?? "-"}</TableCell>
+
+                    <TableCell>{dateFormat(tx.createdAt)}</TableCell>
+                    <TableCell>{timeFormat(tx.createdAt)}</TableCell>
                   </TableRow>
                 ))
               )}

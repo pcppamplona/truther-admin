@@ -109,6 +109,10 @@ export function AppSidebar() {
             url: "transactions/billet-cashout",
           },
           {
+            title: "BRIDGES",
+            url: "transactions/bridges",
+          },
+          {
             title: "Envio de GAS",
             url: "transactions/sendgas",
           },
@@ -118,6 +122,7 @@ export function AppSidebar() {
           },
         ],
       },
+      
       {
         title: t("sidebar.users"),
         url: "users",
