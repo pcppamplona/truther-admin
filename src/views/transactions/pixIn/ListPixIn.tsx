@@ -26,6 +26,7 @@ import { useI18n } from "@/i18n";
 import { getColorRGBA, poColors } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { CardEmpty } from "@/components/CardEmpty";
 
 export default function ListPixIn() {
   const { t } = useI18n();
@@ -103,7 +104,7 @@ export default function ListPixIn() {
         {Object.values(filters).some((v) => v !== "" && v !== undefined) && (
           <div>
             <Label className="mb-2 block text-sm font-medium text-muted-foreground">
-              Filtros aplicados:
+              {t("transactions.common.appliedFilters")}
             </Label>
 
             <div className="flex flex-wrap gap-2">
@@ -148,7 +149,7 @@ export default function ListPixIn() {
                   })
                 }
               >
-                Limpar tudo
+                {t("transactions.common.clearAll")}
               </Badge>
             </div>
           </div>
@@ -173,6 +174,15 @@ export default function ListPixIn() {
           <TableBody>
             {isLoading ? (
               <SkeletonTable />
+            ) : data && data.data && data.data.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={9} className="h-64">
+                  <CardEmpty
+                    title={t("transactions.common.emptyState.title")}
+                    subtitle={t("transactions.common.emptyState.subtitle")}
+                  />
+                </TableCell>
+              </TableRow>
             ) : (
               data?.data?.map((tx) => (
                 <Fragment key={tx.id}>
