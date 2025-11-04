@@ -26,8 +26,10 @@ import { CardEmpty } from "@/components/CardEmpty";
 import { Info } from "@/components/info";
 import { dateFormat, timeFormat } from "@/lib/formatters";
 import { getColorRGBA, txStatusColors } from "@/lib/utils";
+import { useI18n } from "@/i18n";
 
 export default function ListBridges() {
+  const { t } = useI18n();
   const { page: savedPage, limit: savedLimit } = getPaginationSettings(
     "transactions-bridges"
   );
@@ -76,7 +78,7 @@ export default function ListBridges() {
         {Object.values(filters).some((v) => v !== "" && v !== undefined) && (
           <div>
             <Label className="mb-2 block text-sm font-medium text-muted-foreground">
-              Filtros aplicados:
+              {t("transactions.common.appliedFilters")}
             </Label>
 
             <div className="flex flex-wrap gap-2">
@@ -133,8 +135,8 @@ export default function ListBridges() {
                 <TableRow>
                   <TableCell colSpan={9} className="h-64">
                     <CardEmpty
-                      title="Nenhuma transação encontrada"
-                      subtitle="Tente ajustar os filtros ou criar uma nova."
+                      title={t("transactions.common.emptyState.title")}
+                      subtitle={t("transactions.common.emptyState.subtitle")}
                     />
                   </TableCell>
                 </TableRow>

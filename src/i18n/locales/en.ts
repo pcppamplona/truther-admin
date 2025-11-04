@@ -69,6 +69,12 @@ const en = {
       senderWalletLabel: "Sender wallet",
       receiverNameLabel: "Receiver name",
       receiverDocumentLabel: "Receiver document",
+      appliedFilters: "Applied filters:",
+      clearAll: "Clear all",
+      emptyState: {
+        title: "No transactions found",
+        subtitle: "Try adjusting the filters or create a new one.",
+      },
     },
     pixIn: {
       title: "PIX IN Transactions",
