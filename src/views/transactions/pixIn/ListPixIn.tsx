@@ -160,11 +160,11 @@ export default function ListPixIn() {
           <TableHeader>
             <TableRow>
               <TableCell>{t("transactions.pixIn.table.headers.txid")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.statusBank")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.statusBlockchain")}</TableCell>
               <TableCell>{t("transactions.pixIn.table.headers.wallet")}</TableCell>
               <TableCell>{t("transactions.pixIn.table.headers.name")}</TableCell>
               <TableCell>{t("transactions.pixIn.table.headers.payerName")}</TableCell>
-              <TableCell>{t("transactions.pixIn.table.headers.statusBank")}</TableCell>
-              <TableCell>{t("transactions.pixIn.table.headers.statusBlockchain")}</TableCell>
               <TableCell>{t("transactions.pixIn.table.headers.createdAt")}</TableCell>
               <TableCell>{t("transactions.pixIn.table.headers.token")}</TableCell>
               <TableCell></TableCell>
@@ -180,9 +180,7 @@ export default function ListPixIn() {
                     className="cursor-pointer hover:bg-input transition"
                     onClick={() => toggleExpand(tx.id)}
                   >
-                    <TableCell className="font-mono text-xs break-all">
-                      {tx.txid}
-                    </TableCell>
+                    <TableCell className="font-mono text-xs break-all"> {tx.txid}</TableCell>
                     <TableCell>{tx.status_bank ?? "-"}</TableCell>
                     <TableCell>
                       <div
@@ -205,12 +203,9 @@ export default function ListPixIn() {
                         {tx.status_blockchain}
                       </div>
                     </TableCell>
-                    <TableCell className="font-mono text-xs break-all">
-                      {tx.receive_wallet}
-                    </TableCell>
+                    <TableCell className="font-mono text-xs break-all">{tx.receive_wallet}</TableCell>
                     <TableCell>{tx.receive_name ?? "-"}</TableCell>
                     <TableCell>{tx.payer_name ?? "-"}</TableCell>
-
                     <TableCell>{tx.createdAt ?? "-"}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">

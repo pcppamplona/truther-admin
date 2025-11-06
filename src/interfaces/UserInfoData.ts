@@ -17,7 +17,7 @@ export interface UserInfoData {
   created_at: string;
   updated_at: string;
   house_number: string;
-  mothersName: string;
+  mothers_name: string;
   birthday: string;
   active: string;
   uuid: string;

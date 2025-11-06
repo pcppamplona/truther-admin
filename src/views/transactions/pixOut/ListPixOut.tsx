@@ -156,11 +156,11 @@ export default function ListPixOut() {
           <TableHeader>
             <TableRow>
               <TableCell>{t("transactions.pixOut.table.headers.txid")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.statusBank")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.statusBlockchain")}</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.sender")}</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.senderName")}</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.receiverName")}</TableCell>
-              <TableCell>{t("transactions.pixOut.table.headers.statusBank")}</TableCell>
-              <TableCell>{t("transactions.pixOut.table.headers.statusBlockchain")}</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.createdAt")}</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.token")}</TableCell>
               <TableCell></TableCell>
@@ -182,7 +182,7 @@ export default function ListPixOut() {
                     <TableCell>{tx.status_px ?? "-"}</TableCell>
                     <TableCell>
                       <div
-                        className="px-3 py-2 rounded-lg text-xs font-semibold uppercase"
+                        className="px-3 py-2 rounded-lg text-xs font-semibold uppercase text-center w-full"
                         style={{
                           backgroundColor: getColorRGBA(
                             tx.status_bk ?? "",

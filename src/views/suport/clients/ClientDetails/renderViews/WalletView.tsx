@@ -1,77 +1,83 @@
-import { useWalletDoc } from "@/services/wallets/useWallets";
-import { UserInfoData } from "@/interfaces/UserInfoData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPinHouse, PiggyBank, User, WalletCards } from "lucide-react";
-import { documentFormat, getFlagUrl, phoneFormat } from "@/lib/formatters";
-import { useEffect, useState } from "react";
-import { AclwalletData } from "@/interfaces/AclwalletData";
 import { Info } from "@/components/info";
 import { WalletSendGas } from "./components/walletSendGas";
+import { documentFormat, getFlagUrl, phoneFormat } from "@/lib/formatters";
+import { useWalletClientDocument } from "@/services/wallets/useWallets";
+import type { UserInfoData } from "@/interfaces/UserInfoData";
+import { CardEmpty } from "@/components/CardEmpty";
 
 export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
-  const { data: wallets = [] } = useWalletDoc(userinfo.document);
-
-  const [walletAddress, setWalletAddress] = useState<AclwalletData | null>(
-    null
+  const { data: walletAddress, isLoading } = useWalletClientDocument(
+    userinfo.document
   );
 
-  useEffect(() => {
-    if (wallets.length > 0) {
-      setWalletAddress(wallets[0]);
-    }
-  }, [wallets]);
+  if (isLoading) {
+    return <p>Carregando informações da carteira...</p>;
+  }
+
+  if (!walletAddress) {
+    return (
+      <CardEmpty
+        title="Nenhuma carteira encontrada"
+        subtitle="Não foi possível encontrar nenhuma carteira para este usuário."
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
-        <div className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex flex-row items-center gap-2">
-                <User />
-                Portador
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Info label="ID" value={walletAddress?.id} />
-              <Info label="uuid" value={walletAddress?.uuid} />
-              <Info
-                label="Documento"
-                value={documentFormat(walletAddress?.document)}
-              />
-              <Info
-                label="Telefone"
-                value={phoneFormat(walletAddress?.phone)}
-              />
-            </CardContent>
-          </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex flex-row items-center gap-2">
+              <User />
+              Portador
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Info label="ID" value={walletAddress.id} />
+            <Info label="UUID" value={walletAddress.uuid} />
+            <Info
+              label="Documento"
+              value={documentFormat(walletAddress.document)}
+            />
+            <Info label="Telefone" value={phoneFormat(walletAddress.phone)} />
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex flex-row items-center gap-2">
-                <MapPinHouse /> Endereço Portador
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Info label="CEP" value={walletAddress?.zipCode} />
-              <Info
-                label="Rua"
-                value={`${walletAddress?.address} - ${walletAddress?.number}`}
-              />
-              <Info label="País" value={walletAddress?.nacionality} />
+        {/* Endereço */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex flex-row items-center gap-2">
+              <MapPinHouse /> Endereço Portador
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Info label="CEP" value={walletAddress.zipCode} />
+            <Info
+              label="Rua"
+              value={`${walletAddress.address} - ${walletAddress.number}`}
+            />
 
-              <div className="flex items-center gap-2">
-                <img
-                  src={getFlagUrl(walletAddress?.nacionality ?? "")}
-                  alt={walletAddress?.nacionality}
-                  className="w-6 h-5 rounded-lg"
-                />
-                <strong>{walletAddress?.nacionality}</strong>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+            <div className="min-w-0">
+              <p className="text-sm text-muted-foreground">País</p>
 
+              {walletAddress.nacionality && (
+                <div className="flex items-center gap-2">
+                  <img
+                    src={getFlagUrl(walletAddress.nacionality)}
+                    alt={walletAddress.nacionality}
+                    className="w-6 h-5 rounded-lg"
+                  />
+                  <strong>{walletAddress.nacionality}</strong>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Carteiras */}
         <Card className="h-full">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -84,17 +90,17 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
               {
                 name: "Polygon",
                 img: "/polygon.png",
-                value: walletAddress?.wallet,
+                value: walletAddress.wallet ?? "-",
               },
               {
                 name: "Liquid",
                 img: "/liquid.png",
-                value: walletAddress?.liquidWallet ?? "Não aplicado",
+                value: walletAddress.liquidWallet ?? "-",
               },
               {
                 name: "Bitcoin",
                 img: "/bitcoin.png",
-                value: walletAddress?.btcWallet ?? "Não aplicado",
+                value: walletAddress.btcWallet ?? "-",
               },
             ].map((item) => (
               <div
@@ -109,11 +115,13 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold">{item.name}</h3>
                   <p className="text-xs">Endereço</p>
-                  <strong className="text-xs break-all">{item.value}</strong>
+                  <strong className="text-base   break-all">
+                    {item.value}
+                  </strong>
                 </div>
                 <WalletSendGas
-                  network={item?.name}
-                  userName={walletAddress?.name}
+                  network={item.name}
+                  userName={walletAddress.name}
                 />
               </div>
             ))}
@@ -129,21 +137,9 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
 
           <CardContent className="flex flex-row gap-4 justify-between">
             {[
-              {
-                name: "VRL",
-                img: "/vrl.png",
-                value: "$ 1200",
-              },
-              {
-                name: "TETHER",
-                img: "/usdt.png",
-                value: "$ 00.00",
-              },
-              {
-                name: "Bitcoin",
-                img: "/bitcoin.png",
-                value: "$ 00.00",
-              },
+              { name: "VRL", img: "/vrl.png", value: "$ 1200" },
+              { name: "TETHER", img: "/usdt.png", value: "$ 00.00" },
+              { name: "Bitcoin", img: "/bitcoin.png", value: "$ 00.00" },
             ].map((item) => (
               <div
                 key={item.name}

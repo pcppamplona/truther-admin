@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/table";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Download, Funnel, Search, Trash } from "lucide-react";
-import { TransactionsData } from "@/views/suport/clients/ClientDetails/renderViews/UserInfoView";
 import { dateFormat } from "@/lib/formatters";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { TransactionsData } from "..";
 
 export default function ListTransactions() {
   const data = TransactionsData;

@@ -19,25 +19,35 @@ import TicketReasonsFlow from "@/views/suport/occurrences/TicketReasonsFlow";
 import Users from "@/views/users";
 import Transactions from "@/views/transactions";
 import PixInPage from "@/views/transactions/pixIn";
-import SendGas from "@/views/transactions/sendGas";
-import Decode from "@/views/transactions/decode";
 import PixOutPage from "@/views/transactions/pixOut";
 import BilletCashout from "@/views/transactions/billetCashout";
 import Bridges from "@/views/transactions/bridges";
+import SendGas from "@/views/suport/sendGas";
+import Decode from "@/views/suport/decode";
 
 export default function RoutesApp() {
   return (
     <Routes>
       <Route index element={<Login />} />
+      {/* Dash */}
       <Route path="/dashboard" element={<Dashboard />} />
-      
+
+      {/* Suport */}
       <Route path="/suport" element={<Suport />} />
       <Route path="/clients" element={<Clients />} />
       <Route path="/clientDetails" element={<ClientDetails />} />
       <Route path="/ocurrences" element={<Ocurrences />} />
       <Route path="/ocurrenceDetails" element={<OcurrenceDetails />} />
       <Route path="/ticketReasons" element={<TicketReasonsFlow />} />
+      <Route path="/sendgas" element={<SendGas />} />
+      <Route path="/decode" element={<Decode />} />
 
+      {/* transactions */}
+      <Route path="/transactions" element={<Transactions />} />
+      <Route path="/transactions/pix-in" element={<PixInPage />} />
+      <Route path="/transactions/pix-out" element={<PixOutPage />} />
+      <Route path="/transactions/billet-cashout" element={<BilletCashout />} />
+      <Route path="/transactions/bridges" element={<Bridges />} />
 
       <Route path="/marketing" element={<Marketing />} />
       <Route path="/notifications" element={<Notifications />} />
@@ -47,14 +57,6 @@ export default function RoutesApp() {
       <Route path="/cashout" element={<Cashout />} />
 
       <Route path="/users" element={<Users />} />
-
-      <Route path="/transactions" element={<Transactions />} />
-      <Route path="/transactions/pix-in" element={<PixInPage />} />
-      <Route path="/transactions/pix-out" element={<PixOutPage />} />
-      <Route path="/transactions/billet-cashout" element={<BilletCashout />} />
-      <Route path="/transactions/bridges" element={<Bridges />} />
-      <Route path="/transactions/sendgas" element={<SendGas />} />
-      <Route path="/transactions/decode" element={<Decode />} />
 
       <Route path="/auditLog" element={<AuditLog />} />
     </Routes>

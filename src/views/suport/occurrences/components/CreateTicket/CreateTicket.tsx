@@ -5,12 +5,17 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useAuthStore } from "@/store/auth";
 import { useCreateTicket } from "@/services/Tickets/useTickets";
-
 import type { TicketTyped } from "@/interfaces/TicketData";
 import { StepCategory } from "./steps/StepCategory";
 import { StepClient } from "./steps/StepClient";
@@ -71,11 +76,21 @@ export function CreateTicket() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="w-14 h-12">
-          <Plus size={18} color="#fff" />
-        </Button>
-      </DialogTrigger>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DialogTrigger asChild>
+              <Button className="w-12 h-12 text-white">
+                <Plus size={18} />
+              </Button>
+            </DialogTrigger>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Enviar GAS</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      
       <DialogContent className="max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogDescription>Criar novo ticket</DialogDescription>
