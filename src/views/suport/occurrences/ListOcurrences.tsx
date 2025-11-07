@@ -1,4 +1,4 @@
-import { CardHeader, CardTitle } from "@/components/ui/card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableHeader,
@@ -37,11 +37,9 @@ import { RoleId, Status, TicketData } from "@/interfaces/TicketData";
 import { getColorRGBA, statusColors } from "@/lib/utils";
 import { ForbiddenCard } from "@/components/ForbiddenCard";
 import { CardEmpty } from "@/components/CardEmpty";
-import { useI18n } from "@/i18n";
 import { Label } from "@/components/ui/label";
 
 export default function ListOcurrences() {
-  const { t } = useI18n();
   const navigate = useNavigate();
   const { page: savedPage, limit: savedLimit } =
     getPaginationSettings("tickets");
@@ -69,7 +67,7 @@ export default function ListOcurrences() {
     sortOrder,
     onlyAssigned,
     assignedGroup,
-    status 
+    status
   );
 
   const handleRowClick = (ticket: TicketData) => {
@@ -77,12 +75,16 @@ export default function ListOcurrences() {
   };
 
   return (
-    <>
+    <div className="flex flex-col h-[calc(100vh-120px)]">
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
           Ocorrências - Tickets
-          {t("transactions.pixIn.title")}
         </CardTitle>
+
+        <CardDescription>
+          Veja todos os tickets disponíveis.Acompanhe os status, crie novos
+          <br />e organize suas tarefas.
+        </CardDescription>
 
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center border border-border rounded-lg px-3 py-3 w-full max-w-lg">
@@ -104,25 +106,32 @@ export default function ListOcurrences() {
               <Label className="text-xs">Status</Label>
               <Select
                 value={status ?? "ALL"}
-                onValueChange={(val) => setStatus(val === "ALL" ? undefined : (val as Status))}
+                onValueChange={(val) =>
+                  setStatus(val === "ALL" ? undefined : (val as Status))
+                }
               >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="PENDENTE">PENDENTE</SelectItem>
-                  <SelectItem value="PENDENTE EXPIRADO">PENDENTE EXPIRADO</SelectItem>
+                  <SelectItem value="PENDENTE EXPIRADO">
+                    PENDENTE EXPIRADO
+                  </SelectItem>
                   <SelectItem value="EM ANDAMENTO">EM ANDAMENTO</SelectItem>
-                  <SelectItem value="EM ANDAMENTO EXPIRADO">EM ANDAMENTO EXPIRADO</SelectItem>
+                  <SelectItem value="EM ANDAMENTO EXPIRADO">
+                    EM ANDAMENTO EXPIRADO
+                  </SelectItem>
                   <SelectItem value="FINALIZADO">FINALIZADO</SelectItem>
-                  <SelectItem value="FINALIZADO EXPIRADO">FINALIZADO EXPIRADO</SelectItem>
+                  <SelectItem value="FINALIZADO EXPIRADO">
+                    FINALIZADO EXPIRADO
+                  </SelectItem>
                   <SelectItem value="AGUARDANDO RESPOSTA DO CLIENTE">
                     AGUARDANDO RESPOSTA DO CLIENTE
                   </SelectItem>
                   <SelectItem value="ALL">Todos</SelectItem>
                 </SelectContent>
               </Select>
-
             </div>
 
             <div>
@@ -181,21 +190,14 @@ export default function ListOcurrences() {
                 </TooltipContent>
               </Tooltip>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <CreateTicket />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Criar novo Ticket</p>
-                </TooltipContent>
-              </Tooltip>
+              <CreateTicket />
             </TooltipProvider>
           </div>
         </div>
       </CardHeader>
 
       {!isError && (
-        <div className="w-full px-4 lg:px-6">
+        <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">
           <Table>
             <TableHeader>
               <TableRow>
@@ -276,7 +278,7 @@ export default function ListOcurrences() {
         </div>
       )}
       {!isError && (
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center items-center">
           <RenderPagination
             page={page}
             setPage={setPage}
@@ -290,6 +292,6 @@ export default function ListOcurrences() {
       {isError && error?.code === "PERMISSION_DENIED" && (
         <ForbiddenCard permission={error.requiredPermission} />
       )}
-    </>
+    </div>
   );
 }

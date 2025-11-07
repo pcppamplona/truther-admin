@@ -3,35 +3,6 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 import { PaginateData } from "@/interfaces/PaginateData";
 
-// export const useClients = (
-//   page: number,
-//   limit: number,
-//   search?: string,
-//   orderBy?: string,
-//   orderDirection?: "asc" | "desc"
-// ) => {
-//   return useQuery<PaginateData<ClientsData>>({
-//     queryKey: ["clients", page, limit, search, orderBy, orderDirection],
-//     queryFn: async () => {
-//       const params = new URLSearchParams({
-//         page: String(page),
-//         limit: String(limit),
-//       })
-//       if (search) params.append("search", search)
-//       if (orderBy) params.append("orderBy", orderBy)
-//       if (orderDirection) params.append("orderDirection", orderDirection)
-
-//       const { data } = await api.get<PaginateData<ClientsData>>(
-//         `/clients/paginated?${params.toString()}`
-//       )
-//       return data
-//     },
-//     placeholderData: keepPreviousData,
-//     staleTime: Number.POSITIVE_INFINITY,
-//   })
-// }
-
-
 export const useClients = (
   page: number,
   limit: number,

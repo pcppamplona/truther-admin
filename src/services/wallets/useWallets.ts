@@ -2,31 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 import { AclwalletData } from "@/interfaces/AclwalletData";
 
-export const useWallets = () => {
+export const useWalletClientDocument = (document: string) => {
   return useQuery({
-    queryKey: ["aclWallets "],
-    queryFn: async (): Promise<AclwalletData[]> => {
-      const response = await api.get("aclWallets ");
-      return await response.json<AclwalletData[]>();
+    queryKey: ["aclWallets", document],
+    queryFn: async (): Promise<AclwalletData> => {
+      const { data } = await api.get<AclwalletData>(`client/wallet/${document}`);
+      console.log("data:", data)
+      return data;
     },
+    enabled: !!document,
     staleTime: Number.POSITIVE_INFINITY,
     refetchOnMount: true,
-  });
-};
-
-
-export const getWalletDoc = async (document: string): Promise<AclwalletData[]> => {
-  const response = await api.get('aclWallets', {
-    searchParams: { document }
-  });
-  return await response.json();
-};
-
-export const useWalletDoc = (doc: string | undefined) => {
-  return useQuery({
-    queryKey: ['aclWallets-doc', doc],
-    queryFn: () => getWalletDoc(doc!),
-    enabled: !!doc,
-    staleTime: Infinity,
   });
 };

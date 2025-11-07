@@ -1,9 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-
-import { CircleUserRound, FileUser, Wallet, FileText } from "lucide-react";
-import { useClientById } from "@/services/clients/useClients"; // <- ajuste aqui
-import { useUserInfo } from "@/services/clients/useUserinfo";
+import { CircleUserRound, FileUser, Wallet, FileText, ArrowLeftRight } from "lucide-react";
+import { useClientById } from "@/services/clients/useClients";
 import { SidebarLayout } from "@/components/layouts/SidebarLayout";
 import UserInfo from "./renderViews/UserInfoView";
 import { KYCView } from "./renderViews/KYCView";
@@ -11,6 +9,8 @@ import { WalletView } from "./renderViews/WalletView";
 import { NFEView } from "./renderViews/NFEView";
 import { ClientsData } from "@/interfaces/ClientsData";
 import { UserInfoData } from "@/interfaces/UserInfoData";
+import { useUserInfoByUserId } from "@/services/clients/useUserinfo";
+import { UserTransactionsView } from "./renderViews/UserTransactionsView";
 
 export interface ClientInfoProps {
   client: ClientsData;
@@ -20,16 +20,22 @@ export interface ClientInfoProps {
 export default function ClientDetails() {
   const { state } = useLocation();
   const clientId = state?.clientId;
-
   const { data: client, isLoading: loadingClient } = useClientById(clientId);
-  const { data: userInfo } = useUserInfo(clientId);
 
-  const [view, setView] = useState<"Perfil" | "KYC" | "Carteiras" | "NFE">(
-    "Perfil"
-  );
+  const { data: userInfo } = useUserInfoByUserId(clientId)
+
+  const [view, setView] = useState<"Perfil" | "KYC" | "Carteiras" | "Transações" | "NFE">("Perfil");
 
   if (!clientId) return <div>Cliente não especificado.</div>;
   if (!client && !loadingClient) return <div>Cliente não encontrado.</div>;
+
+  const tabs = [
+    { name: "Perfil", icon: <CircleUserRound size={18} /> },
+    { name: "KYC", icon: <FileUser size={18} /> },
+    { name: "Carteiras", icon: <Wallet size={18} /> },
+    { name: "Transações", icon: <ArrowLeftRight size={18} /> },
+    { name: "NFE", icon: <FileText size={18} /> },
+  ];
 
   return (
     <SidebarLayout
@@ -44,20 +50,12 @@ export default function ClientDetails() {
       }
     >
       <div className="flex flex-col md:flex-row flex-wrap gap-2 w-full max-w-4xl border-b">
-        {["Perfil", "KYC", "Carteiras", "NFE"].map((tab) => {
-          const icon = {
-            Perfil: <CircleUserRound size={18} />,
-            KYC: <FileUser size={18} />,
-            Carteiras: <Wallet size={18} />,
-            NFE: <FileText size={18} />,
-          }[tab];
-
-          const isActive = view === tab;
-
+        {tabs.map(({ name, icon }) => {
+          const isActive = view === name;
           return (
             <button
-              key={tab}
-              onClick={() => setView(tab as typeof view)}
+              key={name}
+              onClick={() => setView(name as typeof view)}
               className={`flex items-center gap-2 px-4 py-3 text-sm border-b-3
                 ${
                   isActive
@@ -66,7 +64,7 @@ export default function ClientDetails() {
                 }`}
             >
               {icon}
-              {tab}
+              {name}
             </button>
           );
         })}
@@ -75,6 +73,7 @@ export default function ClientDetails() {
       {view === "Perfil" && client && (<UserInfo client={client} userInfo={userInfo} />)}
       {view === "KYC" && client && (<KYCView client={client} userInfo={userInfo} />)}
       {view === "Carteiras" && userInfo && <WalletView userinfo={userInfo} />}
+      {view === "Transações" && userInfo?.document && <UserTransactionsView document={userInfo.document} />}
       {view === "NFE" && client && <NFEView client={client} />}
     </SidebarLayout>
   );

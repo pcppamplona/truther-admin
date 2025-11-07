@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CardHeader, CardTitle } from "@/components/ui/card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -48,17 +48,21 @@ export default function ListAuditLog() {
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [selectedMethod, setSelectedMethod] = useState<methodType | "">("");
   const [selectedAction, setSelectedAction] = useState<ActionType | "">("");
-  const [createdBefore, setCreatedBefore] = useState<string | undefined>(undefined);
-  const [createdAfter, setCreatedAfter] = useState<string | undefined>(undefined);
+  const [createdBefore, setCreatedBefore] = useState<string | undefined>(
+    undefined
+  );
+  const [createdAfter, setCreatedAfter] = useState<string | undefined>(
+    undefined
+  );
 
   const { data, isLoading, isError, error } = useAuditLog(
-    page, 
-    limit, 
+    page,
+    limit,
     search,
     descriptionSearch,
     selectedMethod as methodType | "",
     selectedAction,
-    createdBefore, 
+    createdBefore,
     createdAfter
   );
 
@@ -67,11 +71,12 @@ export default function ListAuditLog() {
   };
 
   return (
-    <>
+    <div className="flex flex-col h-[calc(100vh-120px)]">
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
           {t("audit.title")}
         </CardTitle>
+        <CardDescription>{t("audit.description")}</CardDescription>
 
         <div className="flex items-center justify-end gap-4">
           <div className="flex items-center gap-2">
@@ -109,20 +114,20 @@ export default function ListAuditLog() {
       </CardHeader>
 
       {!isError && (
-          <div className="w-full px-4 lg:px-6">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableCell>{t("audit.table.headers.id")}</TableCell>
-                  <TableCell>{t("audit.table.headers.method")}</TableCell>
-                  <TableCell>{t("audit.table.headers.date")}</TableCell>
-                  <TableCell>{t("audit.table.headers.time")}</TableCell>
-                  <TableCell>{t("audit.table.headers.action")}</TableCell>
-                  <TableCell>{t("audit.table.headers.sender")}</TableCell>
-                  <TableCell>{t("audit.table.headers.target")}</TableCell>
-                  <TableCell></TableCell>
-                </TableRow>
-              </TableHeader>
+        <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableCell>{t("audit.table.headers.id")}</TableCell>
+                <TableCell>{t("audit.table.headers.method")}</TableCell>
+                <TableCell>{t("audit.table.headers.date")}</TableCell>
+                <TableCell>{t("audit.table.headers.time")}</TableCell>
+                <TableCell>{t("audit.table.headers.action")}</TableCell>
+                <TableCell>{t("audit.table.headers.sender")}</TableCell>
+                <TableCell>{t("audit.table.headers.target")}</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHeader>
 
             <TableBody>
               {isLoading ? (
@@ -137,7 +142,9 @@ export default function ListAuditLog() {
                     >
                       <TableCell>{audit.id}</TableCell>
                       <TableCell
-                        className={`font-semibold ${methodColors[audit.method]}`}
+                        className={`font-semibold ${
+                          methodColors[audit.method]
+                        }`}
                       >
                         {audit.method}
                       </TableCell>
@@ -173,67 +180,71 @@ export default function ListAuditLog() {
                       </TableCell>
                     </TableRow>
 
-                  <AnimatePresence>
-                    {expandedId === audit.id && (
-                      <TableRow className="bg-muted/30">
-                        <TableCell colSpan={8} className="p-0">
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="overflow-hidden p-4 text-sm"
-                          >
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info
-                                  label={
-                                    <span className="flex items-center gap-2">
-                                      <User2 size={18} />
-                                      <strong>{t("audit.details.id")}</strong>
-                                    </span>
-                                  }
-                                  value={audit.target_type + audit.target_id}
-                                />
-                              </div>
+                    <AnimatePresence>
+                      {expandedId === audit.id && (
+                        <TableRow className="bg-muted/30">
+                          <TableCell colSpan={8} className="p-0">
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="overflow-hidden p-4 text-sm"
+                            >
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="border-l-2 border-[#818181] p-2">
+                                  <Info
+                                    label={
+                                      <span className="flex items-center gap-2">
+                                        <User2 size={18} />
+                                        <strong>{t("audit.details.id")}</strong>
+                                      </span>
+                                    }
+                                    value={audit.target_type + audit.target_id}
+                                  />
+                                </div>
 
-                               <div className="border-l-2 border-[#818181] p-2">
-                                <Info
-                                  label={
-                                    <span className="flex items-center gap-2">
-                                      <Calendar1Icon size={18} />
-                                      <strong>{t("audit.details.date")}</strong>
-                                    </span>
-                                  }
-                                  value={audit.created_at}
-                                />
-                              </div>
+                                <div className="border-l-2 border-[#818181] p-2">
+                                  <Info
+                                    label={
+                                      <span className="flex items-center gap-2">
+                                        <Calendar1Icon size={18} />
+                                        <strong>
+                                          {t("audit.details.date")}
+                                        </strong>
+                                      </span>
+                                    }
+                                    value={audit.created_at}
+                                  />
+                                </div>
 
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info
-                                  label={
-                                    <span className="flex items-center gap-2">
-                                      <MessageSquareText size={18} />
-                                      <strong>{t("audit.details.message")}</strong>
-                                    </span>
-                                  }
-                                  value={audit.message}
-                                />
-                              </div>
+                                <div className="border-l-2 border-[#818181] p-2">
+                                  <Info
+                                    label={
+                                      <span className="flex items-center gap-2">
+                                        <MessageSquareText size={18} />
+                                        <strong>
+                                          {t("audit.details.message")}
+                                        </strong>
+                                      </span>
+                                    }
+                                    value={audit.message}
+                                  />
+                                </div>
 
-                              <div className="border-l-2 border-[#818181] p-2">
-                                <Info
-                                  label={
-                                    <span className="flex items-center gap-2">
-                                      <FileText size={18} />
-                                      <strong>{t("audit.details.description")}</strong>
-                                    </span>
-                                  }
-                                  value={audit.description}
-                                />
-                              </div>
-
-
+                                <div className="border-l-2 border-[#818181] p-2">
+                                  <Info
+                                    label={
+                                      <span className="flex items-center gap-2">
+                                        <FileText size={18} />
+                                        <strong>
+                                          {t("audit.details.description")}
+                                        </strong>
+                                      </span>
+                                    }
+                                    value={audit.description}
+                                  />
+                                </div>
                               </div>
                             </motion.div>
                           </TableCell>
@@ -249,21 +260,20 @@ export default function ListAuditLog() {
       )}
 
       {!isError && (
-          <div className="flex justify-center mt-4">
-            <RenderPagination
-              page={page}
-              setPage={setPage}
-              total={Number(data?.total)}
-              limit={Number(data?.limit)}
-              setLimit={setLimit}
-            />
-          </div>
+        <div className="flex justify-center items-center">
+          <RenderPagination
+            page={page}
+            setPage={setPage}
+            total={Number(data?.total)}
+            limit={Number(data?.limit)}
+            setLimit={setLimit}
+          />
+        </div>
       )}
 
-        {isError && error?.code === "PERMISSION_DENIED" && (
-            <ForbiddenCard permission={error.requiredPermission} />
-        )}
-
-    </>
+      {isError && error?.code === "PERMISSION_DENIED" && (
+        <ForbiddenCard permission={error.requiredPermission} />
+      )}
+    </div>
   );
 }

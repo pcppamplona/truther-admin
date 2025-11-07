@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useI18n } from "@/i18n";
 import { Funnel, Calendar as CalendarIcon, X, ListFilter } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { poStatusBlockchain } from "@/interfaces/Transactions";
+import { Badge } from "@/components/ui/badge";
 
 export interface PixOutFiltersValues {
   txid: string;
@@ -198,8 +199,68 @@ export function PixOutFilters(props: PixOutFiltersProps) {
     "PROCESSING"
   ];
 
+  const activeFilters = useMemo(() => {
+    const entries = Object.entries({
+      txid,
+      end2end,
+      pixKey,
+      receiverDocument,
+      receiverName,
+      wallet,
+      status_px,
+      status_bk,
+      min_amount,
+      max_amount,
+      created_after,
+      created_before,
+    }).filter(([_, v]) => v && v !== "");
+    return entries.map(([key, value]) => ({
+      key,
+      label: formatFilterLabel(key, value),
+    }));
+  }, [
+    txid,
+    end2end,
+    pixKey,
+    receiverDocument,
+    receiverName,
+    wallet,
+    status_px,
+    status_bk,
+    min_amount,
+    max_amount,
+    created_after,
+    created_before,
+  ]);
+
   return (
-    <div className="w-full flex justify-end">
+    <div className="w-full flex justify-between items-center">
+      <div className="flex flex-wrap gap-2">
+          {activeFilters.map(({ key, label }) => (
+            <Badge
+              key={key}
+              variant="secondary"
+              className="text-xs font-medium cursor-pointer"
+              onClick={() => {
+                setPage(1);
+                setValues({ [key]: undefined });
+              }}
+            >
+              {label} ✕
+            </Badge>
+          ))}
+
+          {activeFilters.length > 0 && (
+            <Badge
+              variant="outline"
+              className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
+              onClick={clearAll}
+            >
+              Limpar tudo
+            </Badge>
+          )}
+        </div>
+        
       <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
         <DrawerTrigger asChild>
           <Button className="w-14 h-12 ">

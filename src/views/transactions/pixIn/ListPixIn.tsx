@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
-import { CardHeader, CardTitle } from "@/components/ui/card";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -18,15 +18,11 @@ import {
 import { usePixInTransactions } from "@/services/transactions/useTransactions";
 import { Info } from "@/components/info";
 import {
-  formatPixInFilterLabel,
   PixInFilters,
   PixInFiltersValues,
 } from "../components/PixInFilters.tsx";
 import { useI18n } from "@/i18n";
 import { getColorRGBA, poColors } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { CardEmpty } from "@/components/CardEmpty";
 
 export default function ListPixIn() {
   const { t } = useI18n();
@@ -78,11 +74,15 @@ export default function ListPixIn() {
   };
 
   return (
-    <>
+    <div className="flex flex-col h-[calc(100vh-120px)]">
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
           {t("transactions.pixIn.title")}
         </CardTitle>
+        
+         <CardDescription>
+          {t("transactions.pixIn.description")}
+        </CardDescription>
         <PixInFilters
           txid={filters.txid}
           status_bank={filters.status_bank}
@@ -100,72 +100,19 @@ export default function ListPixIn() {
           setValues={(next) => setFilters((prev) => ({ ...prev, ...next }))}
           setPage={setPage}
         />
-
-        {Object.values(filters).some((v) => v !== "" && v !== undefined) && (
-          <div>
-            <Label className="mb-2 block text-sm font-medium text-muted-foreground">
-              {t("transactions.common.appliedFilters")}
-            </Label>
-
-            <div className="flex flex-wrap gap-2">
-              {Object.entries(filters)
-                .filter(([_, value]) => value !== "" && value !== undefined)
-                .map(([key, value]) => (
-                  <Badge
-                    key={key}
-                    variant="secondary"
-                    className="flex items-center gap-2 px-3 py-1"
-                  >
-                    <span>{formatPixInFilterLabel(key, value)}</span>
-                    <button
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, [key]: "" }))
-                      }
-                      className="hover:text-destructive focus:outline-none"
-                    >
-                      <X size={14} />
-                    </button>
-                  </Badge>
-                ))}
-
-              <Badge
-                variant="outline"
-                className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
-                onClick={() =>
-                  setFilters({
-                    txid: "",
-                    status_bank: "",
-                    status_blockchain: "",
-                    payer_document: "",
-                    payer_name: "",
-                    created_after: undefined,
-                    created_before: undefined,
-                    min_amount: "",
-                    max_amount: "",
-                    wallet: "",
-                    end2end: "",
-                    destinationKey: "",
-                    typeIn: "",
-                  })
-                }
-              >
-                {t("transactions.common.clearAll")}
-              </Badge>
-            </div>
-          </div>
-        )}
       </CardHeader>
 
-      <div className="w-full px-4 lg:px-6">
+      <div className="flex-1 overflow-y-auto px-4 lg:px-6">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableCell>ID</TableCell>
               <TableCell>{t("transactions.pixIn.table.headers.txid")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.statusBank")}</TableCell>
+              <TableCell>{t("transactions.pixIn.table.headers.statusBlockchain")}</TableCell>
               <TableCell>{t("transactions.pixIn.table.headers.wallet")}</TableCell>
               <TableCell>{t("transactions.pixIn.table.headers.name")}</TableCell>
               <TableCell>{t("transactions.pixIn.table.headers.payerName")}</TableCell>
-              <TableCell>{t("transactions.pixIn.table.headers.statusBank")}</TableCell>
-              <TableCell>{t("transactions.pixIn.table.headers.statusBlockchain")}</TableCell>
               <TableCell>{t("transactions.pixIn.table.headers.createdAt")}</TableCell>
               <TableCell>{t("transactions.pixIn.table.headers.token")}</TableCell>
               <TableCell></TableCell>
@@ -190,9 +137,8 @@ export default function ListPixIn() {
                     className="cursor-pointer hover:bg-input transition"
                     onClick={() => toggleExpand(tx.id)}
                   >
-                    <TableCell className="font-mono text-xs break-all">
-                      {tx.txid}
-                    </TableCell>
+                    <TableCell>{tx.id}</TableCell>
+                    <TableCell className="font-mono text-xs break-all"> {tx.txid}</TableCell>
                     <TableCell>{tx.status_bank ?? "-"}</TableCell>
                     <TableCell>
                       <div
@@ -215,12 +161,9 @@ export default function ListPixIn() {
                         {tx.status_blockchain}
                       </div>
                     </TableCell>
-                    <TableCell className="font-mono text-xs break-all">
-                      {tx.receive_wallet}
-                    </TableCell>
+                    <TableCell className="font-mono text-xs break-all">{tx.receive_wallet}</TableCell>
                     <TableCell>{tx.receive_name ?? "-"}</TableCell>
                     <TableCell>{tx.payer_name ?? "-"}</TableCell>
-
                     <TableCell>{tx.createdAt ?? "-"}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -255,7 +198,7 @@ export default function ListPixIn() {
                   <AnimatePresence>
                     {expandedId === tx.id && (
                       <TableRow className="bg-muted/30">
-                        <TableCell colSpan={9} className="p-0">
+                        <TableCell colSpan={10} className="p-0">
                           <motion.div
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
@@ -264,7 +207,6 @@ export default function ListPixIn() {
                             className="overflow-hidden p-4 text-sm"
                           >
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <Info label={t("transactions.pixIn.details.id")} value={tx.id} />
                               <Info label={t("transactions.pixIn.details.walletId")} value={tx.wallet_id ?? "-"} />                              
                               <Info label={t("transactions.pixIn.details.recipientDocument")} value={tx.receive_doc ?? "-"} />                              
                               <Info label={t("transactions.pixIn.details.destinationKey")} value={tx.destinationKey ?? "-"} />                             
@@ -287,7 +229,7 @@ export default function ListPixIn() {
         </Table>
       </div>
 
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center items-center">
         <RenderPagination
           page={page}
           setPage={setPage}
@@ -296,6 +238,6 @@ export default function ListPixIn() {
           setLimit={setLimit}
         />
       </div>
-    </>
+    </div>
   );
 }

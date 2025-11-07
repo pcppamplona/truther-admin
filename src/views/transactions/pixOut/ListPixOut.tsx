@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
-import { CardHeader, CardTitle } from "@/components/ui/card";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -18,13 +18,10 @@ import {
 import { usePixOutTransactions } from "@/services/transactions/useTransactions";
 import { Info } from "@/components/info";
 import {
-  formatFilterLabel,
   PixOutFilters,
   PixOutFiltersValues,
 } from "../components/PixOutFilters";
 import { getColorRGBA, poColors } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/i18n";
 import { CardEmpty } from "@/components/CardEmpty";
 
@@ -76,11 +73,16 @@ export default function ListPixOut() {
   };
 
   return (
-    <>
+    <div className="flex flex-col h-[calc(100vh-120px)]">
+
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
           {t("transactions.pixOut.title")}
         </CardTitle>
+        <CardDescription>
+          {t("transactions.pixOut.description")}
+        </CardDescription>
+
         <PixOutFilters
           txid={filters.txid}
           end2end={filters.end2end}
@@ -97,71 +99,19 @@ export default function ListPixOut() {
           setValues={(next: Partial<PixOutFiltersValues>) => setFilters((prev: PixOutFiltersValues) => ({ ...prev, ...next }))}
           setPage={setPage}
         />
-
-        {Object.values(filters).some((v) => v !== "" && v !== undefined) && (
-          <div>
-            <Label className="mb-2 block text-sm font-medium text-muted-foreground">
-              {t("transactions.common.appliedFilters")} 
-            </Label>
-
-            <div className="flex flex-wrap gap-2">
-              {Object.entries(filters)
-                .filter(([_, value]) => value !== "" && value !== undefined)
-                .map(([key, value]) => (
-                  <Badge
-                    key={key}
-                    variant="secondary"
-                    className="flex items-center gap-2 px-3 py-1"
-                  >
-                    <span>{formatFilterLabel(key, value)}</span>
-                    <button
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, [key]: "" }))
-                      }
-                      className="hover:text-destructive focus:outline-none"
-                    >
-                      <X size={14} />
-                    </button>
-                  </Badge>
-                ))}
-
-              <Badge
-                variant="outline"
-                className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
-                onClick={() =>
-                  setFilters({
-                    txid: "",
-                    end2end: "",
-                    pixKey: "",
-                    receiverDocument: "",
-                    receiverName: "",
-                    wallet: "",
-                    status_px: "",
-                    status_bk: "",
-                    min_amount: "",
-                    max_amount: "",
-                    created_after: undefined,
-                    created_before: undefined,
-                  })
-                }
-              >
-                {t("transactions.common.clearAll")}
-              </Badge>
-            </div>
-          </div>
-        )}
       </CardHeader>
 
-      <div className="w-full px-4 lg:px-6">
+      <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableCell>ID</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.txid")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.statusBank")}</TableCell>
+              <TableCell>{t("transactions.pixOut.table.headers.statusBlockchain")}</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.sender")}</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.senderName")}</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.receiverName")}</TableCell>
-              <TableCell>{t("transactions.pixOut.table.headers.statusBank")}</TableCell>
-              <TableCell>{t("transactions.pixOut.table.headers.statusBlockchain")}</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.createdAt")}</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.token")}</TableCell>
               <TableCell></TableCell>
@@ -186,13 +136,14 @@ export default function ListPixOut() {
                     className="cursor-pointer hover:bg-input transition"
                     onClick={() => toggleExpand(tx.id)}
                   >
+                    <TableCell>{tx.id}</TableCell>
                     <TableCell className="font-mono text-xs break-all">
                       {tx.txid}
                     </TableCell>
                     <TableCell>{tx.status_px ?? "-"}</TableCell>
                     <TableCell>
                       <div
-                        className="px-3 py-2 rounded-lg text-xs font-semibold uppercase"
+                        className="px-3 py-2 rounded-lg text-xs font-semibold uppercase text-center w-full"
                         style={{
                           backgroundColor: getColorRGBA(
                             tx.status_bk ?? "",
@@ -252,7 +203,7 @@ export default function ListPixOut() {
                   <AnimatePresence>
                     {expandedId === tx.id && (
                       <TableRow className="bg-muted/30">
-                        <TableCell colSpan={9} className="p-0">
+                        <TableCell colSpan={10} className="p-0">
                           <motion.div
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
@@ -281,7 +232,7 @@ export default function ListPixOut() {
         </Table>
       </div>
 
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center items-center">
         <RenderPagination
           page={page}
           setPage={setPage}
@@ -290,6 +241,6 @@ export default function ListPixOut() {
           setLimit={setLimit}
         />
       </div>
-    </>
+    </div>
   );
 }

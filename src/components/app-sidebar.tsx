@@ -18,7 +18,7 @@ import {
   DollarSign,
   User,
   FlagTriangleRight,
-  ArrowRightLeft
+  ArrowRightLeft,
 } from "lucide-react";
 import { useI18n } from "@/i18n";
 
@@ -40,8 +40,9 @@ export function AppSidebar() {
       },
       {
         title: t("sidebar.support.title"),
-        url: "clients", // suport
+        url: "clients",
         icon: BotMessageSquare,
+        isActive: true,
         items: [
           {
             title: t("sidebar.support.clients"),
@@ -53,18 +54,23 @@ export function AppSidebar() {
             url: "ocurrences",
             matchUrls: ["ocurrences", "ocurrenceDetails"],
             items: [
-              { title: t("sidebar.support.occurrences.ticketReasons"), url: "ticketReasons" },
+              {
+                title: t("sidebar.support.occurrences.ticketReasons"),
+                url: "ticketReasons",
+              },
             ],
           },
           {
             title: t("sidebar.support.reports"),
             url: "report",
           },
+          { title: t("sidebar.support.sendGas"), url: "sendgas" },
+          { title: t("sidebar.support.decode"), url: "decode" },
         ],
       },
       {
         title: t("sidebar.marketing.title"),
-        url: "notifications", // marketing
+        url: "notifications",
         icon: Presentation,
         items: [
           {
@@ -75,7 +81,7 @@ export function AppSidebar() {
       },
       {
         title: t("sidebar.finance.title"),
-        url: "refund", // financier
+        url: "refund",
         icon: DollarSign,
         items: [
           {
@@ -90,39 +96,21 @@ export function AppSidebar() {
       },
       {
         title: t("sidebar.transactions.title"),
-        // url: "transactions",
         url: "transactions/pix-in",
         icon: ArrowRightLeft,
         items: [
           {
             title: t("transactions.pixIn.short"),
             url: "transactions/pix-in",
-            matchUrls: ["transactions/pix-in"],
           },
           {
             title: t("transactions.pixOut.short"),
             url: "transactions/pix-out",
-            matchUrls: ["transactions/pix-out"],
           },
-          {
-            title: "Boleto",
-            url: "transactions/billet-cashout",
-          },
-          {
-            title: "BRIDGES",
-            url: "transactions/bridges",
-          },
-          {
-            title: "Envio de GAS",
-            url: "transactions/sendgas",
-          },
-          {
-            title: "Decodificar",
-            url: "transactions/decode",
-          },
+          { title: "Boleto", url: "transactions/billet-cashout" },
+          { title: "BRIDGES", url: "transactions/bridges" },
         ],
       },
-      
       {
         title: t("sidebar.users"),
         url: "users",
@@ -137,7 +125,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -160,12 +148,15 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent className="border-b-border border-b-1 ml-2">
         <NavMain items={data.navMain} />
       </SidebarContent>
+
       <SidebarFooter>
         <NavUser />
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   );

@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/table";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, Funnel, Search } from "lucide-react";
-import { TransactionsData } from "@/views/suport/clients/ClientDetails/renderViews/UserInfoView";
 import { dateFormat } from "@/lib/formatters";
 import {
   Select,
@@ -23,6 +22,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
+import { TransactionsData } from "..";
 
 export default function ListCashout() {
   const data = TransactionsData;
@@ -79,7 +79,7 @@ export default function ListCashout() {
           </div>
         </div>
       </CardHeader>
-      <div className="w-full px-4 lg:px-6">
+      <div className="w-full px-4 lg:px-6 h-full">
         <Table>
           <TableHeader>
             <TableRow>

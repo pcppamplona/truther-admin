@@ -10,8 +10,17 @@ import {
   documentFormat,
   getFlagUrl,
   phoneFormat,
+  timeFormat,
 } from "@/lib/formatters";
-import { ArrowLeftRight, ExternalLink, MapPinHouse, User } from "lucide-react";
+import {
+  ArrowLeftRight,
+  ChevronsDown,
+  ChevronsUp,
+  ExternalLink,
+  FolderOpen,
+  MapPinHouse,
+  User,
+} from "lucide-react";
 import { ClientInfoProps } from "..";
 import { Info } from "@/components/info";
 import {
@@ -21,59 +30,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-export const TransactionsData = [
-  {
-    id: "1",
-    createdAt: "2025-05-30T08:15:00Z",
-    typeNotification: "BLOCKCHAIN",
-    origin: "0x1aB3fD91fABc1234567890",
-    destiny: "0x9cE5Df12aBCe9876543210",
-    coin: "USDT",
-  },
-  {
-    id: "2",
-    createdAt: "2025-05-30T09:45:00Z",
-    typeNotification: "BLOCKCHAIN",
-    origin: "0x3bC6eF72aDEF2233445566",
-    destiny: "0x6fD4aE31bCCa1122334455",
-    coin: "BTC",
-  },
-  {
-    id: "3",
-    createdAt: "2025-05-30T10:30:00Z",
-    typeNotification: "TRANSFERÊNCIA",
-    origin: "Banco 237 - Conta 123456-7",
-    destiny: "Banco 001 - Conta 987654-3",
-    coin: "BRL",
-  },
-  {
-    id: "4",
-    createdAt: "2025-05-30T11:00:00Z",
-    typeNotification: "PIX",
-    origin: "julio@email.com",
-    destiny: "cpf: 123.456.789-00",
-    coin: "BRL",
-  },
-  {
-    id: "5",
-    createdAt: "2025-05-30T11:30:00Z",
-    typeNotification: "BLOCKCHAIN",
-    origin: "0x7eA1B92CcEf45678901234",
-    destiny: "0x4fC3D12bBAcD5678901234",
-    coin: "ETH",
-  },
-  {
-    id: "6",
-    createdAt: "2025-05-30T12:00:00Z",
-    typeNotification: "TRANSFERÊNCIA",
-    origin: "Banco 104 - Conta 000112-0",
-    destiny: "Banco 033 - Conta 998877-1",
-    coin: "BRL",
-  },
-];
+import { useUserTransactions } from "@/services/transactions/useUserTransactions";
+import { getColorRGBA, txStatusColors } from "@/lib/utils";
+import { SkeletonTableFull } from "@/components/skeletons/skeletonTableFull";
+import { EmptyState } from "@/components/EmptyState";
+import { Button } from "@/components/ui/button";
 
 export default function UserInfo({ userInfo }: ClientInfoProps) {
+  const page = 1;
+  const limit = 5;
+
+  const { data, isLoading, isError, refetch } = useUserTransactions(
+    userInfo?.document ?? "",
+    page,
+    limit
+  );
+
+  const transactions = data?.data ?? [];
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
@@ -92,7 +66,7 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
             />
             <Info label="Telefone" value={phoneFormat(userInfo?.phone)} />
             <Info label="Nascimento" value={userInfo?.birthday} />
-            <Info label="Nome da Mãe" value={userInfo?.mothersName} />
+            <Info label="Nome da Mãe" value={userInfo?.mothers_name} />
 
             <div>
               <p className="text-muted-foreground">País</p>
@@ -149,82 +123,113 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
           </CardContent>
         </Card>
       </div>
+
       <Card>
         <CardHeader>
           <CardTitle className="flex flex-row items-center gap-2">
             <ArrowLeftRight /> Transações
           </CardTitle>
           <CardDescription>
-            Todas as transações efetuadas por {userInfo?.name}
+            Últimas 5 transações efetuadas por{" "}
+            <strong className="bold">{userInfo?.name}</strong>
           </CardDescription>
         </CardHeader>
+
         <CardContent className="px-4 lg:px-6 pt-0 pb-4">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableCell>
-                  ID
-                </TableCell>
-                <TableCell>
-                  Data
-                </TableCell>
-                <TableCell>
-                  Tipo
-                </TableCell>
-                <TableCell>
-                  Origem
-                </TableCell>
-                <TableCell>
-                  Destino
-                </TableCell>
-                <TableCell>
-                  Moeda
-                </TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {TransactionsData?.map((notification) => (
-                <TableRow
-                  key={notification.id}
-                  className="cursor-pointer hover:bg-input transition"
-                >
-                  <TableCell>{notification.id}</TableCell>
-                  <TableCell>{dateFormat(notification.createdAt)}</TableCell>
-                  <TableCell className="flex items-center gap-2">
-                    <img
-                      src={
-                        {
-                          BLOCKCHAIN: "/blockchain.png",
-                          TRANSFERÊNCIA: "/transfer.png",
-                          PIX: "/pix.png",
-                        }[notification.typeNotification] || "/default.png"
-                      }
-                      alt={notification.typeNotification}
-                      className="w-6 h-6 object-contain"
-                    />
-                    {notification.typeNotification}
-                  </TableCell>
-                  <TableCell>{notification.origin}</TableCell>
-                  <TableCell>{notification.destiny}</TableCell>
-                  <TableCell className="flex items-center gap-2">
-                    <img
-                      src={
-                        {
-                          USDT: "/usdt.png",
-                          BTC: "/bitcoin.png",
-                          ETH: "/eth.png",
-                          BRL: "/brl.png",
-                        }[notification.coin] || "/default.png"
-                      }
-                      alt={notification.coin}
-                      className="w-6 h-6 object-contain"
-                    />
-                    {notification.coin}
-                  </TableCell>
+          {isLoading ? (
+            <SkeletonTableFull rows={5} columns={8} />
+          ) : isError ? (
+            <p>Erro ao carregar transações.</p>
+          ) : transactions.length === 0 ? (
+            <EmptyState
+              title="Nenhuma transação encontrada"
+              description="Não há registros de movimentações para este usuário. Tente ajustar o período ou filtros."
+              icon={<FolderOpen className="w-10 h-10 text-muted-foreground" />}
+              actions={
+                <Button variant="outline" onClick={() => refetch()}>
+                  Recarregar
+                </Button>
+              }
+            />
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Flow</TableCell>
+                  <TableCell>Data</TableCell>
+                  <TableCell>Hora</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Tipo</TableCell>
+                  <TableCell>Origem</TableCell>
+                  <TableCell>Destino</TableCell>
+                  <TableCell>Moeda</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {transactions.map((tx) => (
+                  <TableRow
+                    key={tx.id}
+                    className="cursor-pointer hover:bg-input transition"
+                  >
+                    <TableCell>{tx.id}</TableCell>
+                    <TableCell className="flex items-center gap-1">
+                      {tx.flow === "IN" ? (
+                        <ChevronsUp />
+                      ) : (
+                        <ChevronsDown className="text-green-500" />
+                      )}
+                      {tx.flow}
+                    </TableCell>
+                    <TableCell>{dateFormat(tx.created_at)}</TableCell>
+                    <TableCell>{timeFormat(tx.created_at)}</TableCell>
+                    <TableCell>
+                      <div
+                        className="px-3 py-2 rounded-lg text-xs font-semibold uppercase text-center w-full"
+                        style={{
+                          backgroundColor: getColorRGBA(
+                            tx.status ?? "",
+                            txStatusColors,
+                            0.1
+                          ),
+                          color: getColorRGBA(
+                            tx.status ?? "",
+                            txStatusColors,
+                            0.9
+                          ),
+
+                          width: "fit-content",
+                        }}
+                      >
+                        {tx.status}
+                      </div>
+                    </TableCell>
+                    <TableCell>{tx.type}</TableCell>
+                    <TableCell>{tx.from_address}</TableCell>
+                    <TableCell>{tx.to_address}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={
+                            {
+                              USDT: "/usdt.png",
+                              BTC: "/bitcoin.png",
+                              ETH: "/eth.png",
+                              BRL: "/brl.png",
+                              VRL: "/vrl.png",
+                            }[tx.symbol?.toUpperCase() ?? ""] || "/default.png"
+                          }
+                          alt={tx.symbol ?? "token"}
+                          className="w-5 h-5 object-contain"
+                        />
+                        <span className="uppercase">{tx.symbol ?? "-"}</span>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </div>

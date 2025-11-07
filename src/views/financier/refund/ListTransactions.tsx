@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/table";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Download, Funnel, Search, Trash } from "lucide-react";
-import { TransactionsData } from "@/views/suport/clients/ClientDetails/renderViews/UserInfoView";
 import { dateFormat } from "@/lib/formatters";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,12 +15,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { TransactionsData } from "..";
 
 export default function ListTransactions() {
   const data = TransactionsData;
 
   return (
-    <>
+    <div className="flex flex-col h-[calc(100vh-120px)]">
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
           Reembolsos pendentes
@@ -65,7 +65,7 @@ export default function ListTransactions() {
         </div>
       </CardHeader>
       
-      <div className="w-full px-4 lg:px-6">
+      <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">
         <Table>
           <TableHeader>
             <TableRow>
@@ -133,6 +133,6 @@ export default function ListTransactions() {
           </TableBody>
         </Table>
       </div>
-    </>
+    </div>
   );
 }

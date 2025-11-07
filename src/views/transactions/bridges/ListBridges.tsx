@@ -1,5 +1,5 @@
 import { RenderPagination } from "@/components/RenderPagination";
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   getPaginationSettings,
   setPaginationSettings,
@@ -10,9 +10,7 @@ import {
   BridgeFiltersValues,
 } from "../components/BridgesFilters";
 import { useBridgeTransactions } from "@/services/transactions/useTransactions";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -21,12 +19,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { SkeletonTable } from "@/components/skeletons/skeletonTable";
-import { CardEmpty } from "@/components/CardEmpty";
 import { Info } from "@/components/info";
 import { dateFormat, timeFormat } from "@/lib/formatters";
 import { getColorRGBA, txStatusColors } from "@/lib/utils";
-import { useI18n } from "@/i18n";
+import { EmptyState } from "@/components/EmptyState";
+import { SkeletonTableFull } from "@/components/skeletons/skeletonTableFull";
 
 export default function ListBridges() {
   const { t } = useI18n();
@@ -45,7 +42,7 @@ export default function ListBridges() {
     created_before: undefined,
   });
 
-  const { data, isLoading } = useBridgeTransactions(page, limit, {
+  const { data, isLoading, refetch } = useBridgeTransactions(page, limit, {
     user_id: filters.user_id ? Number(filters.user_id) : undefined,
     wallet_id: filters.wallet_id ? Number(filters.wallet_id) : undefined,
     status: filters.status,
@@ -58,94 +55,79 @@ export default function ListBridges() {
   }, [page, limit]);
 
   const [expandedId, setExpandedId] = useState<number | null>(null);
-  const toggleExpand = (id: number) => {
+  const toggleExpand = (id: number) =>
     setExpandedId((prev) => (prev === id ? null : id));
-  };
 
   return (
-    <>
+    <div className="flex flex-col h-[calc(100vh-120px)]">
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
           Transações Bridge
         </CardTitle>
+        <CardDescription>
+          A funcionalidade Transações Bridge centraliza todas as movimentações
+          realizadas através do sistema de bridge — responsável por interligar
+          diferentes redes ou sistemas financeiros,<br/> permitindo a transferência e
+          conversão de valores entre ambientes distintos (ex: Polygon, Bitcoin,
+          Liquid, etc.).
+        </CardDescription>
 
         <BridgeFilters
           {...filters}
           setValues={(next) => setFilters((prev) => ({ ...prev, ...next }))}
           setPage={setPage}
         />
-
-        {Object.values(filters).some((v) => v !== "" && v !== undefined) && (
-          <div>
-            <Label className="mb-2 block text-sm font-medium text-muted-foreground">
-              {t("transactions.common.appliedFilters")}
-            </Label>
-
-            <div className="flex flex-wrap gap-2">
-              {Object.entries(filters)
-                .filter(([_, value]) => value !== "" && value !== undefined)
-                .map(([key, value]) => (
-                  <Badge
-                    key={key}
-                    variant="secondary"
-                    className="flex items-center gap-2 px-3 py-1"
-                  >
-                    <span>
-                      {key}:{" "}
-                      {String(value).length > 20
-                        ? `${String(value).slice(0, 20)}...`
-                        : String(value)}
-                    </span>
-                    <button
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, [key]: "" }))
-                      }
-                      className="hover:text-destructive focus:outline-none"
-                    >
-                      <X size={14} />
-                    </button>
-                  </Badge>
-                ))}
-            </div>
-          </div>
-        )}
       </CardHeader>
 
-      <CardContent>
+      <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">
         <div className="overflow-x-auto rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>ID Usuário</TableHead>
-                <TableHead>ID Wallet</TableHead>
-                <TableHead>Valor</TableHead>
-                <TableHead>Symbol</TableHead>
-                <TableHead>Data</TableHead>
-                <TableHead>Hora</TableHead>
-                <TableHead></TableHead>
-              </TableRow>
-            </TableHeader>
-
-            <TableBody>
-              {isLoading ? (
-                <SkeletonTable />
-              ) : data && data.data.length === 0 ? (
+          {isLoading ? (
+            <SkeletonTableFull rows={10} columns={10} />
+          ) : data && data.data.length === 0 ? (
+            <Table>
+              <TableBody>
                 <TableRow>
-                  <TableCell colSpan={9} className="h-64">
-                    <CardEmpty
-                      title={t("transactions.common.emptyState.title")}
-                      subtitle={t("transactions.common.emptyState.subtitle")}
-                    />
+                  <TableCell colSpan={9}>
+                    <div className="flex justify-center items-center py-16">
+                      <EmptyState
+                        title="Nenhuma transação encontrada"
+                        description="Não há transações bridge que correspondam aos filtros aplicados. Tente ajustar os filtros ou recarregar."
+                        actions={
+                          <button
+                            onClick={() => refetch()}
+                            className="mt-4 px-4 py-2 border rounded-md text-sm hover:bg-muted transition"
+                          >
+                            Recarregar
+                          </button>
+                        }
+                      />
+                    </div>
                   </TableCell>
                 </TableRow>
-              ) : (
-                data?.data.map((tx) => (
+              </TableBody>
+            </Table>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>ID Usuário</TableHead>
+                  <TableHead>ID Wallet</TableHead>
+                  <TableHead>Valor</TableHead>
+                  <TableHead>Symbol</TableHead>
+                  <TableHead>Data</TableHead>
+                  <TableHead>Hora</TableHead>
+                  <TableHead></TableHead>
+                </TableRow>
+              </TableHeader>
+
+              <TableBody>
+                {data?.data.map((tx) => (
                   <>
                     <TableRow
                       key={tx.id}
-                      className="cursor-pointer hover:bg-input transition"
+                      className="cursor-pointer hover:bg-muted/50"
                       onClick={() => toggleExpand(tx.id)}
                     >
                       <TableCell>{tx.id}</TableCell>
@@ -165,7 +147,6 @@ export default function ListBridges() {
                           {tx.status}
                         </div>
                       </TableCell>
-
                       <TableCell>{tx.user_id}</TableCell>
                       <TableCell>{tx.wallet_id}</TableCell>
                       <TableCell>
@@ -174,7 +155,6 @@ export default function ListBridges() {
                           currency: "BRL",
                         })}
                       </TableCell>
-
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <img
@@ -194,7 +174,6 @@ export default function ListBridges() {
                           <span className="uppercase">{tx.symbol ?? "-"}</span>
                         </div>
                       </TableCell>
-
                       <TableCell>{dateFormat(tx.created_at)}</TableCell>
                       <TableCell>{timeFormat(tx.created_at)}</TableCell>
                       <TableCell>
@@ -228,22 +207,22 @@ export default function ListBridges() {
                       </TableRow>
                     )}
                   </>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </div>
+      </div>
 
-        <div className="flex justify-center mt-4">
-          <RenderPagination
-            page={page}
-            setPage={setPage}
-            total={Number(data?.total ?? 0)}
-            limit={Number(data?.limit ?? limit)}
-            setLimit={setLimit}
-          />
-        </div>
-      </CardContent>
-    </>
+      <div className="flex justify-center items-center mt-4 border-t border-border h-16">
+        <RenderPagination
+          page={page}
+          setPage={setPage}
+          total={Number(data?.total ?? 0)}
+          limit={Number(data?.limit ?? limit)}
+          setLimit={setLimit}
+        />
+      </div>
+    </div>
   );
 }

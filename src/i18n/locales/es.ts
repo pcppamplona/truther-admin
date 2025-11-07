@@ -78,6 +78,7 @@ const es = {
     },
     pixIn: {
       title: "Transacciones PIX IN",
+      description: "Visualice todas las transacciones PIX recibidas, con detalles del pagador, estado bancario y blockchain, además del historial completo de creación y token asociado.",
       short: "PIX IN",
       table: {
         headers: {
@@ -109,6 +110,7 @@ const es = {
     },
     pixOut: {
       title: "Transacciones PIX OUT",
+      description: "Visualice todas las transacciones PIX enviadas, con detalles del remitente y receptor, estado bancario y blockchain, además del historial completo de creación y token asociado.",
       short: "PIX OUT",
       table: {
         headers: {
@@ -138,6 +140,7 @@ const es = {
   },
   audit: {
     title: "Auditoría General",
+    description: "Visualize registros detalhados de auditoria, incluindo métodos executados, horários, usuários e eventos do sistema.",
     breadcrumb: "Auditoría",
     table: {
       headers: {

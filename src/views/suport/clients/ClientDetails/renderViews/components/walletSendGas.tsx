@@ -8,7 +8,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Input } from "@/components/ui/input";
+import { Send } from "lucide-react";
 
 interface Props {
   network: string;
@@ -20,11 +27,20 @@ export function WalletSendGas({ network, userName }: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <button className="flex items-center px-4 py-2 bg-primary rounded-lg">
-          Enviar GAS
-        </button>
-      </DialogTrigger>
+       <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DialogTrigger asChild>
+              <Button className="w-12 h-12 text-white">
+                <Send />
+              </Button>
+            </DialogTrigger>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Enviar GAS</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <DialogContent>
         <DialogHeader className="flex flex-row items-center gap-2">
           <img

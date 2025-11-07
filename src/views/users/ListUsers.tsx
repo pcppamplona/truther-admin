@@ -25,7 +25,10 @@ import {
 } from "@/components/ui/tooltip";
 import { useUsers } from "@/services/users/useUsers";
 import { RenderPagination } from "@/components/RenderPagination";
-import { getPaginationSettings, setPaginationSettings } from "@/lib/paginationStorage";
+import {
+  getPaginationSettings,
+  setPaginationSettings,
+} from "@/lib/paginationStorage";
 import { useEffect, useState } from "react";
 
 export default function ListClients() {
@@ -37,13 +40,13 @@ export default function ListClients() {
   const [sortBy, setSortBy] = useState("created_at");
   const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
 
- useEffect(() => {
+  useEffect(() => {
     setPaginationSettings("users", page, limit);
- }, [page, limit])
+  }, [page, limit]);
 
   const { data, isLoading } = useUsers(page, limit, search, sortBy, sortOrder);
   return (
-    <>
+    <div className="flex flex-col h-[calc(100vh-120px)]">
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
           Todos os Usuários
@@ -102,7 +105,7 @@ export default function ListClients() {
         </div>
       </CardHeader>
 
-      <div className="w-full px-4 lg:px-6">
+      <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">
         <Table>
           <TableHeader>
             <TableRow>
@@ -152,7 +155,6 @@ export default function ListClients() {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.username}</TableCell>
 
-                
                   <TableCell>{user.uuid}</TableCell>
                   <TableCell>{user.role_id}</TableCell>
                   <TableCell>
@@ -172,7 +174,7 @@ export default function ListClients() {
         </Table>
       </div>
 
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center items-center">
         <RenderPagination
           page={page}
           setPage={setPage}
@@ -181,6 +183,6 @@ export default function ListClients() {
           setLimit={setLimit}
         />
       </div>
-    </>
+    </div>
   );
 }
