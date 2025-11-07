@@ -121,6 +121,15 @@ export default function ListPixIn() {
           <TableBody>
             {isLoading ? (
               <SkeletonTable />
+            ) : data && data.data && data.data.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={9} className="h-64">
+                  <CardEmpty
+                    title={t("transactions.common.emptyState.title")}
+                    subtitle={t("transactions.common.emptyState.subtitle")}
+                  />
+                </TableCell>
+              </TableRow>
             ) : (
               data?.data?.map((tx) => (
                 <Fragment key={tx.id}>

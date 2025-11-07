@@ -69,6 +69,12 @@ const pt = {
       senderWalletLabel: "Wallet do remetente",
       receiverNameLabel: "Nome do beneficiário",
       receiverDocumentLabel: "Documento do beneficiário",
+      appliedFilters: "Filtros aplicados:",
+      clearAll: "Limpar tudo",
+      emptyState: {
+        title: "Nenhuma transação encontrada",
+        subtitle: "Tente ajustar os filtros ou criar uma nova.",
+      },
     },
     pixIn: {
       title: "Transações PIX IN",

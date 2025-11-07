@@ -23,6 +23,7 @@ import {
 } from "../components/PixOutFilters";
 import { getColorRGBA, poColors } from "@/lib/utils";
 import { useI18n } from "@/i18n";
+import { CardEmpty } from "@/components/CardEmpty";
 
 export default function ListPixOut() {
   const { t } = useI18n();
@@ -119,6 +120,15 @@ export default function ListPixOut() {
           <TableBody>
             {isLoading ? (
               <SkeletonTable />
+            ) : data && data.data && data.data.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={9} className="h-64">
+                  <CardEmpty
+                    title={t("transactions.common.emptyState.title")}
+                    subtitle={t("transactions.common.emptyState.subtitle")}
+                  />
+                </TableCell>
+              </TableRow>
             ) : (
               data?.data?.map((tx, index) => (
                 <Fragment key={`${tx.id}-${tx.txid}-${index}`}>

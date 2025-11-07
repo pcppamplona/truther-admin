@@ -26,6 +26,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { SkeletonTableFull } from "@/components/skeletons/skeletonTableFull";
 
 export default function ListBridges() {
+  const { t } = useI18n();
   const { page: savedPage, limit: savedLimit } = getPaginationSettings(
     "transactions-bridges"
   );
