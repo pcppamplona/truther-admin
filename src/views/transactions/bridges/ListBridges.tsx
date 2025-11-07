@@ -10,9 +10,7 @@ import {
   BridgeFiltersValues,
 } from "../components/BridgesFilters";
 import { useBridgeTransactions } from "@/services/transactions/useTransactions";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -78,41 +76,6 @@ export default function ListBridges() {
           setValues={(next) => setFilters((prev) => ({ ...prev, ...next }))}
           setPage={setPage}
         />
-
-        {Object.values(filters).some((v) => v !== "" && v !== undefined) && (
-          <div>
-            <Label className="mb-2 block text-sm font-medium text-muted-foreground">
-              Filtros aplicados:
-            </Label>
-
-            <div className="flex flex-wrap gap-2">
-              {Object.entries(filters)
-                .filter(([_, value]) => value !== "" && value !== undefined)
-                .map(([key, value]) => (
-                  <Badge
-                    key={key}
-                    variant="secondary"
-                    className="flex items-center gap-2 px-3 py-1"
-                  >
-                    <span>
-                      {key}:{" "}
-                      {String(value).length > 20
-                        ? `${String(value).slice(0, 20)}...`
-                        : String(value)}
-                    </span>
-                    <button
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, [key]: "" }))
-                      }
-                      className="hover:text-destructive focus:outline-none"
-                    >
-                      <X size={14} />
-                    </button>
-                  </Badge>
-                ))}
-            </div>
-          </div>
-        )}
       </CardHeader>
 
       <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">

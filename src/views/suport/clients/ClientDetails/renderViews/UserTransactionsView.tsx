@@ -24,6 +24,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Info } from "@/components/info";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
+import {
+  UserTransactionsFilters,
+  UserTransactionsFiltersValues,
+} from "@/views/transactions/components/UserTransactionsFilters";
 
 interface UserTransactionsProps {
   document: string;
@@ -35,17 +39,26 @@ export function UserTransactionsView({ document }: UserTransactionsProps) {
 
   const [page, setPage] = useState(savedPage);
   const [limit, setLimit] = useState(savedLimit);
-  const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState("created_at");
-  const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
+
+  const [filters, setFilters] = useState<UserTransactionsFiltersValues>({
+    status: "",
+    hash: "",
+    value: undefined,
+    created_after: undefined,
+    created_before: undefined,
+  });
 
   const { data, isLoading, isError, refetch } = useUserTransactions(
     document,
     page,
     limit,
-    search,
-    sortBy,
-    sortOrder
+    {
+      status: filters.status || undefined,
+      hash: filters.hash || undefined,
+      value: filters.value || undefined,
+      created_after: filters.created_after,
+      created_before: filters.created_before,
+    }
   );
 
   const transactions = data?.data ?? [];
@@ -68,9 +81,15 @@ export function UserTransactionsView({ document }: UserTransactionsProps) {
           Aqui você pode acompanhar os detalhes de cada movimentação, incluindo
           status, tipo e moeda.
         </CardDescription>
+
+        <UserTransactionsFilters
+          {...filters}
+          setValues={(next) => setFilters((prev) => ({ ...prev, ...next }))}
+          setPage={setPage}
+        />
       </CardHeader>
 
-      <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">
+      <div className="flex-1 overflow-y-auto px-4 lg:px-6">
         <div className="overflow-x-auto rounded-md">
           {isLoading ? (
             <SkeletonTableFull rows={6} columns={8} />

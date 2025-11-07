@@ -1,47 +1,37 @@
 import { PaginateData } from "@/interfaces/PaginateData";
 import { UserTransaction } from "@/interfaces/UserTransaction";
+import { UserTransactionsFiltersValues } from "@/views/transactions/components/UserTransactionsFilters";
+import { useQuery } from "@tanstack/react-query";
 import { api } from "../api";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 export const useUserTransactions = (
   document: string,
   page: number,
   limit: number,
-  search?: string,
-  sortBy?: string,
-  sortOrder?: "ASC" | "DESC"
+  filters?: UserTransactionsFiltersValues
 ) => {
-  return useQuery<PaginateData<UserTransaction>, any>({
-    queryKey: [
-      "user-transactions",
-      document,
-      page,
-      limit,
-      search,
-      sortBy,
-      sortOrder,
-    ],
+  return useQuery<PaginateData<UserTransaction>>({
+    queryKey: ["user-transactions", document, page, limit, filters],
     queryFn: async () => {
-      try {
-        const params = new URLSearchParams({
-          page: String(page),
-          limit: String(limit),
-        });
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+      });
 
-        if (search) params.append("search", search);
-        if (sortBy) params.append("sortBy", sortBy);
-        if (sortOrder) params.append("sortOrder", sortOrder);
+      if (filters?.status) params.append("status", filters.status);
+      if (filters?.hash) params.append("hash", filters.hash);
+      if (filters?.value) params.append("value", String(filters.value));
+      if (filters?.created_after)
+        params.append("created_after", filters.created_after);
+      if (filters?.created_before)
+        params.append("created_before", filters.created_before);
 
-        const { data } = await api.get<PaginateData<UserTransaction>>(
-          `/transactions/by-document/${document}?${params.toString()}`
-        );
+      const { data } = await api.get<PaginateData<UserTransaction>>(
+        `/transactions/by-document/${document}?${params.toString()}`
+      );
 
-        return data;
-      } catch (err: any) {
-        throw err.response?.data || err;
-      }
+      return data;
     },
-    placeholderData: keepPreviousData,
-    staleTime: Number.POSITIVE_INFINITY,
+     refetchOnWindowFocus: false,
   });
 };

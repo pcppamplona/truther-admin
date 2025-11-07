@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -18,13 +18,10 @@ import {
 import { usePixOutTransactions } from "@/services/transactions/useTransactions";
 import { Info } from "@/components/info";
 import {
-  formatFilterLabel,
   PixOutFilters,
   PixOutFiltersValues,
 } from "../components/PixOutFilters";
 import { getColorRGBA, poColors } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/i18n";
 
 export default function ListPixOut() {
@@ -101,59 +98,6 @@ export default function ListPixOut() {
           setValues={(next: Partial<PixOutFiltersValues>) => setFilters((prev: PixOutFiltersValues) => ({ ...prev, ...next }))}
           setPage={setPage}
         />
-
-        {Object.values(filters).some((v) => v !== "" && v !== undefined) && (
-          <div>
-            <Label className="mb-2 block text-sm font-medium text-muted-foreground">
-              Filtros aplicados:
-            </Label>
-
-            <div className="flex flex-wrap gap-2">
-              {Object.entries(filters)
-                .filter(([_, value]) => value !== "" && value !== undefined)
-                .map(([key, value]) => (
-                  <Badge
-                    key={key}
-                    variant="secondary"
-                    className="flex items-center gap-2 px-3 py-1"
-                  >
-                    <span>{formatFilterLabel(key, value)}</span>
-                    <button
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, [key]: "" }))
-                      }
-                      className="hover:text-destructive focus:outline-none"
-                    >
-                      <X size={14} />
-                    </button>
-                  </Badge>
-                ))}
-
-              <Badge
-                variant="outline"
-                className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
-                onClick={() =>
-                  setFilters({
-                    txid: "",
-                    end2end: "",
-                    pixKey: "",
-                    receiverDocument: "",
-                    receiverName: "",
-                    wallet: "",
-                    status_px: "",
-                    status_bk: "",
-                    min_amount: "",
-                    max_amount: "",
-                    created_after: undefined,
-                    created_before: undefined,
-                  })
-                }
-              >
-                Limpar tudo
-              </Badge>
-            </div>
-          </div>
-        )}
       </CardHeader>
 
       <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">

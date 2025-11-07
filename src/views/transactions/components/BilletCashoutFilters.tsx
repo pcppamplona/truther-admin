@@ -24,6 +24,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { BcStatusBillet } from "@/interfaces/Transactions";
+import { Badge } from "@/components/ui/badge";
 
 export interface BilletCashoutFiltersValues {
   orderId?: string;
@@ -178,8 +179,50 @@ export function BilletCashoutFilters(props: BilletCashoutFiltersProps) {
     }
   };
 
+  const activeFilters = Object.entries({
+    orderId,
+    receiverName,
+    receiverDocument,
+    status,
+    min_amount,
+    max_amount,
+    banksId,
+    created_after,
+    created_before,
+  })
+    .filter(([_, value]) => value && value !== "")
+    .map(([key, value]) => ({
+      key,
+      label: formatFilterLabel(key, value),
+    }));
+
   return (
-    <div className="w-full flex justify-end">
+    <div className="w-full flex justify-between items-center">
+      <div className="flex flex-wrap gap-2">
+        {activeFilters.map(({ key, label }) => (
+          <Badge
+            key={key}
+            variant="secondary"
+            className="text-xs font-medium cursor-pointer"
+            onClick={() => setValues({ [key]: undefined })}
+          >
+            {label} ✕
+          </Badge>
+        ))}
+
+        <div className="flex items-center gap-2">
+          {activeFilters.length > 0 && (
+            <Badge
+              variant="outline"
+              className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
+              onClick={clearAll}
+            >
+              Limpar tudo
+            </Badge>
+          )}
+        </div>
+      </div>
+
       <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
         <DrawerTrigger asChild>
           <Button className="w-14 h-12 ">

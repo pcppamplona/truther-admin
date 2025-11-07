@@ -1,13 +1,30 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { Calendar as CalendarIcon, Funnel, ListFilter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { poStatusBlockchain } from "@/interfaces/Transactions";
 import { useI18n } from "@/i18n";
+import { Badge } from "@/components/ui/badge";
 
 export interface PixInFiltersValues {
   txid: string;
@@ -190,8 +207,68 @@ export function PixInFilters(props: PixInFiltersProps) {
     "PROCESSING",
   ];
 
+  const activeFilters = useMemo(() => {
+    const entries = Object.entries({
+      txid,
+      status_bank,
+      status_blockchain,
+      payer_document,
+      payer_name,
+      created_after,
+      created_before,
+      min_amount,
+      max_amount,
+      wallet,
+      end2end,
+      destinationKey,
+      typeIn,
+    }).filter(([_, v]) => v);
+    return entries.map(([key, value]) => ({
+      key,
+      label: formatPixInFilterLabel(key, value),
+    }));
+  }, [
+    txid,
+    status_bank,
+    status_blockchain,
+    payer_document,
+    payer_name,
+    created_after,
+    created_before,
+    min_amount,
+    max_amount,
+    wallet,
+    end2end,
+    destinationKey,
+    typeIn,
+  ]);
+
   return (
-    <div className="w-full flex justify-end">
+    <div className="w-full flex justify-between items-center">
+      <div className="flex flex-wrap gap-2">
+        {activeFilters.map(({ key, label }) => (
+          <Badge
+            key={key}
+            variant="secondary"
+            className="text-xs font-medium cursor-pointer"
+            onClick={() => setValues({ [key]: undefined })}
+          >
+            {label} ✕
+          </Badge>
+        ))}
+
+        <div className="flex items-center gap-2">
+          {activeFilters.length > 0 && (
+            <Badge
+              variant="outline"
+              className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
+              onClick={clearAll}
+            >
+              Limpar tudo
+            </Badge>
+          )}
+        </div>
+      </div>
       <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
         <Button className="w-14 h-12 " onClick={() => setOpen(true)}>
           <Funnel size={18} color="#fff" />
@@ -203,7 +280,9 @@ export function PixInFilters(props: PixInFiltersProps) {
           <div className="grid grid-cols-2 gap-4 p-4">
             <DrawerHeader className="col-span-full">
               <DrawerTitle className="flex flex-row items-center gap-2">
-                <ListFilter />{t("transactions.pixIn.filters.title")}</DrawerTitle>
+                <ListFilter />
+                {t("transactions.pixIn.filters.title")}
+              </DrawerTitle>
             </DrawerHeader>
 
             <div className="mt-2">
@@ -218,7 +297,9 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="wallet">{t("transactions.common.walletLabel")}</Label>
+              <Label htmlFor="wallet">
+                {t("transactions.common.walletLabel")}
+              </Label>
               <input
                 id="wallet"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -229,7 +310,9 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="payer_document">{t("transactions.common.payerDocumentLabel")}</Label>
+              <Label htmlFor="payer_document">
+                {t("transactions.common.payerDocumentLabel")}
+              </Label>
               <input
                 id="payer_document"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -240,7 +323,9 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="payer_name">{t("transactions.common.payerNameLabel")}</Label>
+              <Label htmlFor="payer_name">
+                {t("transactions.common.payerNameLabel")}
+              </Label>
               <input
                 id="payer_name"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -251,7 +336,9 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="destinationKey">{t("transactions.common.destinationKeyLabel")}</Label>
+              <Label htmlFor="destinationKey">
+                {t("transactions.common.destinationKeyLabel")}
+              </Label>
               <input
                 id="destinationKey"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -262,7 +349,9 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="end2end">{t("transactions.common.endToEndLabel")}</Label>
+              <Label htmlFor="end2end">
+                {t("transactions.common.endToEndLabel")}
+              </Label>
               <input
                 id="end2end"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -279,10 +368,14 @@ export function PixInFilters(props: PixInFiltersProps) {
                 onValueChange={(v) => setLocalStatusBank(v === "ALL" ? "" : v)}
               >
                 <SelectTrigger className="mt-1 w-full">
-                  <SelectValue placeholder={t("transactions.common.statusBankLabel")} />
+                  <SelectValue
+                    placeholder={t("transactions.common.statusBankLabel")}
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ALL">{t("transactions.common.allOption")}</SelectItem>
+                  <SelectItem value="ALL">
+                    {t("transactions.common.allOption")}
+                  </SelectItem>
                   <SelectItem value="NEW">NEW</SelectItem>
                   <SelectItem value="CONFIRMED">CONFIRMED</SelectItem>
                   <SelectItem value="REFUNDED">REFUNDED</SelectItem>
@@ -315,7 +408,9 @@ export function PixInFilters(props: PixInFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="min_amount">{t("transactions.common.minAmount")}</Label>
+              <Label htmlFor="min_amount">
+                {t("transactions.common.minAmount")}
+              </Label>
               <input
                 id="min_amount"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -325,7 +420,9 @@ export function PixInFilters(props: PixInFiltersProps) {
               />
             </div>
             <div className="mt-2">
-              <Label htmlFor="max_amount">{t("transactions.common.maxAmount")}</Label>
+              <Label htmlFor="max_amount">
+                {t("transactions.common.maxAmount")}
+              </Label>
               <input
                 id="max_amount"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
