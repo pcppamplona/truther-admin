@@ -75,7 +75,7 @@ export default function ListOcurrences() {
   };
 
   return (
-    <>
+    <div className="flex flex-col h-[calc(100vh-120px)]">
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
           Ocorrências - Tickets
@@ -197,7 +197,7 @@ export default function ListOcurrences() {
       </CardHeader>
 
       {!isError && (
-        <div className="w-full px-4 lg:px-6">
+        <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">
           <Table>
             <TableHeader>
               <TableRow>
@@ -278,7 +278,7 @@ export default function ListOcurrences() {
         </div>
       )}
       {!isError && (
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center items-center">
           <RenderPagination
             page={page}
             setPage={setPage}
@@ -292,6 +292,6 @@ export default function ListOcurrences() {
       {isError && error?.code === "PERMISSION_DENIED" && (
         <ForbiddenCard permission={error.requiredPermission} />
       )}
-    </>
+    </div>
   );
 }

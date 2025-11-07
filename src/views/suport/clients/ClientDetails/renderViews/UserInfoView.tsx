@@ -17,6 +17,7 @@ import {
   ChevronsDown,
   ChevronsUp,
   ExternalLink,
+  FolderOpen,
   MapPinHouse,
   User,
 } from "lucide-react";
@@ -31,12 +32,15 @@ import {
 } from "@/components/ui/table";
 import { useUserTransactions } from "@/services/transactions/useUserTransactions";
 import { getColorRGBA, txStatusColors } from "@/lib/utils";
+import { SkeletonTableFull } from "@/components/skeletons/skeletonTableFull";
+import { EmptyState } from "@/components/EmptyState";
+import { Button } from "@/components/ui/button";
 
 export default function UserInfo({ userInfo }: ClientInfoProps) {
   const page = 1;
   const limit = 5;
 
-  const { data, isLoading, isError } = useUserTransactions(
+  const { data, isLoading, isError, refetch } = useUserTransactions(
     userInfo?.document ?? "",
     page,
     limit
@@ -126,17 +130,27 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
             <ArrowLeftRight /> Transações
           </CardTitle>
           <CardDescription>
-            Últimas 5 transações efetuadas por <strong className="bold">{userInfo?.name}</strong>
+            Últimas 5 transações efetuadas por{" "}
+            <strong className="bold">{userInfo?.name}</strong>
           </CardDescription>
         </CardHeader>
 
         <CardContent className="px-4 lg:px-6 pt-0 pb-4">
           {isLoading ? (
-            <p>Carregando transações...</p>
+            <SkeletonTableFull rows={5} columns={8} />
           ) : isError ? (
             <p>Erro ao carregar transações.</p>
           ) : transactions.length === 0 ? (
-            <p>Nenhuma transação encontrada.</p>
+            <EmptyState
+              title="Nenhuma transação encontrada"
+              description="Não há registros de movimentações para este usuário. Tente ajustar o período ou filtros."
+              icon={<FolderOpen className="w-10 h-10 text-muted-foreground" />}
+              actions={
+                <Button variant="outline" onClick={() => refetch()}>
+                  Recarregar
+                </Button>
+              }
+            />
           ) : (
             <Table>
               <TableHeader>
@@ -161,9 +175,9 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
                     <TableCell>{tx.id}</TableCell>
                     <TableCell className="flex items-center gap-1">
                       {tx.flow === "IN" ? (
-                        <ChevronsUp  />
+                        <ChevronsUp />
                       ) : (
-                        <ChevronsDown className="text-green-500"/>
+                        <ChevronsDown className="text-green-500" />
                       )}
                       {tx.flow}
                     </TableCell>

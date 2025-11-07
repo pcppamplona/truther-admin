@@ -178,7 +178,7 @@ export function AuditLogFilters({
       </DrawerTrigger>
       <DrawerContent ref={drawerRef} className="
           p-4
-          data-[vaul-drawer-direction=right]:w-[700px]
+          data-[vaul-drawer-direction=right]:w-[500px]
           data-[vaul-drawer-direction=right]:max-w-[70vw]
           data-[vaul-drawer-direction=right]:sm:max-w-[70vw]
         ">

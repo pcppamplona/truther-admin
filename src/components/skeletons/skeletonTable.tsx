@@ -1,7 +1,11 @@
 import { TableRow, TableCell } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function SkeletonTable({ rows = 8 }) {
+interface Props {
+  rows?: number;
+}
+
+export function SkeletonTable({ rows = 8 }: Props) {
   return (
     <>
       {Array.from({ length: rows }).map((_, index) => (

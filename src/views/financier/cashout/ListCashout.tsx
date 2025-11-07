@@ -79,7 +79,7 @@ export default function ListCashout() {
           </div>
         </div>
       </CardHeader>
-      <div className="w-full px-4 lg:px-6">
+      <div className="w-full px-4 lg:px-6 h-full">
         <Table>
           <TableHeader>
             <TableRow>

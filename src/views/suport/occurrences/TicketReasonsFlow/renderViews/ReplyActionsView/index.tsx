@@ -25,7 +25,7 @@ export function ReplyActionsView() {
   const handleRowClick = () => {};
 
   return (
-    <>
+    <div className="flex flex-col h-[calc(100vh-120px)]">
       <CardHeader className="mb-4">
         <div className="flex items-center justify-between">
           <div>
@@ -42,7 +42,7 @@ export function ReplyActionsView() {
         </div>
       </CardHeader>
 
-      <div className="w-full px-4 lg:px-6">
+      <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">
         <Table>
           <TableHeader>
             <TableRow>
@@ -88,6 +88,6 @@ export function ReplyActionsView() {
           </TableBody>
         </Table>
       </div>
-    </>
+    </div>
   );
 }

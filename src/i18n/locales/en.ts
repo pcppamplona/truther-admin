@@ -72,6 +72,7 @@ const en = {
     },
     pixIn: {
       title: "PIX IN Transactions",
+      description: "View all incoming PIX transactions, including payer details, bank and blockchain status, and the full record of creation and associated token.",
       short: "PIX IN",
       table: {
         headers: {
@@ -103,6 +104,7 @@ const en = {
     },
     pixOut: {
       title: "PIX OUT Transactions",
+      description: "View all outgoing PIX transactions, including sender and receiver details, bank and blockchain status, and the full record of creation and associated token.",
       short: "PIX OUT",
       table: {
         headers: {
@@ -132,6 +134,7 @@ const en = {
   },
   audit: {
     title: "General Audit",
+    description: "View detailed audit logs, including methods executed, times, users, and system events.",
     breadcrumb: "Audit",
     table: {
       headers: {

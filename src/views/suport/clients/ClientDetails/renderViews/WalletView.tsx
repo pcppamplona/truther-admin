@@ -1,26 +1,51 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPinHouse, PiggyBank, User, WalletCards } from "lucide-react";
+import {
+  FolderOpen,
+  MapPinHouse,
+  PiggyBank,
+  User,
+  WalletCards,
+} from "lucide-react";
 import { Info } from "@/components/info";
 import { WalletSendGas } from "./components/walletSendGas";
 import { documentFormat, getFlagUrl, phoneFormat } from "@/lib/formatters";
 import { useWalletClientDocument } from "@/services/wallets/useWallets";
 import type { UserInfoData } from "@/interfaces/UserInfoData";
-import { CardEmpty } from "@/components/CardEmpty";
+import { EmptyState } from "@/components/EmptyState";
+import { Button } from "@/components/ui/button";
+import { SkeletonCard } from "@/components/skeletons/skeletonCard";
 
 export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
-  const { data: walletAddress, isLoading } = useWalletClientDocument(
-    userinfo.document
-  );
+  const {
+    data: walletAddress,
+    isLoading,
+    refetch,
+  } = useWalletClientDocument(userinfo.document);
 
   if (isLoading) {
-    return <p>Carregando informações da carteira...</p>;
-  }
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+      </div>
+    </div>
+  );
+}
 
   if (!walletAddress) {
     return (
-      <CardEmpty
+      <EmptyState
         title="Nenhuma carteira encontrada"
-        subtitle="Não foi possível encontrar nenhuma carteira para este usuário."
+        description="Não foi possível encontrar nenhuma carteira para este usuário."
+        icon={<FolderOpen className="w-10 h-10 text-muted-foreground" />}
+        actions={
+          <Button variant="outline" onClick={() => refetch()}>
+            Recarregar
+          </Button>
+        }
       />
     );
   }

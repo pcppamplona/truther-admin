@@ -73,7 +73,7 @@ export default function ClientDetails() {
       {view === "Perfil" && client && (<UserInfo client={client} userInfo={userInfo} />)}
       {view === "KYC" && client && (<KYCView client={client} userInfo={userInfo} />)}
       {view === "Carteiras" && userInfo && <WalletView userinfo={userInfo} />}
-       {view === "Transações" && userInfo?.document && <UserTransactionsView document={userInfo.document} />}
+      {view === "Transações" && userInfo?.document && <UserTransactionsView document={userInfo.document} />}
       {view === "NFE" && client && <NFEView client={client} />}
     </SidebarLayout>
   );

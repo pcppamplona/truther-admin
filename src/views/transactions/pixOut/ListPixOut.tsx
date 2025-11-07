@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
-import { CardHeader, CardTitle } from "@/components/ui/card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -75,11 +75,16 @@ export default function ListPixOut() {
   };
 
   return (
-    <>
+    <div className="flex flex-col h-[calc(100vh-120px)]">
+
       <CardHeader>
         <CardTitle className="text-2xl font-bold mb-4">
           {t("transactions.pixOut.title")}
         </CardTitle>
+        <CardDescription>
+          {t("transactions.pixOut.description")}
+        </CardDescription>
+
         <PixOutFilters
           txid={filters.txid}
           end2end={filters.end2end}
@@ -151,10 +156,11 @@ export default function ListPixOut() {
         )}
       </CardHeader>
 
-      <div className="w-full px-4 lg:px-6">
+      <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableCell>ID</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.txid")}</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.statusBank")}</TableCell>
               <TableCell>{t("transactions.pixOut.table.headers.statusBlockchain")}</TableCell>
@@ -176,6 +182,7 @@ export default function ListPixOut() {
                     className="cursor-pointer hover:bg-input transition"
                     onClick={() => toggleExpand(tx.id)}
                   >
+                    <TableCell>{tx.id}</TableCell>
                     <TableCell className="font-mono text-xs break-all">
                       {tx.txid}
                     </TableCell>
@@ -242,7 +249,7 @@ export default function ListPixOut() {
                   <AnimatePresence>
                     {expandedId === tx.id && (
                       <TableRow className="bg-muted/30">
-                        <TableCell colSpan={9} className="p-0">
+                        <TableCell colSpan={10} className="p-0">
                           <motion.div
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
@@ -271,7 +278,7 @@ export default function ListPixOut() {
         </Table>
       </div>
 
-      <div className="flex justify-center mt-4">
+      <div className="flex justify-center items-center">
         <RenderPagination
           page={page}
           setPage={setPage}
@@ -280,6 +287,6 @@ export default function ListPixOut() {
           setLimit={setLimit}
         />
       </div>
-    </>
+    </div>
   );
 }
