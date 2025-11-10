@@ -31,7 +31,6 @@ export function ReasonsView() {
   }, [allTicketReasons]);
 
   const handleRowClick = (reasonId: number) => {
-    console.log("Selecionado:", reasonId);
     setExpandedId((prev) => (prev === reasonId ? null : reasonId));
   };
 
