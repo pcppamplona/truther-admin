@@ -244,7 +244,7 @@ export function PixInFilters(props: PixInFiltersProps) {
   ]);
 
   return (
-    <div className="w-full flex justify-between items-center">
+    <div className="w-full flex justify-between items-center mb-2">
       <div className="flex flex-wrap gap-2">
         {activeFilters.map(({ key, label }) => (
           <Badge
