@@ -109,6 +109,7 @@ export function AppSidebar() {
           },
           { title: "Boleto", url: "transactions/billet-cashout" },
           { title: "BRIDGES", url: "transactions/bridges" },
+          { title: "ATM", url: "transactions/atm" }
         ],
       },
       {

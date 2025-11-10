@@ -110,7 +110,6 @@ export function useUpdateTicket() {
 
   const updateTicket = async ({ id, data }: UpdateTicketInput): Promise<TicketTyped> => {
     const response = await api.patch<TicketTyped>(`/tickets/${id}`, data);
-    console.log("response:", response.data);
     return response.data;
   };
 

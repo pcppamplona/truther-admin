@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 import { PaginateData } from "@/interfaces/PaginateData";
-import { BilletCashoutQueryFilters, BilletCashoutTransaction, BridgeQueryFilters, BridgeTransaction, PixInQueryFilters, PixInTransaction, PixOutQueryFilters, PixOutTransaction } from "@/interfaces/Transactions";
+import { AtmQueryFilters, AtmTransaction, BilletCashoutQueryFilters, BilletCashoutTransaction, BridgeQueryFilters, BridgeTransaction, PixInQueryFilters, PixInTransaction, PixOutQueryFilters, PixOutTransaction } from "@/interfaces/Transactions";
 
 export const usePixOutTransactions = (
   page: number,
@@ -188,6 +188,61 @@ export const useBridgeTransactions = (
 
       const { data } = await api.get<PaginateData<BridgeTransaction>>(
         `/transactions/bridges?${params.toString()}`
+      );
+
+      return data;
+    },
+    refetchOnWindowFocus: false,
+  });
+};
+
+
+export const useAtmTransactions = (
+  page: number,
+  limit: number,
+  filters: AtmQueryFilters = {}
+) => {
+  return useQuery<PaginateData<AtmTransaction>>({
+    queryKey: [
+      "transactions",
+      "atm",
+      page,
+      limit,
+      filters.txid ?? "",
+      filters.sender ?? "",
+      filters.receiverName ?? "",
+      filters.receiverDocument ?? "",
+      filters.status_bk ?? "",
+      filters.status_px ?? "",
+      filters.min_amount ?? "",
+      filters.max_amount ?? "",
+      filters.created_after ?? "",
+      filters.created_before ?? "",
+    ],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+      });
+
+      if (filters.txid) params.append("txid", filters.txid);
+      if (filters.sender) params.append("sender", filters.sender);
+      if (filters.receiverName) params.append("receiverName", filters.receiverName);
+      if (filters.receiverDocument)
+        params.append("receiverDocument", filters.receiverDocument);
+      if (filters.status_bk) params.append("status_bk", filters.status_bk);
+      if (filters.status_px) params.append("status_px", filters.status_px);
+      if (filters.min_amount !== undefined)
+        params.append("min_amount", String(filters.min_amount));
+      if (filters.max_amount !== undefined)
+        params.append("max_amount", String(filters.max_amount));
+      if (filters.created_after)
+        params.append("created_after", filters.created_after);
+      if (filters.created_before)
+        params.append("created_before", filters.created_before);
+
+      const { data } = await api.get<PaginateData<AtmTransaction>>(
+        `/transactions/atm?${params.toString()}`
       );
 
       return data;

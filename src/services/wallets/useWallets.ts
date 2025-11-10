@@ -7,7 +7,6 @@ export const useWalletClientDocument = (document: string) => {
     queryKey: ["aclWallets", document],
     queryFn: async (): Promise<AclwalletData> => {
       const { data } = await api.get<AclwalletData>(`client/wallet/${document}`);
-      console.log("data:", data)
       return data;
     },
     enabled: !!document,

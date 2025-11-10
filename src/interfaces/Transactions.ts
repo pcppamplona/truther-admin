@@ -156,3 +156,38 @@ export type TxStatusBridge =
   | "CANCELED"
   | "FAILED_BRIDGE"
   | "EME";
+
+
+  
+/////////////////////// ATM
+export interface AtmTransaction {
+  id: number;
+  txid: string;
+  refundTxid: string | null;
+  block: number | null;
+  sender: string;
+  receiver: string | null;
+  amount_crypto: string;
+  status_bk: string;
+  receiverName: string;
+  receiverDocument: string;
+  amount_brl: string;
+  status_px: string;
+  createdAt: string;
+}
+export interface AtmQueryFilters {
+  created_after?: string;
+  created_before?: string;
+  txid?: string;
+  sender?: string;
+  sender_name?: string;
+  sender_document?: string;
+  status_bk?: string;
+  status_px?: string;
+  date_op?: string;
+  receiverDocument?: string;
+  receiverName?: string;
+  pixKey?: string;
+  min_amount?: number;
+  max_amount?: number;
+}
