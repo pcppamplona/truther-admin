@@ -10,10 +10,9 @@ import { CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ArrowDown01,
   ArrowUp01,
+  ChevronRight,
   Download,
-  Edit,
   Search,
-  Trash,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -30,8 +29,12 @@ import {
   setPaginationSettings,
 } from "@/lib/paginationStorage";
 import { useEffect, useState } from "react";
+import { UserData } from "@/interfaces/UserData";
+import { useNavigate } from "react-router-dom";
 
 export default function ListClients() {
+  const navigate = useNavigate();
+
   const { page: savedPage, limit: savedLimit } = getPaginationSettings("users");
 
   const [page, setPage] = useState(savedPage);
@@ -45,6 +48,11 @@ export default function ListClients() {
   }, [page, limit]);
 
   const { data, isLoading } = useUsers(page, limit, search, sortBy, sortOrder);
+
+  const handleRowClick = (user: UserData) => {
+    navigate("/userDetails", { state: { user } });
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-120px)]">
       <CardHeader>
@@ -73,7 +81,7 @@ export default function ListClients() {
                 <TooltipTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-14 h-12"
+                    className="w-12 h-10"
                     onClick={() =>
                       setSortOrder(sortOrder === "ASC" ? "DESC" : "ASC")
                     }
@@ -92,8 +100,8 @@ export default function ListClients() {
 
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button className="w-14 h-12">
-                    <Download size={18} color="#fff" />
+                  <Button className="w-12 h-10">
+                    <Download size={16} color="#fff" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -129,8 +137,6 @@ export default function ListClients() {
               <TableCell>uuid</TableCell>
               <TableCell>Role</TableCell>
               <TableCell></TableCell>
-
-              <TableCell></TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -141,6 +147,7 @@ export default function ListClients() {
                 <TableRow
                   key={user.id}
                   className="cursor-pointer hover:bg-input transition"
+                  onClick={() => handleRowClick(user)}
                 >
                   <TableCell>
                     <div className="flex items-center gap-3">
@@ -158,14 +165,7 @@ export default function ListClients() {
                   <TableCell>{user.uuid}</TableCell>
                   <TableCell>{user.role_id}</TableCell>
                   <TableCell>
-                    <Button className="bg-destructive text-background">
-                      <Trash />
-                    </Button>
-                  </TableCell>
-                  <TableCell>
-                    <Button className="text-background">
-                      <Edit />
-                    </Button>
+                    <ChevronRight size={18} />
                   </TableCell>
                 </TableRow>
               ))

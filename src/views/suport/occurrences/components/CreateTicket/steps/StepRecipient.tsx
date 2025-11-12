@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAllUsers } from "@/services/users/useUsers";
-import { Group, TicketTyped, TypeRecipient } from "@/interfaces/TicketData";
+import { RoleId, TicketTyped, TypeRecipient } from "@/interfaces/TicketData";
 import { getInitials } from "@/lib/formatters";
 import { ChevronRight } from "lucide-react";
 import { useTicketReasonsById } from "@/services/Tickets/useReasons";
@@ -27,14 +27,13 @@ export function StepRecipient({
   reasonId,
 }: StepRecipientProps) {
   const { data: reasonData, isLoading } = useTicketReasonsById(reasonId);
-
   const { data: usersData } = useAllUsers();
   const users = usersData ?? [];
 
   const [reasonTypeRecipient, setReasonTypeRecipient] =
     useState<TypeRecipient>();
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-  const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
+  const [selectedGroup, setSelectedGroup] = useState<number | null>(null);
   const [selectedTypeAll, setSelectedTypeAll] = useState<"USER" | "GROUP" | "">(
     ""
   );
@@ -46,8 +45,8 @@ export function StepRecipient({
     setReasonTypeRecipient(type);
     onChange("reason_id", reasonData.id);
 
-    if (type === "GROUP") {
-      onChange("assigned_group", reasonData.recipient as Group);
+    if (type === "GROUP" && reasonData.recipient) {
+      onChange("assigned_role", reasonData.recipient);
       onChange("assigned_user", null);
     }
   }, [reasonData]);
@@ -59,13 +58,12 @@ export function StepRecipient({
     if (!selectedUser) return;
 
     onChange("assigned_user", selectedUser.id);
-    onChange("assigned_group", selectedUser.groupLevel as Group);
+    onChange("assigned_role", selectedUser.role_id);
   }, [selectedUserId]);
 
   useEffect(() => {
     if (!selectedGroup) return;
-
-    onChange("assigned_group", selectedGroup);
+    onChange("assigned_role", selectedGroup);
     onChange("assigned_user", null);
   }, [selectedGroup]);
 
@@ -98,7 +96,7 @@ export function StepRecipient({
                   }`}
                   onClick={() => {
                     setSelectedUserId(user.id);
-                    setSelectedGroup(user.groupLevel as Group);
+                    setSelectedGroup(user.role_id);
                   }}
                 >
                   <div
@@ -158,9 +156,9 @@ export function StepRecipient({
                       }`}
                       onClick={() => {
                         setSelectedUserId(user.id);
-                        setSelectedGroup(user.groupLevel as Group);
+                        setSelectedGroup(user.role_id);
                         onChange("assigned_user", user.id);
-                        onChange("assigned_group", user.groupLevel as Group);
+                        onChange("assigned_role", user.role_id);
                       }}
                     >
                       <div
@@ -189,14 +187,16 @@ export function StepRecipient({
           )}
 
           {selectedTypeAll === "GROUP" && (
-            <Select onValueChange={(value) => setSelectedGroup(value as Group)}>
+            <Select
+              onValueChange={(value) => setSelectedGroup(Number(value))}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Selecione o grupo" />
               </SelectTrigger>
               <SelectContent>
-                {["N1", "N2", "N3", "PRODUTO", "MKT", "ADMIN"].map((group) => (
-                  <SelectItem key={group} value={group}>
-                    {group}
+                {RoleId.map((role) => (
+                  <SelectItem key={role.id} value={role.id.toString()}>
+                    {role.name}
                   </SelectItem>
                 ))}
               </SelectContent>

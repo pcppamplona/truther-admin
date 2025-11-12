@@ -196,7 +196,7 @@ export function PixOutFilters(props: PixOutFiltersProps) {
     "CANCEL",
     "REFUNDED",
     "NEW",
-    "PROCESSING"
+    "PROCESSING",
   ];
 
   const activeFilters = useMemo(() => {
@@ -236,35 +236,35 @@ export function PixOutFilters(props: PixOutFiltersProps) {
   return (
     <div className="w-full flex justify-between items-center">
       <div className="flex flex-wrap gap-2">
-          {activeFilters.map(({ key, label }) => (
-            <Badge
-              key={key}
-              variant="secondary"
-              className="text-xs font-medium cursor-pointer"
-              onClick={() => {
-                setPage(1);
-                setValues({ [key]: undefined });
-              }}
-            >
-              {label} ✕
-            </Badge>
-          ))}
+        {activeFilters.map(({ key, label }) => (
+          <Badge
+            key={key}
+            variant="secondary"
+            className="text-xs font-medium cursor-pointer"
+            onClick={() => {
+              setPage(1);
+              setValues({ [key]: undefined });
+            }}
+          >
+            {label} ✕
+          </Badge>
+        ))}
 
-          {activeFilters.length > 0 && (
-            <Badge
-              variant="outline"
-              className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
-              onClick={clearAll}
-            >
-              Limpar tudo
-            </Badge>
-          )}
-        </div>
-        
+        {activeFilters.length > 0 && (
+          <Badge
+            variant="outline"
+            className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
+            onClick={clearAll}
+          >
+            Limpar tudo
+          </Badge>
+        )}
+      </div>
+
       <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
         <DrawerTrigger asChild>
-          <Button className="w-14 h-12 ">
-            <Funnel size={18} color="#fff" />
+          <Button className="w-12 h-10 mr-2" variant="outline">
+            <Funnel size={16} color="#fff" />
           </Button>
         </DrawerTrigger>
         <DrawerContent
@@ -291,7 +291,9 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="wallet">{t("transactions.common.senderWalletLabel")}</Label>
+              <Label htmlFor="wallet">
+                {t("transactions.common.senderWalletLabel")}
+              </Label>
               <input
                 id="wallet"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -302,7 +304,9 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="receiverName">{t("transactions.common.receiverNameLabel")}</Label>
+              <Label htmlFor="receiverName">
+                {t("transactions.common.receiverNameLabel")}
+              </Label>
               <input
                 id="receiverName"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -326,7 +330,9 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="pixKey">{t("transactions.common.pixKeyLabel")}</Label>
+              <Label htmlFor="pixKey">
+                {t("transactions.common.pixKeyLabel")}
+              </Label>
               <input
                 id="pixKey"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -337,7 +343,9 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="end2end">{t("transactions.common.endToEndLabel")}</Label>
+              <Label htmlFor="end2end">
+                {t("transactions.common.endToEndLabel")}
+              </Label>
               <input
                 id="end2end"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -374,10 +382,14 @@ export function PixOutFilters(props: PixOutFiltersProps) {
                 onValueChange={(v) => setLocalStatusPx(v === "ALL" ? "" : v)}
               >
                 <SelectTrigger className="mt-1">
-                  <SelectValue placeholder={t("transactions.common.statusBankLabel")} />
+                  <SelectValue
+                    placeholder={t("transactions.common.statusBankLabel")}
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ALL">{t("transactions.common.allOption")}</SelectItem>
+                  <SelectItem value="ALL">
+                    {t("transactions.common.allOption")}
+                  </SelectItem>
                   <SelectItem value="NEW">NEW</SelectItem>
                   <SelectItem value="PROCESSING">PROCESSING</SelectItem>
                   <SelectItem value="CONFIRMED">CONFIRMED</SelectItem>
@@ -389,7 +401,9 @@ export function PixOutFilters(props: PixOutFiltersProps) {
             </div>
 
             <div className="mt-2">
-              <Label htmlFor="min_amount">{t("transactions.common.minAmount")}</Label>
+              <Label htmlFor="min_amount">
+                {t("transactions.common.minAmount")}
+              </Label>
               <input
                 id="min_amount"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"
@@ -399,7 +413,9 @@ export function PixOutFilters(props: PixOutFiltersProps) {
               />
             </div>
             <div className="mt-2">
-              <Label htmlFor="max_amount">{t("transactions.common.maxAmount")}</Label>
+              <Label htmlFor="max_amount">
+                {t("transactions.common.maxAmount")}
+              </Label>
               <input
                 id="max_amount"
                 className="mt-1 w-full border rounded-lg px-3 py-2 bg-transparent"

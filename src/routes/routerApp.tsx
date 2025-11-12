@@ -25,6 +25,7 @@ import Bridges from "@/views/transactions/bridges";
 import SendGas from "@/views/suport/sendGas";
 import Decode from "@/views/suport/decode";
 import Atm from "@/views/transactions/atm";
+import UserDetails from "@/views/users/UserDetails";
 
 export default function RoutesApp() {
   return (
@@ -59,6 +60,8 @@ export default function RoutesApp() {
       <Route path="/cashout" element={<Cashout />} />
 
       <Route path="/users" element={<Users />} />
+      <Route path="/userDetails" element={<UserDetails />} />
+
 
       <Route path="/auditLog" element={<AuditLog />} />
     </Routes>

@@ -80,8 +80,8 @@ export function CreateTicket() {
         <Tooltip>
           <TooltipTrigger asChild>
             <DialogTrigger asChild>
-              <Button className="w-12 h-12 text-white">
-                <Plus size={18} />
+              <Button className="w-12 h-10 mt-3">
+                <Plus size={16} color="#fff" />
               </Button>
             </DialogTrigger>
           </TooltipTrigger>

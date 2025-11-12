@@ -173,7 +173,7 @@ export default function ListOcurrences() {
                 <TooltipTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-14 h-12"
+                    className="w-12 h-10 mt-3"
                     onClick={() =>
                       setSortOrder(sortOrder === "ASC" ? "DESC" : "ASC")
                     }

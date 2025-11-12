@@ -17,7 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, Filter, ListFilter, X } from "lucide-react";
+import { CalendarIcon, Funnel, ListFilter, X } from "lucide-react";
 import {
   Select,
   SelectTrigger,
@@ -188,8 +188,8 @@ export function UserTransactionsFilters(props: UserTransactionsFiltersProps) {
 
       <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
         <DrawerTrigger asChild>
-          <Button className="w-14 h-12">
-            <Filter size={18} color="#fff" />
+          <Button className="w-12 h-10 mr-2" variant="outline">
+            <Funnel size={16} color="#fff" />
           </Button>
         </DrawerTrigger>
 

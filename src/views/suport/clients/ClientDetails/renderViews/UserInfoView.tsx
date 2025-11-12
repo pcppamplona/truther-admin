@@ -54,8 +54,11 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
         <Card>
           <CardHeader>
             <CardTitle className="flex flex-row items-center gap-2">
-              <User /> Dados Pessoais
+              <User /> Informações Pessoais
             </CardTitle>
+            <CardDescription>
+              Dados de identificação e registro vinculados ao cliente.
+            </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Info label="Nome" value={userInfo?.name} />
@@ -92,6 +95,9 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
             <CardTitle className="flex flex-row items-center gap-2">
               <MapPinHouse /> Endereço
             </CardTitle>
+            <CardDescription>
+              Detalhes do local de residência ou correspondência do cliente.
+            </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Info label="CEP" value={userInfo?.cep} />
