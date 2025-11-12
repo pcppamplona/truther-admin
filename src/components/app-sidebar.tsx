@@ -17,7 +17,7 @@ import {
   House,
   DollarSign,
   User,
-  FlagTriangleRight,
+  Activity,
   ArrowRightLeft,
 } from "lucide-react";
 import { useI18n } from "@/i18n";
@@ -121,7 +121,7 @@ export function AppSidebar() {
       {
         title: t("sidebar.audit"),
         url: "auditLog",
-        icon: FlagTriangleRight,
+        icon: Activity,
       },
     ],
   };

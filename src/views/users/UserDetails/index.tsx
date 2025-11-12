@@ -1,7 +1,7 @@
 import { SidebarLayout } from "@/components/layouts/SidebarLayout";
 import { UserData } from "@/interfaces/UserData";
 import { useLocation } from "react-router";
-import { CircleUserRound, FlagTriangleRight, ShieldCloseIcon } from "lucide-react";
+import { Activity, CircleUserRound, ShieldCloseIcon } from "lucide-react";
 import { useState } from "react";
 import { UserProfile } from "./renderViews/UserProfile";
 import { UserPermissions } from "./renderViews/UserPermissions";
@@ -22,7 +22,7 @@ export default function UserDetails() {
   const tabs = [
     { name: "Perfil", icon: <CircleUserRound size={18} /> },
     { name: "Permissões", icon: <ShieldCloseIcon size={18} /> },
-    { name: "Auditoria", icon: <FlagTriangleRight size={18} /> },
+    { name: "Auditoria", icon: <Activity size={18} /> },
   ];
   return (
     <SidebarLayout

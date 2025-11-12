@@ -81,13 +81,13 @@ export default function ListClients() {
             />
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mr-2">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-14 h-12"
+                    className="w-12 h-10"
                     onClick={() =>
                       setSortOrder(sortOrder === "ASC" ? "DESC" : "ASC")
                     }
@@ -106,7 +106,7 @@ export default function ListClients() {
 
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button className="w-14 h-12">
+                  <Button className="w-12 h-10">
                     <Download size={18} color="#fff" />
                   </Button>
                 </TooltipTrigger>

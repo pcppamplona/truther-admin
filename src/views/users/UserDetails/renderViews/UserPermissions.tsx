@@ -16,11 +16,9 @@ export function UserPermissions({ user }: { user: UserData }) {
   const { data: userPermissions = [], isLoading: loadingUser } = useUserPermissions(user.id);
   const { data: rolePermissions = [], isLoading: loadingRole } = useRolePermissions(user.role_id);
 
-  console.log("userPermissions", userPermissions)
-
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="w-full  max-h-[50vh] overflow-y-auto">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
@@ -63,8 +61,7 @@ export function UserPermissions({ user }: { user: UserData }) {
         </CardContent>
       </Card>
 
-      {/* Permissões herdadas */}
-      <Card>
+      <Card className="w-full max-h-[50vh] overflow-y-auto">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield /> Permissões da Role

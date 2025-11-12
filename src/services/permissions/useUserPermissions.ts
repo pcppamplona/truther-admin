@@ -46,7 +46,6 @@ export const useDeleteUserPermission = () => {
       return data;
     },
      onSuccess: async (_data, payload) => {
-      // Mesmo comportamento — garante sincronização imediata
       await queryClient.invalidateQueries({
         queryKey: ["user-permissions", payload.user_id],
         exact: true,

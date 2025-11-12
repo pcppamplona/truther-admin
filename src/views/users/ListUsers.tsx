@@ -81,7 +81,7 @@ export default function ListClients() {
                 <TooltipTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-14 h-12"
+                    className="w-12 h-10"
                     onClick={() =>
                       setSortOrder(sortOrder === "ASC" ? "DESC" : "ASC")
                     }
@@ -100,8 +100,8 @@ export default function ListClients() {
 
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button className="w-14 h-12">
-                    <Download size={18} color="#fff" />
+                  <Button className="w-12 h-10">
+                    <Download size={16} color="#fff" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>

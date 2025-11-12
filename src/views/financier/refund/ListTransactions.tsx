@@ -41,7 +41,7 @@ export default function ListTransactions() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button className="w-14 h-12 bg-blue-500">
+                  <Button className="w-12 h-10 bg-blue-500">
                     <Funnel size={18} color="#fff"/>
                   </Button>
                 </TooltipTrigger>
@@ -52,7 +52,7 @@ export default function ListTransactions() {
 
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button className="w-14 h-12">
+                  <Button className="w-12 h-10">
                     <Download size={18} color="#fff" />
                   </Button>
                 </TooltipTrigger>

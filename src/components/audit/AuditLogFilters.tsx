@@ -34,10 +34,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { methodType } from "@/interfaces/AuditLogData";
-import {useRef, useState} from "react";
+import { useRef, useState } from "react";
 import { useI18n } from "@/i18n";
+import { Badge } from "../ui/badge";
 
-type actionType = 'security' | 'listing' | 'alter' | 'crm';
+type actionType = "security" | "listing" | "alter" | "crm";
 
 interface AuditLogFiltersProps {
   search: string;
@@ -76,14 +77,18 @@ export function AuditLogFilters({
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [drawerSearch, setDrawerSearch] = useState("");
   const [drawerDescriptionSearch, setDrawerDescriptionSearch] = useState("");
-  const [drawerSelectedMethod, setDrawerSelectedMethod] = useState<methodType | "">(selectedMethod);
-  const [drawerSelectedAction, setDrawerSelectedAction] = useState<actionType | "">(selectedAction);
-  const [drawerCreatedBefore, setDrawerCreatedBefore] = useState<Date | undefined>(
-    createdBefore ? new Date(createdBefore) : undefined
-  );
-  const [drawerCreatedAfter, setDrawerCreatedAfter] = useState<Date | undefined>(
-    createdAfter ? new Date(createdAfter) : undefined
-  );
+  const [drawerSelectedMethod, setDrawerSelectedMethod] = useState<
+    methodType | ""
+  >(selectedMethod);
+  const [drawerSelectedAction, setDrawerSelectedAction] = useState<
+    actionType | ""
+  >(selectedAction);
+  const [drawerCreatedBefore, setDrawerCreatedBefore] = useState<
+    Date | undefined
+  >(createdBefore ? new Date(createdBefore) : undefined);
+  const [drawerCreatedAfter, setDrawerCreatedAfter] = useState<
+    Date | undefined
+  >(createdAfter ? new Date(createdAfter) : undefined);
   const [openBeforeCalendar, setOpenBeforeCalendar] = useState(false);
   const [openAfterCalendar, setOpenAfterCalendar] = useState(false);
 
@@ -97,15 +102,15 @@ export function AuditLogFilters({
       setDrawerSelectedAction(selectedAction);
 
       if (createdBefore) {
-        const [year, month, day] = createdBefore.split('-').map(Number);
+        const [year, month, day] = createdBefore.split("-").map(Number);
         const date = new Date(Date.UTC(year, month - 1, day));
         setDrawerCreatedBefore(date);
       } else {
         setDrawerCreatedBefore(undefined);
       }
-      
+
       if (createdAfter) {
-        const [year, month, day] = createdAfter.split('-').map(Number);
+        const [year, month, day] = createdAfter.split("-").map(Number);
         const date = new Date(Date.UTC(year, month - 1, day));
         setDrawerCreatedAfter(date);
       } else {
@@ -137,25 +142,25 @@ export function AuditLogFilters({
     setSelectedMethod(drawerSelectedMethod);
     setSelectedAction(drawerSelectedAction);
 
-    const formattedBeforeDate = drawerCreatedBefore 
+    const formattedBeforeDate = drawerCreatedBefore
       ? formatDateToYYYYMMDD(drawerCreatedBefore)
       : undefined;
-    
+
     const formattedAfterDate = drawerCreatedAfter
       ? formatDateToYYYYMMDD(drawerCreatedAfter)
       : undefined;
-    
+
     setCreatedBefore(formattedBeforeDate);
     setCreatedAfter(formattedAfterDate);
-    
+
     setPage(1);
     setIsDrawerOpen(false);
   };
 
   const formatDateToYYYYMMDD = (date: Date): string => {
     const year = date.getUTCFullYear();
-    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(date.getUTCDate()).padStart(2, '0');
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(date.getUTCDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
@@ -163,293 +168,417 @@ export function AuditLogFilters({
     e?.stopPropagation();
     setDrawerCreatedBefore(undefined);
   };
-  
+
   const handleClearAfterClick = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     setDrawerCreatedAfter(undefined);
   };
 
+  const clearAll = () => {
+    setPage(1);
+    setSearch("");
+    setDescriptionSearch("");
+    setSelectedMethod("");
+    setSelectedAction("");
+    setCreatedBefore(undefined);
+    setCreatedAfter(undefined);
+  };
+
+  const activeFilters = Object.entries({
+    search,
+    descriptionSearch,
+    selectedMethod,
+    selectedAction,
+    createdBefore,
+    createdAfter,
+  })
+    .filter(([_, value]) => value && value !== "")
+    .map(([key, value]) => ({
+      key,
+      label: formatFilterLabel(key, value),
+    }));
+
+  function formatFilterLabel(key: string, value: any): string {
+    switch (key) {
+      case "search":
+        return `Mensagem: ${value}`;
+      case "descriptionSearch":
+        return `Descrição: ${value}`;
+      case "selectedMethod":
+        return `Método: ${value}`;
+      case "selectedAction":
+        return `Ação: ${value}`;
+      case "createdBefore":
+        return `Antes de: ${value}`;
+      case "createdAfter":
+        return `Depois de: ${value}`;
+      default:
+        return `${key}: ${value}`;
+    }
+  }
+
   return (
-    <Drawer open={isDrawerOpen} onOpenChange={handleDrawerOpenChange} direction="right">
-      <DrawerTrigger asChild>
-        <Button className="w-14 h-12 bg-blue-500">
-          <Funnel size={18} color="#fff" />
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent ref={drawerRef} className="
+    <div className="w-full flex justify-between items-center">
+      <div className="flex flex-wrap gap-2 mb-4">
+        {activeFilters.map(({ key, label }) => (
+          <Badge
+            key={key}
+            variant="secondary"
+            className="text-xs font-medium cursor-pointer"
+            onClick={() => {
+              switch (key) {
+                case "search":
+                  setSearch("");
+                  break;
+                case "descriptionSearch":
+                  setDescriptionSearch("");
+                  break;
+                case "selectedMethod":
+                  setSelectedMethod("");
+                  break;
+                case "selectedAction":
+                  setSelectedAction("");
+                  break;
+                case "createdBefore":
+                  setCreatedBefore(undefined);
+                  break;
+                case "createdAfter":
+                  setCreatedAfter(undefined);
+                  break;
+              }
+              setPage(1);
+            }}
+          >
+            {label} ✕
+          </Badge>
+        ))}
+
+        {activeFilters.length > 0 && (
+          <Badge
+            variant="outline"
+            className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
+            onClick={clearAll}
+          >
+            Limpar tudo
+          </Badge>
+        )}
+      </div>
+      
+      <Drawer
+        open={isDrawerOpen}
+        onOpenChange={handleDrawerOpenChange}
+        direction="right"
+      >
+        <DrawerTrigger asChild>
+          <Button className="w-12 h-10 mr-2" variant="outline">
+            <Funnel size={16} color="#fff" />
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent
+          ref={drawerRef}
+          className="
           p-4
           data-[vaul-drawer-direction=right]:w-[500px]
           data-[vaul-drawer-direction=right]:max-w-[70vw]
           data-[vaul-drawer-direction=right]:sm:max-w-[70vw]
-        ">
-        <DrawerHeader>
-          <DrawerTitle>{t("audit.filters.title")}</DrawerTitle>
-          <DrawerDescription>
-            {t("audit.filters.description")}
-          </DrawerDescription>
-        </DrawerHeader>
-        
-        <div className="space-y-4 py-4">
-          <div className="flex flex-row gap-4">
-            <div className="space-y-2 flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <MessageSquareText size={18} />
-                <strong>{t("audit.filters.message.label")}</strong>
-              </div>
-              <div className="flex items-center border border-border rounded-lg px-3 py-3 w-full">
-                <Search size={16} className="mr-2 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder={t("audit.filters.message.placeholder")}
-                  className="outline-none text-sm w-full"
-                  value={drawerSearch}
-                  onChange={(e) => setDrawerSearch(e.target.value)}
-                />
-              </div>
-            </div>
-            
-            <div className="space-y-2 flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <ScrollText size={18} />
-                <strong>{t("audit.filters.descriptionField.label")}</strong>
-              </div>
-              <div className="flex items-center border border-border rounded-lg px-3 py-3 w-full">
-                <Search size={16} className="mr-2 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder={t("audit.filters.descriptionField.placeholder")}
-                  className="outline-none text-sm w-full"
-                  value={drawerDescriptionSearch}
-                  onChange={(e) => setDrawerDescriptionSearch(e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex flex-row gap-4">
-            <div className="space-y-2 flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <FileText size={18} />
-                <strong>{t("audit.filters.method.label")}</strong>
-              </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between">
-                    {drawerSelectedMethod || t("audit.filters.method.placeholder")}
-                    <ChevronDown size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-full">
-                  <DropdownMenuItem 
-                    onClick={() => setDrawerSelectedMethod("")}
-                    className="cursor-pointer"
-                  >
-                    {t("common.actions.all")}
-                  </DropdownMenuItem>
-                  {["POST", "DELETE", "GET", "PUT", "PATCH"].map((method) => (
-                    <DropdownMenuItem 
-                      key={method}
-                      onClick={() => setDrawerSelectedMethod(method as methodType)}
-                      className={`cursor-pointer ${drawerSelectedMethod === method ? "bg-muted" : ""}`}
-                    >
-                      <span className={methodColors[method as methodType]}>
-                        {method}
-                      </span>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            
-            <div className="space-y-2 flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <Shield size={18} />
-                <strong>{t("audit.filters.action.label")}</strong>
-              </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between">
-                    {drawerSelectedAction || t("audit.filters.action.placeholder")}
-                    <ChevronDown size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-full">
-                  <DropdownMenuItem 
-                    onClick={() => setDrawerSelectedAction("")}
-                    className="cursor-pointer"
-                  >
-                    {t("common.actions.all")}
-                  </DropdownMenuItem>
-                  {["security", "listing", "alter", "crm"].map((action) => (
-                    <DropdownMenuItem 
-                      key={action}
-                      onClick={() => setDrawerSelectedAction(action as actionType)}
-                      className={`cursor-pointer ${drawerSelectedAction === action ? "bg-muted" : ""}`}
-                    >
-                      {action}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
+        "
+        >
+          <DrawerHeader>
+            <DrawerTitle>{t("audit.filters.title")}</DrawerTitle>
+            <DrawerDescription>
+              {t("audit.filters.description")}
+            </DrawerDescription>
+          </DrawerHeader>
 
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 mb-1">
-              <CalendarIcon size={18} />
-              <strong>{t("audit.filters.createdAt.label")}</strong>
-            </div>
-            
+          <div className="space-y-4 py-4">
             <div className="flex flex-row gap-4">
-              <div className="flex flex-col gap-3 flex-1">
-                <Label htmlFor="created_after" className="px-1">
-                  {t("audit.filters.createdAt.createdAfter")}
-                </Label>
-                <Popover open={openAfterCalendar} onOpenChange={setOpenAfterCalendar}>
-                  <PopoverTrigger asChild>
+              <div className="space-y-2 flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <MessageSquareText size={18} />
+                  <strong>{t("audit.filters.message.label")}</strong>
+                </div>
+                <div className="flex items-center border border-border rounded-lg px-3 py-3 w-full">
+                  <Search size={16} className="mr-2 text-muted-foreground" />
+                  <input
+                    type="text"
+                    placeholder={t("audit.filters.message.placeholder")}
+                    className="outline-none text-sm w-full"
+                    value={drawerSearch}
+                    onChange={(e) => setDrawerSearch(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2 flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <ScrollText size={18} />
+                  <strong>{t("audit.filters.descriptionField.label")}</strong>
+                </div>
+                <div className="flex items-center border border-border rounded-lg px-3 py-3 w-full">
+                  <Search size={16} className="mr-2 text-muted-foreground" />
+                  <input
+                    type="text"
+                    placeholder={t(
+                      "audit.filters.descriptionField.placeholder"
+                    )}
+                    className="outline-none text-sm w-full"
+                    value={drawerDescriptionSearch}
+                    onChange={(e) => setDrawerDescriptionSearch(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-row gap-4">
+              <div className="space-y-2 flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <FileText size={18} />
+                  <strong>{t("audit.filters.method.label")}</strong>
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
                     <Button
                       variant="outline"
-                      id="created_after"
-                      className="w-full justify-between font-normal"
-                      type="button"
-                      aria-label={t("audit.filters.createdAt.ariaAfter")}
+                      className="w-full justify-between"
                     >
-                      <span>
-                        {drawerCreatedAfter ? formatDateToYYYYMMDD(drawerCreatedAfter) : t("common.actions.selectDate")}
-                      </span>
-                      
-                      <span className="flex items-center gap-1">
+                      {drawerSelectedMethod ||
+                        t("audit.filters.method.placeholder")}
+                      <ChevronDown size={16} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-full">
+                    <DropdownMenuItem
+                      onClick={() => setDrawerSelectedMethod("")}
+                      className="cursor-pointer"
+                    >
+                      {t("common.actions.all")}
+                    </DropdownMenuItem>
+                    {["POST", "DELETE", "GET", "PUT", "PATCH"].map((method) => (
+                      <DropdownMenuItem
+                        key={method}
+                        onClick={() =>
+                          setDrawerSelectedMethod(method as methodType)
+                        }
+                        className={`cursor-pointer ${
+                          drawerSelectedMethod === method ? "bg-muted" : ""
+                        }`}
+                      >
+                        <span className={methodColors[method as methodType]}>
+                          {method}
+                        </span>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              <div className="space-y-2 flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <Shield size={18} />
+                  <strong>{t("audit.filters.action.label")}</strong>
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-between"
+                    >
+                      {drawerSelectedAction ||
+                        t("audit.filters.action.placeholder")}
+                      <ChevronDown size={16} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-full">
+                    <DropdownMenuItem
+                      onClick={() => setDrawerSelectedAction("")}
+                      className="cursor-pointer"
+                    >
+                      {t("common.actions.all")}
+                    </DropdownMenuItem>
+                    {["security", "listing", "alter", "crm"].map((action) => (
+                      <DropdownMenuItem
+                        key={action}
+                        onClick={() =>
+                          setDrawerSelectedAction(action as actionType)
+                        }
+                        className={`cursor-pointer ${
+                          drawerSelectedAction === action ? "bg-muted" : ""
+                        }`}
+                      >
+                        {action}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 mb-1">
+                <CalendarIcon size={18} />
+                <strong>{t("audit.filters.createdAt.label")}</strong>
+              </div>
+
+              <div className="flex flex-row gap-4">
+                <div className="flex flex-col gap-3 flex-1">
+                  <Label htmlFor="created_after" className="px-1">
+                    {t("audit.filters.createdAt.createdAfter")}
+                  </Label>
+                  <Popover
+                    open={openAfterCalendar}
+                    onOpenChange={setOpenAfterCalendar}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        id="created_after"
+                        className="w-full justify-between font-normal"
+                        type="button"
+                        aria-label={t("audit.filters.createdAt.ariaAfter")}
+                      >
+                        <span>
+                          {drawerCreatedAfter
+                            ? formatDateToYYYYMMDD(drawerCreatedAfter)
+                            : t("common.actions.selectDate")}
+                        </span>
+
+                        <span className="flex items-center gap-1">
+                          {drawerCreatedAfter && (
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              aria-label={t("audit.filters.calendar.clear")}
+                              onClick={handleClearAfterClick}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          )}
+                          <CalendarIcon className="h-4 w-4 opacity-60" />
+                        </span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      container={drawerRef.current}
+                      className="w-auto p-0"
+                      align="start"
+                    >
+                      <Calendar
+                        mode="single"
+                        selected={drawerCreatedAfter}
+                        captionLayout="dropdown"
+                        onSelect={setDrawerCreatedAfter}
+                        initialFocus
+                      />
+                      <div className="flex justify-end gap-2 p-2">
                         {drawerCreatedAfter && (
                           <Button
-                            type="button"
-                            size="icon"
                             variant="ghost"
-                            aria-label={t("audit.filters.calendar.clear")}
-                            onClick={handleClearAfterClick}
+                            size="sm"
+                            onClick={() => {
+                              setDrawerCreatedAfter(undefined);
+                              setOpenAfterCalendar(false);
+                            }}
                           >
-                            <X className="h-4 w-4" />
+                            {t("audit.filters.calendar.clear")}
                           </Button>
                         )}
-                        <CalendarIcon className="h-4 w-4 opacity-60" />
-                      </span>
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent 
-                    container={drawerRef.current}
-                    className="w-auto p-0" 
-                    align="start"
-                  >
-                    <Calendar
-                      mode="single"
-                      selected={drawerCreatedAfter}
-                      captionLayout="dropdown"
-                      onSelect={setDrawerCreatedAfter}
-                      initialFocus
-                    />
-                    <div className="flex justify-end gap-2 p-2">
-                      {drawerCreatedAfter && (
                         <Button
-                          variant="ghost"
                           size="sm"
-                          onClick={() => {
-                            setDrawerCreatedAfter(undefined);
-                            setOpenAfterCalendar(false);
-                          }}
+                          onClick={() => setOpenAfterCalendar(false)}
                         >
-                          {t("audit.filters.calendar.clear")}
+                          {t("audit.filters.calendar.ok")}
                         </Button>
-                      )}
-                      <Button size="sm" onClick={() => setOpenAfterCalendar(false)}>
-                        {t("audit.filters.calendar.ok")}
-                      </Button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </div>
 
-              <div className="flex flex-col gap-3 flex-1">
-                <Label htmlFor="created_before" className="px-1">
-                  {t("audit.filters.createdAt.createdBefore")}
-                </Label>
-                <Popover open={openBeforeCalendar} onOpenChange={setOpenBeforeCalendar}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      id="created_before"
-                      className="w-full justify-between font-normal"
-                      type="button"
-                      aria-label={t("audit.filters.createdAt.ariaBefore")}
+                <div className="flex flex-col gap-3 flex-1">
+                  <Label htmlFor="created_before" className="px-1">
+                    {t("audit.filters.createdAt.createdBefore")}
+                  </Label>
+                  <Popover
+                    open={openBeforeCalendar}
+                    onOpenChange={setOpenBeforeCalendar}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        id="created_before"
+                        className="w-full justify-between font-normal"
+                        type="button"
+                        aria-label={t("audit.filters.createdAt.ariaBefore")}
+                      >
+                        <span>
+                          {drawerCreatedBefore
+                            ? formatDateToYYYYMMDD(drawerCreatedBefore)
+                            : t("common.actions.selectDate")}
+                        </span>
+
+                        <span className="flex items-center gap-1">
+                          {drawerCreatedBefore && (
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              aria-label={t("audit.filters.calendar.clear")}
+                              onClick={handleClearBeforeClick}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          )}
+                          <CalendarIcon className="h-4 w-4 opacity-60" />
+                        </span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      container={drawerRef.current}
+                      className="w-auto p-0"
+                      align="start"
                     >
-                      <span>
-                        {drawerCreatedBefore ? formatDateToYYYYMMDD(drawerCreatedBefore) : t("common.actions.selectDate")}
-                      </span>
-                      
-                      <span className="flex items-center gap-1">
+                      <Calendar
+                        mode="single"
+                        selected={drawerCreatedBefore}
+                        captionLayout="dropdown"
+                        onSelect={setDrawerCreatedBefore}
+                        initialFocus
+                      />
+                      <div className="flex justify-end gap-2 p-2">
                         {drawerCreatedBefore && (
                           <Button
-                            type="button"
-                            size="icon"
                             variant="ghost"
-                            aria-label={t("audit.filters.calendar.clear")}
-                            onClick={handleClearBeforeClick}
+                            size="sm"
+                            onClick={() => {
+                              setDrawerCreatedBefore(undefined);
+                              setOpenBeforeCalendar(false);
+                            }}
                           >
-                            <X className="h-4 w-4" />
+                            {t("audit.filters.calendar.clear")}
                           </Button>
                         )}
-                        <CalendarIcon className="h-4 w-4 opacity-60" />
-                      </span>
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent 
-                    container={drawerRef.current}
-                    className="w-auto p-0" 
-                    align="start"
-                  >
-                    <Calendar
-                      mode="single"
-                      selected={drawerCreatedBefore}
-                      captionLayout="dropdown"
-                      onSelect={setDrawerCreatedBefore}
-                      initialFocus
-                    />
-                    <div className="flex justify-end gap-2 p-2">
-                      {drawerCreatedBefore && (
                         <Button
-                          variant="ghost"
                           size="sm"
-                          onClick={() => {
-                            setDrawerCreatedBefore(undefined);
-                            setOpenBeforeCalendar(false);
-                          }}
+                          onClick={() => setOpenBeforeCalendar(false)}
                         >
-                          {t("audit.filters.calendar.clear")}
+                          {t("audit.filters.calendar.ok")}
                         </Button>
-                      )}
-                      <Button size="sm" onClick={() => setOpenBeforeCalendar(false)}>
-                        {t("audit.filters.calendar.ok")}
-                      </Button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        <DrawerFooter className="flex flex-row justify-end gap-2">
-          <Button 
-            variant="outline" 
-            onClick={handleClear}
-          >
-            {t("common.actions.clear")}
-          </Button>
-          <Button 
-            onClick={handleApply}
-          >
-            {t("common.actions.apply")}
-          </Button>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+
+          <DrawerFooter className="flex flex-row justify-end gap-2">
+            <Button variant="outline" onClick={handleClear}>
+              {t("common.actions.clear")}
+            </Button>
+            <Button onClick={handleApply}>{t("common.actions.apply")}</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </div>
   );
 }

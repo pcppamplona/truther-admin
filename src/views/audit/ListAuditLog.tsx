@@ -79,37 +79,35 @@ export default function ListAuditLog() {
         <CardDescription>{t("audit.description")}</CardDescription>
 
         <div className="flex items-center justify-end gap-4">
-          <div className="flex items-center gap-2">
-            <TooltipProvider>
-              <AuditLogFilters
-                search={search}
-                setSearch={setSearch}
-                descriptionSearch={descriptionSearch}
-                setDescriptionSearch={setDescriptionSearch}
-                selectedMethod={selectedMethod}
-                setSelectedMethod={setSelectedMethod}
-                selectedAction={selectedAction}
-                setSelectedAction={setSelectedAction}
-                createdBefore={createdBefore}
-                setCreatedBefore={setCreatedBefore}
-                createdAfter={createdAfter}
-                setCreatedAfter={setCreatedAfter}
-                setPage={setPage}
-                methodColors={methodColors}
-              />
+          <TooltipProvider>
+            <AuditLogFilters
+              search={search}
+              setSearch={setSearch}
+              descriptionSearch={descriptionSearch}
+              setDescriptionSearch={setDescriptionSearch}
+              selectedMethod={selectedMethod}
+              setSelectedMethod={setSelectedMethod}
+              selectedAction={selectedAction}
+              setSelectedAction={setSelectedAction}
+              createdBefore={createdBefore}
+              setCreatedBefore={setCreatedBefore}
+              createdAfter={createdAfter}
+              setCreatedAfter={setCreatedAfter}
+              setPage={setPage}
+              methodColors={methodColors}
+            />
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button className="w-14 h-12">
-                    <Download size={18} color="#fff" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{t("common.actions.downloadCsv")}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button className="w-12 h-10">
+                  <Download size={18} color="#fff" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{t("common.actions.downloadCsv")}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </CardHeader>
 

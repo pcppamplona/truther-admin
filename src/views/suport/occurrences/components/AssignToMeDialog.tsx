@@ -56,8 +56,6 @@ export function AssignToMeDialog({
     }
   };
 
-  // const isAssigned = Boolean(ticket.assigned_user);
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
