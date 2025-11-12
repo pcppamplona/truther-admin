@@ -40,13 +40,11 @@ export function AddPermissionDialog({ user }: Props) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Set<number>>(new Set());
 
-  // IDs herdados da role (bloqueados)
   const inheritedIds = useMemo(
     () => rolePermissions.map((p) => Number(p.id)),
     [rolePermissions]
   );
 
-  // Sincroniza o estado local com as permissões reais do usuário
   useEffect(() => {
     if (userPermissions.length > 0) {
       setSelected(new Set(userPermissions.map((p) => Number(p.id))));
