@@ -12,6 +12,8 @@ interface AuthState {
   logout: () => void;
 }
 
+const PERMISSIONS_STORAGE_KEY = "permissions";
+
 export const useAuthStore = create<AuthState>((set) => {
   const token = localStorage.getItem("authToken");
 
@@ -22,6 +24,7 @@ export const useAuthStore = create<AuthState>((set) => {
         set({ user: data, token });
       } catch {
         localStorage.removeItem("authToken");
+        localStorage.removeItem(PERMISSIONS_STORAGE_KEY);
         set({ user: null, token: null });
       }
     })();
@@ -41,6 +44,15 @@ export const useAuthStore = create<AuthState>((set) => {
           password,
         });
         localStorage.setItem("authToken", data.token);
+        if (data?.permissions) {
+          try {
+            localStorage.setItem(PERMISSIONS_STORAGE_KEY, JSON.stringify(data.permissions));
+          } catch {
+            localStorage.removeItem(PERMISSIONS_STORAGE_KEY);
+          }
+        } else {
+          localStorage.removeItem(PERMISSIONS_STORAGE_KEY);
+        }
         set({ token: data.token });
 
         await useAuthStore.getState().fetchMe();
@@ -63,11 +75,13 @@ export const useAuthStore = create<AuthState>((set) => {
       } catch {
         set({ error: "Falha ao carregar usuário", user: null, token: null });
         localStorage.removeItem("authToken");
+        localStorage.removeItem(PERMISSIONS_STORAGE_KEY);
       }
     },
 
     logout: () => {
       localStorage.removeItem("authToken");
+      localStorage.removeItem(PERMISSIONS_STORAGE_KEY);
       set({ user: null, token: null });
     },
   };
