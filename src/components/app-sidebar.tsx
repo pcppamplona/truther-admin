@@ -116,6 +116,7 @@ export function AppSidebar() {
         title: t("sidebar.users"),
         url: "users",
         icon: User,
+        matchUrls: ["user", "userDetails", "userEdit"],
       },
       {
         title: t("sidebar.audit"),
@@ -132,13 +133,13 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground ml-2"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="flex aspect-square size-10 items-center justify-center rounded-lg">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                 <img
                   src="/icon.png"
                   alt="Logo Truther"
-                  className="w-full h-[80px] object-contain"
+                  className="w-full h-[70px] object-contain"
                 />
               </div>
               <div className="grid flex-1 text-left text-lg leading-tight">
@@ -150,7 +151,7 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
 
-      <SidebarContent className="border-b-border border-b-1 ml-2">
+      <SidebarContent className="border-b-border border-b-1">
         <NavMain items={data.navMain} />
       </SidebarContent>
 
