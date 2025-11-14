@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from "react";
-import { Calendar as CalendarIcon, Funnel, ListFilter, X } from "lucide-react";
+import { Calendar as CalendarIcon, Funnel, ListFilter, X, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
@@ -25,6 +25,8 @@ import {
 import { poStatusBlockchain } from "@/interfaces/Transactions";
 import { useI18n } from "@/i18n";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { api } from "@/services/api";
 
 export interface PixInFiltersValues {
   txid: string;
@@ -243,6 +245,41 @@ export function PixInFilters(props: PixInFiltersProps) {
     typeIn,
   ]);
 
+  const handleDownloadCsv = async () => {
+    try {
+      const params = new URLSearchParams();
+      if (txid) params.append("txid", txid);
+      if (wallet) params.append("wallet", wallet);
+      if (end2end) params.append("end2end", end2end);
+      if (destinationKey) params.append("destinationKey", destinationKey);
+      if (payer_document) params.append("payerDocument", payer_document);
+      if (payer_name) params.append("payerName", payer_name);
+      if (status_bank) params.append("status_bank", status_bank);
+      if (status_blockchain) params.append("status_blockchain", status_blockchain);
+      if (typeIn) params.append("typeIn", typeIn);
+      if (min_amount) params.append("min_amount", min_amount);
+      if (max_amount) params.append("max_amount", max_amount);
+
+      const response = await api.get(`/transactions/pix-in/csv?${params.toString()}`,
+        { responseType: "blob" }
+      );
+      const blob = new Blob([response.data], { type: "text/csv;charset=utf-8" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const now = new Date();
+      const pad = (n: number) => String(n).padStart(2, "0");
+      const filename = `pix-in-${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}.csv`;
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("Failed to download CSV pix-in:", e);
+    }
+  };
+
   return (
     <div className="w-full flex justify-between items-center mb-2">
       <div className="flex flex-wrap gap-2">
@@ -269,6 +306,19 @@ export function PixInFilters(props: PixInFiltersProps) {
           )}
         </div>
       </div>
+      <div className="flex items-center gap-2">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button className="w-14 h-12" onClick={handleDownloadCsv}>
+                <Download size={18} color="#fff" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t("common.actions.downloadCsv")}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
         <Button className="w-12 h-10 mr-2" variant="outline"  onClick={() => setOpen(true)}>
           <Funnel size={16} color="#fff" />
@@ -532,5 +582,6 @@ export function PixInFilters(props: PixInFiltersProps) {
         </DrawerContent>
       </Drawer>
     </div>
+  </div>
   );
 }
