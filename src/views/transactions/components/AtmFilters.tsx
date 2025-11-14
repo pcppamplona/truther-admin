@@ -71,7 +71,6 @@ function formatFilterLabel(key: string, value: any): string {
 }
 
 export function AtmFilters(props: AtmFiltersProps) {
-  const { t } = useI18n();
   const {
     txid,
     sender,
@@ -92,8 +91,12 @@ export function AtmFilters(props: AtmFiltersProps) {
 
   const [localTxid, setLocalTxid] = useState(txid ?? "");
   const [localSender, setLocalSender] = useState(sender ?? "");
-  const [localReceiverName, setLocalReceiverName] = useState(receiverName ?? "");
-  const [localReceiverDocument, setLocalReceiverDocument] = useState(receiverDocument ?? "");
+  const [localReceiverName, setLocalReceiverName] = useState(
+    receiverName ?? ""
+  );
+  const [localReceiverDocument, setLocalReceiverDocument] = useState(
+    receiverDocument ?? ""
+  );
   const [localStatusBk, setLocalStatusBk] = useState(status_bk ?? "");
   const [localStatusPx, setLocalStatusPx] = useState(status_px ?? "");
   const [localMinAmount, setLocalMinAmount] = useState(min_amount ?? "");
@@ -101,9 +104,9 @@ export function AtmFilters(props: AtmFiltersProps) {
   const [localCreatedAfter, setLocalCreatedAfter] = useState<Date | undefined>(
     created_after ? new Date(created_after) : undefined
   );
-  const [localCreatedBefore, setLocalCreatedBefore] = useState<Date | undefined>(
-    created_before ? new Date(created_before) : undefined
-  );
+  const [localCreatedBefore, setLocalCreatedBefore] = useState<
+    Date | undefined
+  >(created_before ? new Date(created_before) : undefined);
 
   const [openBeforeCalendar, setOpenBeforeCalendar] = useState(false);
   const [openAfterCalendar, setOpenAfterCalendar] = useState(false);
@@ -157,12 +160,28 @@ export function AtmFilters(props: AtmFiltersProps) {
       setLocalMinAmount(min_amount ?? "");
       setLocalMaxAmount(max_amount ?? "");
       setLocalCreatedAfter(created_after ? new Date(created_after) : undefined);
-      setLocalCreatedBefore(created_before ? new Date(created_before) : undefined);
+      setLocalCreatedBefore(
+        created_before ? new Date(created_before) : undefined
+      );
     }
   };
 
-  const blockchainStatus = ["NEW", "PROCESSING", "CONFIRMED", "DROP", "CANCEL", "REFUNDED"];
-  const internalStatus = ["NEW", "PROCESSING", "CONFIRMED", "CANCEL", "FAILED", "REFUNDED"];
+  const blockchainStatus = [
+    "NEW",
+    "PROCESSING",
+    "CONFIRMED",
+    "DROP",
+    "CANCEL",
+    "REFUNDED",
+  ];
+  const internalStatus = [
+    "NEW",
+    "PROCESSING",
+    "CONFIRMED",
+    "CANCEL",
+    "FAILED",
+    "REFUNDED",
+  ];
 
   const activeFilters = useMemo(() => {
     const entries = Object.entries({
@@ -268,12 +287,12 @@ export function AtmFilters(props: AtmFiltersProps) {
           </Tooltip>
         </TooltipProvider>
 
-        <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
-          <DrawerTrigger asChild>
-            <Button className="w-14 h-12">
-              <Funnel size={18} color="#fff" />
-            </Button>
-          </DrawerTrigger>
+      <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
+        <DrawerTrigger asChild>
+          <Button className="w-12 h-10 mr-2" variant="outline">
+            <Funnel size={16} color="#fff" />
+          </Button>
+        </DrawerTrigger>
 
           <DrawerContent
             ref={drawerRef}
@@ -390,16 +409,26 @@ export function AtmFilters(props: AtmFiltersProps) {
 
             <div>
               <Label>Data início</Label>
-              <Popover open={openAfterCalendar} onOpenChange={setOpenAfterCalendar}>
+              <Popover
+                open={openAfterCalendar}
+                onOpenChange={setOpenAfterCalendar}
+              >
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="mt-1 justify-start text-left font-normal">
+                  <Button
+                    variant="outline"
+                    className="mt-1 justify-start text-left font-normal"
+                  >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {localCreatedAfter
                       ? localCreatedAfter.toLocaleDateString()
                       : "Selecionar"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent container={drawerRef.current} className="w-auto p-0" align="start">
+                <PopoverContent
+                  container={drawerRef.current}
+                  className="w-auto p-0"
+                  align="start"
+                >
                   <Calendar
                     mode="single"
                     selected={localCreatedAfter}
@@ -415,16 +444,26 @@ export function AtmFilters(props: AtmFiltersProps) {
 
             <div>
               <Label>Data fim</Label>
-              <Popover open={openBeforeCalendar} onOpenChange={setOpenBeforeCalendar}>
+              <Popover
+                open={openBeforeCalendar}
+                onOpenChange={setOpenBeforeCalendar}
+              >
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="mt-1 justify-start text-left font-normal">
+                  <Button
+                    variant="outline"
+                    className="mt-1 justify-start text-left font-normal"
+                  >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {localCreatedBefore
                       ? localCreatedBefore.toLocaleDateString()
                       : "Selecionar"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent container={drawerRef.current} className="w-auto p-0" align="start">
+                <PopoverContent
+                  container={drawerRef.current}
+                  className="w-auto p-0"
+                  align="start"
+                >
                   <Calendar
                     mode="single"
                     selected={localCreatedBefore}

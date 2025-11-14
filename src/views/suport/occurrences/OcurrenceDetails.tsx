@@ -52,24 +52,6 @@ export default function OcurrenceDetails() {
   const { data: ticketComments } = useTicketComments(ticketId);
   const { data: ticketAudit } = useTicketAudit(ticketId);
 
-  // const canComment = React.useMemo(() => {
-  //   if (!ticket || !user) return false;
-  //   const { status, assigned_user } = ticket;
-  //   if (status === "FINALIZADO" || status === "FINALIZADO EXPIRADO") {
-  //     return false;
-  //   }
-  //   if (!assigned_user) return true;
-  //   if (typeof assigned_user !== "string" && assigned_user.id === user.id) {
-  //     return true;
-  //   }
-  //   const userLevel = groupHierarchy[user.groupLevel as Group];
-  //   const assignedLevel =
-  //     typeof assigned_user === "string"
-  //       ? groupHierarchy[assigned_user as Group]
-  //       : groupHierarchy[assigned_user.group_level as Group];
-  //   return userLevel > assignedLevel;
-  // }, [ticket, user]);
-
   if (isLoading) return <p>Carregando...</p>;
   if (isError) return <p>Erro ao carregar ocorrência.</p>;
   if (!ticket) return <p>Ocorrência não encontrada.</p>;

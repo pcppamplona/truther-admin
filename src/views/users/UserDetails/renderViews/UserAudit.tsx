@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  Activity,
   Calendar1Icon,
   ChevronDown,
   ChevronUp,
-  Download,
   FileText,
   MessageSquareText,
   MoveDown,
@@ -18,29 +18,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { AuditLogFilters } from "@/components/audit/AuditLogFilters";
 import { getPaginationSettings } from "@/lib/paginationStorage";
 import { RenderPagination } from "@/components/RenderPagination";
 import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import { dateFormat, timeFormat } from "@/lib/formatters";
 import { ActionType, methodType } from "@/interfaces/AuditLogData";
-import { useAuditLog } from "@/services/audit/useAuditLog";
 import { Info } from "@/components/info";
 import { actionColors, methodColors } from "@/lib/utils";
 import { ForbiddenCard } from "@/components/ForbiddenCard";
 import { useI18n } from "@/i18n";
+import { UserData } from "@/interfaces/UserData";
+import { useUserAuditLogs } from "@/services/audit/useAuditLog";
 
-export default function ListAuditLog() {
+export function UserAudit({ user }: { user: UserData }) {
   const { t } = useI18n();
-  const { page: savedPage, limit: savedLimit } = getPaginationSettings("audit");
+  const { page: savedPage, limit: savedLimit } =
+    getPaginationSettings("audit-user");
   const [page, setPage] = useState(savedPage);
   const [limit, setLimit] = useState(savedLimit);
   const [search, setSearch] = useState("");
@@ -48,14 +47,11 @@ export default function ListAuditLog() {
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [selectedMethod, setSelectedMethod] = useState<methodType | "">("");
   const [selectedAction, setSelectedAction] = useState<ActionType | "">("");
-  const [createdBefore, setCreatedBefore] = useState<string | undefined>(
-    undefined
-  );
-  const [createdAfter, setCreatedAfter] = useState<string | undefined>(
-    undefined
-  );
+  const [createdBefore, setCreatedBefore] = useState<string | undefined>();
+  const [createdAfter, setCreatedAfter] = useState<string | undefined>();
 
-  const { data, isLoading, isError, error } = useAuditLog(
+  const { data, isLoading, isError, error } = useUserAuditLogs(
+    user.id,
     page,
     limit,
     search,
@@ -71,43 +67,32 @@ export default function ListAuditLog() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-120px)]">
+    <div className="flex flex-col h-[calc(95vh-120px)]">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold mb-4">
-          {t("audit.title")}
+        <CardTitle className="flex items-center gap-2 text-xl font-bold">
+          <Activity size={20} /> Auditoria de {user.name}
         </CardTitle>
-        <CardDescription>{t("audit.description")}</CardDescription>
+        <CardDescription>
+          Registro das atividades e alterações associadas a este usuário.
+        </CardDescription>
 
         <div className="flex items-center justify-end gap-4">
-          <TooltipProvider>
-            <AuditLogFilters
-              search={search}
-              setSearch={setSearch}
-              descriptionSearch={descriptionSearch}
-              setDescriptionSearch={setDescriptionSearch}
-              selectedMethod={selectedMethod}
-              setSelectedMethod={setSelectedMethod}
-              selectedAction={selectedAction}
-              setSelectedAction={setSelectedAction}
-              createdBefore={createdBefore}
-              setCreatedBefore={setCreatedBefore}
-              createdAfter={createdAfter}
-              setCreatedAfter={setCreatedAfter}
-              setPage={setPage}
-              methodColors={methodColors}
-            />
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button className="w-12 h-10">
-                  <Download size={18} color="#fff" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{t("common.actions.downloadCsv")}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <AuditLogFilters
+            search={search}
+            setSearch={setSearch}
+            descriptionSearch={descriptionSearch}
+            setDescriptionSearch={setDescriptionSearch}
+            selectedMethod={selectedMethod}
+            setSelectedMethod={setSelectedMethod}
+            selectedAction={selectedAction}
+            setSelectedAction={setSelectedAction}
+            createdBefore={createdBefore}
+            setCreatedBefore={setCreatedBefore}
+            createdAfter={createdAfter}
+            setCreatedAfter={setCreatedAfter}
+            setPage={setPage}
+            methodColors={methodColors}
+          />
         </div>
       </CardHeader>
 
@@ -140,9 +125,7 @@ export default function ListAuditLog() {
                     >
                       <TableCell>{audit.id}</TableCell>
                       <TableCell
-                        className={`font-semibold ${
-                          methodColors[audit.method]
-                        }`}
+                      className={`font-semibold ${methodColors[audit.method]}`}
                       >
                         {audit.method}
                       </TableCell>
@@ -195,10 +178,10 @@ export default function ListAuditLog() {
                                     label={
                                       <span className="flex items-center gap-2">
                                         <User2 size={18} />
-                                        <strong>{t("audit.details.id")}</strong>
+                                        <strong>ID alvo</strong>
                                       </span>
                                     }
-                                    value={audit.target_type + audit.target_id}
+                                    value={`${audit.target_type} ${audit.target_id}`}
                                   />
                                 </div>
 
@@ -207,9 +190,7 @@ export default function ListAuditLog() {
                                     label={
                                       <span className="flex items-center gap-2">
                                         <Calendar1Icon size={18} />
-                                        <strong>
-                                          {t("audit.details.date")}
-                                        </strong>
+                                        <strong>Data</strong>
                                       </span>
                                     }
                                     value={audit.created_at}
@@ -221,9 +202,7 @@ export default function ListAuditLog() {
                                     label={
                                       <span className="flex items-center gap-2">
                                         <MessageSquareText size={18} />
-                                        <strong>
-                                          {t("audit.details.message")}
-                                        </strong>
+                                        <strong>Mensagem</strong>
                                       </span>
                                     }
                                     value={audit.message}
@@ -235,9 +214,7 @@ export default function ListAuditLog() {
                                     label={
                                       <span className="flex items-center gap-2">
                                         <FileText size={18} />
-                                        <strong>
-                                          {t("audit.details.description")}
-                                        </strong>
+                                        <strong>Descrição</strong>
                                       </span>
                                     }
                                     value={audit.description}

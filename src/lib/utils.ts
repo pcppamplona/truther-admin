@@ -17,7 +17,7 @@ export function ThemeInitializer() {
   return null;
 }
 
-import { Status } from "@/interfaces/TicketData";
+import { RoleId, Status } from "@/interfaces/TicketData";
 import { ActionType, methodType } from "@/interfaces/AuditLogData";
 import { BcStatusBillet, poStatusBlockchain, TxStatusBridge } from "@/interfaces/Transactions";
 
@@ -101,4 +101,9 @@ export function getColorRGBA(
   const hex = colorMap[key];
   if (!hex) return "rgba(128,128,128,0.3)"; 
   return hexToRGBA(hex, alpha);
+}
+
+export function getRoleNameById(id?: number | null): string {
+  const role = RoleId.find((r) => r.id === id);
+  return role ? role.name : "-";
 }

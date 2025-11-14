@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   FolderOpen,
   MapPinHouse,
@@ -59,6 +59,9 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
               <User />
               Portador
             </CardTitle>
+            <CardDescription>
+              Dados de identificação e contato do portador vinculado à carteira.
+            </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Info label="ID" value={walletAddress.id} />
@@ -75,8 +78,11 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
         <Card>
           <CardHeader>
             <CardTitle className="flex flex-row items-center gap-2">
-              <MapPinHouse /> Endereço Portador
+              <MapPinHouse /> Endereço do Portador
             </CardTitle>
+            <CardDescription>
+              Informações referentes ao endereço cadastrado do portador.
+            </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Info label="CEP" value={walletAddress.zipCode} />
@@ -108,6 +114,9 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
             <CardTitle className="flex items-center gap-2">
               <WalletCards /> Carteiras
             </CardTitle>
+            <CardDescription>
+              Relação das carteiras digitais associadas ao portador.
+            </CardDescription>
           </CardHeader>
 
           <CardContent className="flex flex-col gap-4">
@@ -158,6 +167,9 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
             <CardTitle className="flex items-center gap-2">
               <PiggyBank /> Saldo nas carteiras
             </CardTitle>
+            <CardDescription>
+              Relação das carteiras digitais e o saldo associado a elas.
+            </CardDescription>
           </CardHeader>
 
           <CardContent className="flex flex-row gap-4 justify-between">

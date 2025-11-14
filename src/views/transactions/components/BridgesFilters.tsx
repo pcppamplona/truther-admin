@@ -242,12 +242,12 @@ export function BridgeFilters(props: BridgeFiltersProps) {
           </Tooltip>
         </TooltipProvider>
 
-        <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
-          <DrawerTrigger asChild>
-            <Button className="w-14 h-12">
-              <Funnel size={18} color="#fff" />
-            </Button>
-          </DrawerTrigger>
+      <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
+        <DrawerTrigger asChild>
+          <Button className="w-12 h-10 mr-2" variant="outline">
+            <Funnel size={16} color="#fff" />
+          </Button>
+        </DrawerTrigger>
 
           <DrawerContent
             ref={drawerRef}
