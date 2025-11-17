@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from "react";
-import { Funnel, Calendar as CalendarIcon, X, ListFilter } from "lucide-react";
+import { Funnel, Calendar as CalendarIcon, X, ListFilter, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
@@ -24,6 +24,9 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { api } from "@/services/api";
+import { useI18n } from "@/i18n";
 
 export interface AtmFiltersValues {
   txid?: string;
@@ -210,6 +213,38 @@ export function AtmFilters(props: AtmFiltersProps) {
     created_before,
   ]);
 
+  const handleDownloadCsv = async () => {
+    try {
+      const params = new URLSearchParams();
+      if (txid) params.append("txid", txid);
+      if (sender) params.append("sender", sender);
+      if (receiverName) params.append("receiverName", receiverName);
+      if (receiverDocument) params.append("receiverDocument", receiverDocument);
+      if (status_bk) params.append("status_bk", status_bk);
+      if (status_px) params.append("status_px", status_px);
+      if (min_amount) params.append("min_amount", String(min_amount));
+      if (max_amount) params.append("max_amount", String(max_amount));
+      if (created_after) params.append("created_after", created_after);
+      if (created_before) params.append("created_before", created_before);
+
+      const response = await api.get(`/transactions/atm/csv?${params.toString()}`, { responseType: "blob" });
+      const blob = new Blob([response.data], { type: "text/csv;charset=utf-8" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const now = new Date();
+      const pad = (n: number) => String(n).padStart(2, "0");
+      const filename = `atm-${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}.csv`;
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("Failed to download CSV atm:", e);
+    }
+  };
+
   return (
     <div className="w-full flex justify-between items-center">
       <div className="flex flex-wrap gap-2">
@@ -238,6 +273,20 @@ export function AtmFilters(props: AtmFiltersProps) {
         )}
       </div>
 
+      <div className="flex items-center gap-2">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button className="w-14 h-12" onClick={handleDownloadCsv}>
+                <Download size={18} color="#fff" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t("common.actions.downloadCsv")}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
       <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
         <DrawerTrigger asChild>
           <Button className="w-12 h-10 mr-2" variant="outline">
@@ -245,10 +294,10 @@ export function AtmFilters(props: AtmFiltersProps) {
           </Button>
         </DrawerTrigger>
 
-        <DrawerContent
-          ref={drawerRef}
-          className="p-4 data-[vaul-drawer-direction=right]:w-[500px] data-[vaul-drawer-direction=right]:max-w-[70vw]"
-        >
+          <DrawerContent
+            ref={drawerRef}
+            className="p-4 data-[vaul-drawer-direction=right]:w-[500px] data-[vaul-drawer-direction=right]:max-w-[70vw]"
+          >
           <DrawerHeader className="col-span-full">
             <DrawerTitle className="flex flex-row items-center gap-2">
               <ListFilter /> Filtros ATM
@@ -440,5 +489,6 @@ export function AtmFilters(props: AtmFiltersProps) {
         </DrawerContent>
       </Drawer>
     </div>
+  </div>
   );
 }

@@ -23,6 +23,7 @@ import {
 } from "../components/PixInFilters.tsx";
 import { useI18n } from "@/i18n";
 import { getColorRGBA, poColors } from "@/lib/utils";
+import {CardEmpty} from "@/components/CardEmpty.tsx";
 
 export default function ListPixIn() {
   const { t } = useI18n();

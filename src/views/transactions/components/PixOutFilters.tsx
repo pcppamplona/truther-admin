@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo } from "react";
 import { useI18n } from "@/i18n";
-import { Funnel, Calendar as CalendarIcon, X, ListFilter } from "lucide-react";
+import { Funnel, Calendar as CalendarIcon, X, ListFilter, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
@@ -26,6 +26,8 @@ import {
 } from "@/components/ui/drawer";
 import { poStatusBlockchain } from "@/interfaces/Transactions";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { api } from "@/services/api";
 
 export interface PixOutFiltersValues {
   txid: string;
@@ -233,6 +235,40 @@ export function PixOutFilters(props: PixOutFiltersProps) {
     created_before,
   ]);
 
+  const handleDownloadCsv = async () => {
+    try {
+      const params = new URLSearchParams();
+      if (txid) params.append("txid", txid);
+      if (end2end) params.append("end2end", end2end);
+      if (pixKey) params.append("pixKey", pixKey);
+      if (receiverDocument) params.append("receiverDocument", receiverDocument);
+      if (receiverName) params.append("receiverName", receiverName);
+      if (wallet) params.append("wallet", wallet);
+      if (status_px) params.append("status_px", status_px);
+      if (status_bk) params.append("status_bk", status_bk);
+      if (min_amount) params.append("min_amount", min_amount);
+      if (max_amount) params.append("max_amount", max_amount);
+
+      const response = await api.get(`/transactions/pix-out/csv?${params.toString()}`,
+        { responseType: "blob" }
+      );
+      const blob = new Blob([response.data], { type: "text/csv;charset=utf-8" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const now = new Date();
+      const pad = (n: number) => String(n).padStart(2, "0");
+      const filename = `pix-out-${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}.csv`;
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("Failed to download CSV pix-out:", e);
+    }
+  };
+
   return (
     <div className="w-full flex justify-between items-center">
       <div className="flex flex-wrap gap-2">
@@ -250,27 +286,41 @@ export function PixOutFilters(props: PixOutFiltersProps) {
           </Badge>
         ))}
 
-        {activeFilters.length > 0 && (
-          <Badge
-            variant="outline"
-            className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
-            onClick={clearAll}
-          >
-            Limpar tudo
-          </Badge>
-        )}
-      </div>
+          {activeFilters.length > 0 && (
+            <Badge
+              variant="outline"
+              className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
+              onClick={clearAll}
+            >
+              Limpar tudo
+            </Badge>
+          )}
+        </div>
 
-      <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
-        <DrawerTrigger asChild>
-          <Button className="w-12 h-10 mr-2" variant="outline">
-            <Funnel size={16}  />
-          </Button>
-        </DrawerTrigger>
-        <DrawerContent
-          ref={drawerRef}
-          className="p-4 data-[vaul-drawer-direction=right]:w-[500px] data-[vaul-drawer-direction=right]:max-w-[70vw] data-[vaul-drawer-direction=right]:sm:max-w-[70vw]"
-        >
+      <div className="flex items-center gap-2">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button className="w-14 h-12" onClick={handleDownloadCsv}>
+                <Download size={18} color="#fff" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t("common.actions.downloadCsv")}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
+          <DrawerTrigger asChild>
+            <Button className="w-12 h-10 mr-2" variant="outline">
+              <Funnel size={16}  />
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent
+            ref={drawerRef}
+            className="p-4 data-[vaul-drawer-direction=right]:w-[500px] data-[vaul-drawer-direction=right]:max-w-[70vw] data-[vaul-drawer-direction=right]:sm:max-w-[70vw]"
+          >
           <div className="grid grid-cols-2 gap-4 p-4">
             <DrawerHeader className="col-span-full">
               <DrawerTitle className="flex flex-row items-center gap-2">
@@ -507,5 +557,6 @@ export function PixOutFilters(props: PixOutFiltersProps) {
         </DrawerContent>
       </Drawer>
     </div>
+  </div>
   );
 }
