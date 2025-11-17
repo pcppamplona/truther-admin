@@ -71,7 +71,7 @@ export default function ListClients() {
             <Search size={16} className="mr-2 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Pesquisar clientes Ex: Documento, nome..."
+              placeholder="Pesquisar clientes Ex: Documento, Wallets ou Nome"
               className="outline-none text-sm w-full bg-transparent"
               value={search}
               onChange={(e) => {
@@ -122,7 +122,7 @@ export default function ListClients() {
      
       <div className="flex-1 overflow-y-auto px-4 lg:px-6 mt-2">
         {isLoading ? (
-          <SkeletonTableFull rows={10} columns={6} />
+          <SkeletonTableFull rows={8} columns={6} />
         ) : clients?.data.length === 0 ? (
           <EmptyState
             title="Nenhum cliente encontrado"

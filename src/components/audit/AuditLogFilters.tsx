@@ -271,7 +271,7 @@ export function AuditLogFilters({
       >
         <DrawerTrigger asChild>
           <Button className="w-12 h-10 mr-2" variant="outline">
-            <Funnel size={16} color="#fff" />
+            <Funnel size={16}  />
           </Button>
         </DrawerTrigger>
         <DrawerContent

@@ -271,7 +271,7 @@ export function PixInFilters(props: PixInFiltersProps) {
       </div>
       <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
         <Button className="w-12 h-10 mr-2" variant="outline"  onClick={() => setOpen(true)}>
-          <Funnel size={16} color="#fff" />
+          <Funnel size={16}  />
         </Button>
         <DrawerContent
           ref={drawerRef}

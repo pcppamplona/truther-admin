@@ -160,7 +160,7 @@ export function UserTransactionsFilters(props: UserTransactionsFiltersProps) {
   }, [status, hash, value, created_after, created_before]);
 
   return (
-    <div className="w-full flex justify-between items-center">
+    <div className="w-full flex justify-between items-center mb-2">
       <div className="flex flex-wrap gap-2">
         {activeFilters.map(({ key, label }) => (
           <Badge
@@ -189,7 +189,7 @@ export function UserTransactionsFilters(props: UserTransactionsFiltersProps) {
       <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
         <DrawerTrigger asChild>
           <Button className="w-12 h-10 mr-2" variant="outline">
-            <Funnel size={16} color="#fff" />
+            <Funnel size={16}  />
           </Button>
         </DrawerTrigger>
 
