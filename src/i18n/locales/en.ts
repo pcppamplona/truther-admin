@@ -149,8 +149,10 @@ const en = {
         date: "date",
         time: "time",
         action: "action",
+        severity: "severity",
         sender: "sender",
         target: "target",
+        targetExternalId: "external id",
       },
     },
     details: {
@@ -158,6 +160,8 @@ const en = {
       date: "Date",
       message: "Message",
       description: "Description",
+      severity: "Severity",
+      targetExternalId: "External ID",
     },
     filters: {
       title: "Filters",
@@ -178,6 +182,16 @@ const en = {
         label: "Action",
         placeholder: "Select an action",
       },
+        severity: {
+            label: "Severity",
+            labelShort: "Sev.",
+            placeholder: "Select a severity",
+            options: {
+                low: "Low",
+                medium: "Medium",
+                high: "High",
+            },
+        },
       createdAt: {
         label: "Creation date",
         createdAfter: "Created after",

@@ -10,6 +10,7 @@ import {
   MoveDown,
   MoveUp,
   User2,
+  Hash,
 } from "lucide-react";
 import {
   Table,
@@ -30,7 +31,7 @@ import { SkeletonTable } from "@/components/skeletons/skeletonTable";
 import { dateFormat, timeFormat } from "@/lib/formatters";
 import { ActionType, methodType } from "@/interfaces/AuditLogData";
 import { Info } from "@/components/info";
-import { actionColors, methodColors } from "@/lib/utils";
+import { actionColors, methodColors, severityColors } from "@/lib/utils";
 import { ForbiddenCard } from "@/components/ForbiddenCard";
 import { useI18n } from "@/i18n";
 import { UserData } from "@/interfaces/UserData";
@@ -49,6 +50,7 @@ export function UserAudit({ user }: { user: UserData }) {
   const [selectedAction, setSelectedAction] = useState<ActionType | "">("");
   const [createdBefore, setCreatedBefore] = useState<string | undefined>();
   const [createdAfter, setCreatedAfter] = useState<string | undefined>();
+  const [selectedSeverity, setSelectedSeverity] = useState<"" | "low" | "medium" | "high">("");
 
   const { data, isLoading, isError, error } = useUserAuditLogs(
     user.id,
@@ -59,7 +61,8 @@ export function UserAudit({ user }: { user: UserData }) {
     selectedMethod as methodType | "",
     selectedAction,
     createdBefore,
-    createdAfter
+    createdAfter,
+    selectedSeverity
   );
 
   const toggleExpand = (id: number) => {
@@ -86,6 +89,8 @@ export function UserAudit({ user }: { user: UserData }) {
             setSelectedMethod={setSelectedMethod}
             selectedAction={selectedAction}
             setSelectedAction={setSelectedAction}
+            selectedSeverity={selectedSeverity}
+            setSelectedSeverity={setSelectedSeverity}
             createdBefore={createdBefore}
             setCreatedBefore={setCreatedBefore}
             createdAfter={createdAfter}
@@ -106,6 +111,7 @@ export function UserAudit({ user }: { user: UserData }) {
                 <TableCell>{t("audit.table.headers.date")}</TableCell>
                 <TableCell>{t("audit.table.headers.time")}</TableCell>
                 <TableCell>{t("audit.table.headers.action")}</TableCell>
+                <TableCell>{t("audit.table.headers.severity")}</TableCell>
                 <TableCell>{t("audit.table.headers.sender")}</TableCell>
                 <TableCell>{t("audit.table.headers.target")}</TableCell>
                 <TableCell></TableCell>
@@ -141,6 +147,15 @@ export function UserAudit({ user }: { user: UserData }) {
                         </div>
                       </TableCell>
                       <TableCell>
+                        <div
+                          className={`px-3 py-1 w-fit min-w-18 flex text-sm uppercase font-semibold ${
+                            audit.severity ? severityColors[audit.severity as "low" | "medium" | "high"] : "text-muted-foreground"
+                          }`}
+                        >
+                          {audit.severity ? t(`audit.filters.severity.options.${audit.severity}`) : "-"}
+                        </div>
+                      </TableCell>
+                      <TableCell>
                         <div className="flex items-center">
                           <MoveUp size={18} color="#818181" />
                           {audit.sender_type}
@@ -152,6 +167,7 @@ export function UserAudit({ user }: { user: UserData }) {
                           {audit.target_type}
                         </div>
                       </TableCell>
+                      <TableCell>{audit.target_external_id ?? "-"}</TableCell>
                       <TableCell>
                         {expandedId === audit.id ? (
                           <ChevronUp size={18} />
@@ -164,7 +180,7 @@ export function UserAudit({ user }: { user: UserData }) {
                     <AnimatePresence>
                       {expandedId === audit.id && (
                         <TableRow className="bg-muted/30">
-                          <TableCell colSpan={8} className="p-0">
+                          <TableCell colSpan={9} className="p-0">
                             <motion.div
                               initial={{ height: 0, opacity: 0 }}
                               animate={{ height: "auto", opacity: 1 }}
@@ -218,6 +234,18 @@ export function UserAudit({ user }: { user: UserData }) {
                                       </span>
                                     }
                                     value={audit.description}
+                                  />
+                                </div>
+
+                                <div className="border-l-2 border-[#818181] p-2">
+                                  <Info
+                                    label={
+                                      <span className="flex items-center gap-2">
+                                        <Hash size={18} />
+                                        <strong>ID Externo</strong>
+                                      </span>
+                                    }
+                                    value={audit.target_external_id ?? "-"}
                                   />
                                 </div>
                               </div>

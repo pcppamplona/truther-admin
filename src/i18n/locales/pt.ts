@@ -149,8 +149,10 @@ const pt = {
         date: "data",
         time: "hora",
         action: "ação",
+        severity: "severidade",
         sender: "remetente",
         target: "destinatário",
+        targetExternalId: "id externo",
       },
     },
     details: {
@@ -158,6 +160,8 @@ const pt = {
       date: "Data",
       message: "Mensagem",
       description: "Descrição",
+      severity: "Severidade",
+      targetExternalId: "ID Externo",
     },
     filters: {
       title: "Filtros",
@@ -177,6 +181,16 @@ const pt = {
       action: {
         label: "Ação",
         placeholder: "Selecione uma ação",
+      },
+      severity: {
+        label: "Severidade",
+        labelShort: "Sev.",
+        placeholder: "Selecione uma severidade",
+        options: {
+            low: "Baixa",
+            medium: "Média",
+            high: "Alta",
+        },
       },
       createdAt: {
         label: "Data de criação",
