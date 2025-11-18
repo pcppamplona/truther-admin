@@ -67,6 +67,13 @@ export const actionColors: Record<ActionType, string> = {
   listing: "border-[#9e3790]",
   crm: "border-[#a57b2c]",
   security: "border-[#1a6b80]",
+  export: "border-[#2c7a7b]",
+};
+
+export const severityColors: Record<"low" | "medium" | "high", string> = {
+  low: "text-[#22C55E]",
+  medium: "text-[#F59E0B]",
+  high: "text-[#EF4444]",
 };
 
 export const bcStatusBilletColors: Record<BcStatusBillet, string> = {
