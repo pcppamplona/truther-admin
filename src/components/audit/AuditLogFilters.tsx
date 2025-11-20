@@ -38,7 +38,7 @@ import { useRef, useState } from "react";
 import { useI18n } from "@/i18n";
 import { Badge } from "../ui/badge";
 
-type actionType = "security" | "listing" | "alter" | "crm";
+type actionType = "security" | "listing" | "alter" | "crm" | "export";
 
 interface AuditLogFiltersProps {
   search: string;
@@ -49,6 +49,8 @@ interface AuditLogFiltersProps {
   setSelectedMethod: (value: methodType | "") => void;
   selectedAction: actionType | "";
   setSelectedAction: (value: actionType | "") => void;
+  selectedSeverity: "" | "low" | "medium" | "high";
+  setSelectedSeverity: (value: "" | "low" | "medium" | "high") => void;
   createdBefore: string | undefined;
   setCreatedBefore: (value: string | undefined) => void;
   createdAfter: string | undefined;
@@ -66,6 +68,8 @@ export function AuditLogFilters({
   setSelectedMethod,
   selectedAction,
   setSelectedAction,
+  selectedSeverity,
+  setSelectedSeverity,
   createdBefore,
   setCreatedBefore,
   createdAfter,
@@ -83,6 +87,9 @@ export function AuditLogFilters({
   const [drawerSelectedAction, setDrawerSelectedAction] = useState<
     actionType | ""
   >(selectedAction);
+  const [drawerSelectedSeverity, setDrawerSelectedSeverity] = useState<
+    "" | "low" | "medium" | "high"
+  >(selectedSeverity);
   const [drawerCreatedBefore, setDrawerCreatedBefore] = useState<
     Date | undefined
   >(createdBefore ? new Date(createdBefore) : undefined);
@@ -100,6 +107,7 @@ export function AuditLogFilters({
       setDrawerDescriptionSearch(descriptionSearch);
       setDrawerSelectedMethod(selectedMethod);
       setDrawerSelectedAction(selectedAction);
+      setDrawerSelectedSeverity(selectedSeverity);
 
       if (createdBefore) {
         const [year, month, day] = createdBefore.split("-").map(Number);
@@ -125,12 +133,14 @@ export function AuditLogFilters({
     setDrawerDescriptionSearch("");
     setDrawerSelectedMethod("");
     setDrawerSelectedAction("");
+    setDrawerSelectedSeverity("");
     setDrawerCreatedBefore(undefined);
     setDrawerCreatedAfter(undefined);
     setSearch("");
     setDescriptionSearch("");
     setSelectedMethod("");
     setSelectedAction("");
+    setSelectedSeverity("");
     setCreatedBefore(undefined);
     setCreatedAfter(undefined);
     setIsDrawerOpen(false);
@@ -141,6 +151,7 @@ export function AuditLogFilters({
     setDescriptionSearch(drawerDescriptionSearch);
     setSelectedMethod(drawerSelectedMethod);
     setSelectedAction(drawerSelectedAction);
+    setSelectedSeverity(drawerSelectedSeverity);
 
     const formattedBeforeDate = drawerCreatedBefore
       ? formatDateToYYYYMMDD(drawerCreatedBefore)
@@ -180,6 +191,7 @@ export function AuditLogFilters({
     setDescriptionSearch("");
     setSelectedMethod("");
     setSelectedAction("");
+    setSelectedSeverity("");
     setCreatedBefore(undefined);
     setCreatedAfter(undefined);
   };
@@ -189,6 +201,7 @@ export function AuditLogFilters({
     descriptionSearch,
     selectedMethod,
     selectedAction,
+    selectedSeverity,
     createdBefore,
     createdAfter,
   })
@@ -201,17 +214,19 @@ export function AuditLogFilters({
   function formatFilterLabel(key: string, value: any): string {
     switch (key) {
       case "search":
-        return `Mensagem: ${value}`;
+        return `${t("audit.filters.message.label")}: ${value}`;
       case "descriptionSearch":
-        return `Descrição: ${value}`;
+        return `${t("audit.filters.descriptionField.label")}: ${value}`;
       case "selectedMethod":
-        return `Método: ${value}`;
+        return `${t("audit.filters.method.label")}: ${value}`;
       case "selectedAction":
-        return `Ação: ${value}`;
+        return `${t("audit.filters.action.label")}: ${value}`;
+      case "selectedSeverity":
+        return `${t("audit.filters.severity.labelShort")}: ${t(`audit.filters.severity.options.${value}`)}`;
       case "createdBefore":
-        return `Antes de: ${value}`;
+        return `${t("audit.filters.createdAt.createdBefore")}: ${value}`;
       case "createdAfter":
-        return `Depois de: ${value}`;
+        return `${t("audit.filters.createdAt.createdAfter")}: ${value}`;
       default:
         return `${key}: ${value}`;
     }
@@ -238,6 +253,9 @@ export function AuditLogFilters({
                   break;
                 case "selectedAction":
                   setSelectedAction("");
+                  break;
+                case "selectedSeverity":
+                  setSelectedSeverity("");
                   break;
                 case "createdBefore":
                   setCreatedBefore(undefined);
@@ -395,7 +413,7 @@ export function AuditLogFilters({
                     >
                       {t("common.actions.all")}
                     </DropdownMenuItem>
-                    {["security", "listing", "alter", "crm"].map((action) => (
+                    {["security", "listing", "alter", "crm", "export"].map((action) => (
                       <DropdownMenuItem
                         key={action}
                         onClick={() =>
@@ -411,7 +429,50 @@ export function AuditLogFilters({
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
+
             </div>
+
+          <div className="flex flex-row gap-4">
+
+              <div className="space-y-2 flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <Shield size={18} />
+                  <strong>{t("audit.filters.severity.label")}</strong>
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-between"
+                    >
+                      {drawerSelectedSeverity
+                        ? t(`audit.filters.severity.options.${drawerSelectedSeverity}`)
+                        : t("audit.filters.severity.placeholder")}
+                      <ChevronDown size={16} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-full">
+                    <DropdownMenuItem
+                      onClick={() => setDrawerSelectedSeverity("")}
+                      className="cursor-pointer"
+                    >
+                      {t("common.actions.all")}
+                    </DropdownMenuItem>
+                    {["low", "medium", "high"].map((sev) => (
+                      <DropdownMenuItem
+                        key={sev}
+                        onClick={() => setDrawerSelectedSeverity(sev as any)}
+                        className={`cursor-pointer ${
+                          drawerSelectedSeverity === sev ? "bg-muted" : ""
+                        }`}
+                      >
+                        {t(`audit.filters.severity.options.${sev}`)}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+          </div>
 
             <div className="space-y-2">
               <div className="flex items-center gap-2 mb-1">

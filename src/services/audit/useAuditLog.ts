@@ -11,7 +11,8 @@ export const useAuditLog = (
   method?: methodType | "",
   action?: string,
   created_before?: string,
-  created_after?: string
+  created_after?: string,
+  severity?: "low" | "medium" | "high" | ""
 ) => {
   return useQuery<PaginateData<AuditLog>, any>({
     queryKey: [
@@ -24,6 +25,7 @@ export const useAuditLog = (
       action,
       created_before,
       created_after,
+      severity,
     ],
     queryFn: async () => {
       try {
@@ -38,6 +40,7 @@ export const useAuditLog = (
         if (action) params.append("action", action);
         if (created_before) params.append("created_before", created_before);
         if (created_after) params.append("created_after", created_after);
+        if (severity) params.append("severity", severity);
 
         const { data } = await api.get<PaginateData<AuditLog>>(
           `/audit-logs?${params.toString()}`
@@ -64,7 +67,8 @@ export const useUserAuditLogs = (
   method?: methodType | "",
   action?: string,
   created_before?: string,
-  created_after?: string
+  created_after?: string,
+  severity?: "low" | "medium" | "high" | ""
 ) => {
   return useQuery<PaginateData<AuditLog>, any>({
     queryKey: [
@@ -78,6 +82,7 @@ export const useUserAuditLogs = (
       action,
       created_before,
       created_after,
+      severity,
     ],
     queryFn: async () => {
       try {
@@ -92,6 +97,7 @@ export const useUserAuditLogs = (
         if (action) params.append("action", action)
         if (created_before) params.append("created_before", created_before)
         if (created_after) params.append("created_after", created_after)
+        if (severity) params.append("severity", severity)
 
         const { data } = await api.get<PaginateData<AuditLog>>(
           `/audit-logs/user/${userId}?${params.toString()}`
