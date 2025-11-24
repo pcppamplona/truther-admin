@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/drawer";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { api } from "@/services/api";
+import { useTransactionsCsv } from "@/services/transactions/useTransactionsCsv";
 import { useI18n } from "@/i18n";
 
 export interface AtmFiltersValues {
@@ -46,7 +46,7 @@ interface AtmFiltersProps extends AtmFiltersValues {
   setPage: (v: number) => void;
 }
 
-function formatDateParam(date?: Date): string | undefined {
+function formatDateFilter(date?: Date): string | undefined {
   if (!date) return undefined;
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -71,7 +71,8 @@ function formatFilterLabel(key: string, value: any): string {
 }
 
 export function AtmFilters(props: AtmFiltersProps) {
-  const {
+    const { t } = useI18n();
+    const {
     txid,
     sender,
     receiverName,
@@ -111,7 +112,7 @@ export function AtmFilters(props: AtmFiltersProps) {
   const [openBeforeCalendar, setOpenBeforeCalendar] = useState(false);
   const [openAfterCalendar, setOpenAfterCalendar] = useState(false);
 
-  const resetLocal = () => {
+  const resetLocalState = () => {
     setLocalTxid("");
     setLocalSender("");
     setLocalReceiverName("");
@@ -124,7 +125,7 @@ export function AtmFilters(props: AtmFiltersProps) {
     setLocalCreatedBefore(undefined);
   };
 
-  const apply = () => {
+  const applyFilters = () => {
     setPage(1);
     setValues({
       txid: localTxid,
@@ -135,20 +136,31 @@ export function AtmFilters(props: AtmFiltersProps) {
       status_px: localStatusPx,
       min_amount: localMinAmount,
       max_amount: localMaxAmount,
-      created_after: formatDateParam(localCreatedAfter),
-      created_before: formatDateParam(localCreatedBefore),
+      created_after: formatDateFilter(localCreatedAfter),
+      created_before: formatDateFilter(localCreatedBefore),
     });
     setOpen(false);
   };
 
-  const clearAll = () => {
+  const clearFilters = () => {
     setPage(1);
-    setValues({});
-    resetLocal();
+    setValues({
+      txid: "",
+      sender: "",
+      receiverName: "",
+      receiverDocument: "",
+      status_bk: "",
+      status_px: "",
+      min_amount: "",
+      max_amount: "",
+      created_after: undefined,
+      created_before: undefined,
+    });
+    resetLocalState();
     setOpen(false);
   };
 
-  const syncWhenOpen = (nextOpen: boolean) => {
+  const handleDrawerOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
     if (nextOpen) {
       setLocalTxid(txid ?? "");
@@ -166,7 +178,7 @@ export function AtmFilters(props: AtmFiltersProps) {
     }
   };
 
-  const blockchainStatus = [
+  const blockchainStatuses = [
     "NEW",
     "PROCESSING",
     "CONFIRMED",
@@ -174,7 +186,7 @@ export function AtmFilters(props: AtmFiltersProps) {
     "CANCEL",
     "REFUNDED",
   ];
-  const internalStatus = [
+  const internalStatuses = [
     "NEW",
     "PROCESSING",
     "CONFIRMED",
@@ -213,36 +225,20 @@ export function AtmFilters(props: AtmFiltersProps) {
     created_before,
   ]);
 
+  const downloadCsv = useTransactionsCsv('/transactions/atm/csv', 'atm');
   const handleDownloadCsv = async () => {
-    try {
-      const params = new URLSearchParams();
-      if (txid) params.append("txid", txid);
-      if (sender) params.append("sender", sender);
-      if (receiverName) params.append("receiverName", receiverName);
-      if (receiverDocument) params.append("receiverDocument", receiverDocument);
-      if (status_bk) params.append("status_bk", status_bk);
-      if (status_px) params.append("status_px", status_px);
-      if (min_amount) params.append("min_amount", String(min_amount));
-      if (max_amount) params.append("max_amount", String(max_amount));
-      if (created_after) params.append("created_after", created_after);
-      if (created_before) params.append("created_before", created_before);
-
-      const response = await api.get(`/transactions/atm/csv?${params.toString()}`, { responseType: "blob" });
-      const blob = new Blob([response.data], { type: "text/csv;charset=utf-8" });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      const now = new Date();
-      const pad = (n: number) => String(n).padStart(2, "0");
-      const filename = `atm-${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}.csv`;
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (e) {
-      console.error("Failed to download CSV atm:", e);
-    }
+    await downloadCsv({
+      txid,
+      sender,
+      receiverName,
+      receiverDocument,
+      status_bk,
+      status_px,
+      min_amount,
+      max_amount,
+      created_after,
+      created_before,
+    });
   };
 
   return (
@@ -266,7 +262,7 @@ export function AtmFilters(props: AtmFiltersProps) {
           <Badge
             variant="outline"
             className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
-            onClick={clearAll}
+            onClick={clearFilters}
           >
             Limpar tudo
           </Badge>
@@ -287,7 +283,7 @@ export function AtmFilters(props: AtmFiltersProps) {
           </Tooltip>
         </TooltipProvider>
 
-      <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
+      <Drawer open={open} onOpenChange={handleDrawerOpenChange} direction="right">
         <DrawerTrigger asChild>
           <Button className="w-12 h-10 mr-2" variant="outline">
             <Funnel size={16}  />
@@ -356,7 +352,7 @@ export function AtmFilters(props: AtmFiltersProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="ALL">Todos</SelectItem>
-                  {blockchainStatus.map((s) => (
+                  {blockchainStatuses.map((s) => (
                     <SelectItem key={s} value={s}>
                       {s}
                     </SelectItem>
@@ -376,7 +372,7 @@ export function AtmFilters(props: AtmFiltersProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="ALL">Todos</SelectItem>
-                  {internalStatus.map((s) => (
+                  {internalStatuses.map((s) => (
                     <SelectItem key={s} value={s}>
                       {s}
                     </SelectItem>
@@ -480,10 +476,10 @@ export function AtmFilters(props: AtmFiltersProps) {
 
           <DrawerFooter className="col-span-full">
             <div className="flex items-center justify-end gap-2">
-              <Button variant="ghost" onClick={clearAll}>
+              <Button variant="ghost" onClick={clearFilters}>
                 <X size={16} className="mr-1" /> Limpar
               </Button>
-              <Button onClick={apply}>Aplicar</Button>
+              <Button onClick={applyFilters}>Aplicar</Button>
             </div>
           </DrawerFooter>
         </DrawerContent>
