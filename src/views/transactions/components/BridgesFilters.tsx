@@ -26,7 +26,7 @@ import {
 import { TxStatusBridge } from "@/interfaces/Transactions";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { api } from "@/services/api";
+import { useTransactionsCsv } from "@/services/transactions/useTransactionsCsv";
 import { useI18n } from "@/i18n";
 
 export interface BridgeFiltersValues {
@@ -42,7 +42,7 @@ interface BridgeFiltersProps extends BridgeFiltersValues {
   setPage: (v: number) => void;
 }
 
-function formatDateParam(date?: Date): string | undefined {
+function formatDateFilter(date?: Date): string | undefined {
   if (!date) return undefined;
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -77,10 +77,9 @@ export function BridgeFilters(props: BridgeFiltersProps) {
     setPage,
   } = props;
 
-  const [open, setOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
 
-  // estados locais
   const [localUserId, setLocalUserId] = useState(user_id ?? "");
   const [localWalletId, setLocalWalletId] = useState(wallet_id ?? "");
   const [localStatus, setLocalStatus] = useState(status ?? "");
@@ -91,10 +90,10 @@ export function BridgeFilters(props: BridgeFiltersProps) {
     Date | undefined
   >(created_before ? new Date(created_before) : undefined);
 
-  const [openBeforeCalendar, setOpenBeforeCalendar] = useState(false);
-  const [openAfterCalendar, setOpenAfterCalendar] = useState(false);
+  const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState(false);
+  const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false);
 
-  const resetLocal = () => {
+  const resetLocalState = () => {
     setLocalUserId("");
     setLocalWalletId("");
     setLocalStatus("");
@@ -102,19 +101,19 @@ export function BridgeFilters(props: BridgeFiltersProps) {
     setLocalCreatedBefore(undefined);
   };
 
-  const apply = () => {
+  const applyFilters = () => {
     setPage(1);
     setValues({
       user_id: localUserId,
       wallet_id: localWalletId,
       status: localStatus,
-      created_after: formatDateParam(localCreatedAfter),
-      created_before: formatDateParam(localCreatedBefore),
+      created_after: formatDateFilter(localCreatedAfter),
+      created_before: formatDateFilter(localCreatedBefore),
     });
-    setOpen(false);
+    setIsDrawerOpen(false);
   };
 
-  const clearAll = () => {
+  const clearFilters = () => {
     setPage(1);
     setValues({
       user_id: "",
@@ -123,12 +122,12 @@ export function BridgeFilters(props: BridgeFiltersProps) {
       created_after: undefined,
       created_before: undefined,
     });
-    resetLocal();
-    setOpen(false);
+    resetLocalState();
+    setIsDrawerOpen(false);
   };
 
-  const syncWhenOpen = (nextOpen: boolean) => {
-    setOpen(nextOpen);
+  const handleDrawerOpenChange = (nextOpen: boolean) => {
+    setIsDrawerOpen(nextOpen);
     if (nextOpen) {
       setLocalUserId(user_id ?? "");
       setLocalWalletId(wallet_id ?? "");
@@ -140,7 +139,7 @@ export function BridgeFilters(props: BridgeFiltersProps) {
     }
   };
 
-  const statuses: TxStatusBridge[] = [
+  const bridgeStatuses: TxStatusBridge[] = [
     "SUCCESS",
     "FAILED",
     "DUPLICATED",
@@ -174,31 +173,15 @@ export function BridgeFilters(props: BridgeFiltersProps) {
       label: formatFilterLabel(key, value),
     }));
 
+  const downloadCsv = useTransactionsCsv('/transactions/bridges/csv', 'bridges');
   const handleDownloadCsv = async () => {
-    try {
-      const params = new URLSearchParams();
-      if (user_id) params.append("user_id", user_id);
-      if (wallet_id) params.append("wallet_id", wallet_id);
-      if (status) params.append("status", status);
-      if (created_after) params.append("created_after", created_after);
-      if (created_before) params.append("created_before", created_before);
-
-      const response = await api.get(`/transactions/bridges/csv?${params.toString()}`,{ responseType: "blob" });
-      const blob = new Blob([response.data], { type: "text/csv;charset=utf-8" });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      const now = new Date();
-      const pad = (n: number) => String(n).padStart(2, "0");
-      const filename = `bridges-${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}.csv`;
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (e) {
-      console.error("Failed to download CSV bridges:", e);
-    }
+    await downloadCsv({
+      user_id,
+      wallet_id,
+      status,
+      created_after,
+      created_before,
+    });
   };
 
   return (
@@ -220,7 +203,7 @@ export function BridgeFilters(props: BridgeFiltersProps) {
             <Badge
               variant="outline"
               className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
-              onClick={clearAll}
+              onClick={clearFilters}
             >
               Limpar tudo
             </Badge>
@@ -242,7 +225,7 @@ export function BridgeFilters(props: BridgeFiltersProps) {
           </Tooltip>
         </TooltipProvider>
 
-      <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
+      <Drawer open={isDrawerOpen} onOpenChange={handleDrawerOpenChange} direction="right">
         <DrawerTrigger asChild>
           <Button className="w-12 h-10 mr-2" variant="outline">
             <Funnel size={16}  />
@@ -261,7 +244,6 @@ export function BridgeFilters(props: BridgeFiltersProps) {
               </DrawerTitle>
             </DrawerHeader>
 
-            {/* User ID */}
             <div className="mt-4">
               <Label htmlFor="user_id">User ID</Label>
               <input
@@ -288,8 +270,8 @@ export function BridgeFilters(props: BridgeFiltersProps) {
             <div className="flex flex-col mt-4">
               <Label>Data início</Label>
               <Popover
-                open={openAfterCalendar}
-                onOpenChange={setOpenAfterCalendar}
+                open={isStartDatePickerOpen}
+                onOpenChange={setIsStartDatePickerOpen}
               >
                 <PopoverTrigger asChild>
                   <Button
@@ -312,7 +294,7 @@ export function BridgeFilters(props: BridgeFiltersProps) {
                     selected={localCreatedAfter}
                     onSelect={(date) => {
                       setLocalCreatedAfter(date ?? undefined);
-                      setOpenAfterCalendar(false);
+                      setIsStartDatePickerOpen(false);
                     }}
                     initialFocus
                   />
@@ -320,12 +302,11 @@ export function BridgeFilters(props: BridgeFiltersProps) {
               </Popover>
             </div>
 
-            {/* Data fim */}
             <div className="flex flex-col mt-4">
               <Label>Data fim</Label>
               <Popover
-                open={openBeforeCalendar}
-                onOpenChange={setOpenBeforeCalendar}
+                open={isEndDatePickerOpen}
+                onOpenChange={setIsEndDatePickerOpen}
               >
                 <PopoverTrigger asChild>
                   <Button
@@ -348,7 +329,7 @@ export function BridgeFilters(props: BridgeFiltersProps) {
                     selected={localCreatedBefore}
                     onSelect={(date) => {
                       setLocalCreatedBefore(date ?? undefined);
-                      setOpenBeforeCalendar(false);
+                      setIsEndDatePickerOpen(false);
                     }}
                     initialFocus
                   />
@@ -367,7 +348,7 @@ export function BridgeFilters(props: BridgeFiltersProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="ALL">Todos</SelectItem>
-                  {statuses.map((s) => (
+                  {bridgeStatuses.map((s) => (
                     <SelectItem key={s} value={s}>
                       {s}
                     </SelectItem>
@@ -378,10 +359,10 @@ export function BridgeFilters(props: BridgeFiltersProps) {
 
             <DrawerFooter className="col-span-full">
               <div className="flex items-center justify-end gap-2">
-                <Button variant="ghost" onClick={clearAll}>
+                <Button variant="ghost" onClick={clearFilters}>
                   <X size={16} className="mr-1" /> Limpar
                 </Button>
-                <Button onClick={apply}>Aplicar</Button>
+                <Button onClick={applyFilters}>Aplicar</Button>
               </div>
             </DrawerFooter>
           </div>

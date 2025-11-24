@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Funnel, Calendar as CalendarIcon, X, ListFilter } from "lucide-react";
+import { Funnel, Calendar as CalendarIcon, X, ListFilter, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "@/components/ui/label";
@@ -25,6 +25,9 @@ import {
 } from "@/components/ui/drawer";
 import { BcStatusBillet } from "@/interfaces/Transactions";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useI18n } from "@/i18n";
+import { useTransactionsCsv } from "@/services/transactions/useTransactionsCsv";
 
 export interface BilletCashoutFiltersValues {
   orderId?: string;
@@ -79,6 +82,7 @@ export function formatFilterLabel(key: string, value: any): string {
 const statuses: BcStatusBillet[] = ["CONFIRMED", "DROP", "QUEUED", "REFUNDED"];
 
 export function BilletCashoutFilters(props: BilletCashoutFiltersProps) {
+  const { t } = useI18n();
   const {
     orderId,
     receiverName,
@@ -116,6 +120,21 @@ export function BilletCashoutFilters(props: BilletCashoutFiltersProps) {
 
   const [openBeforeCalendar, setOpenBeforeCalendar] = useState(false);
   const [openAfterCalendar, setOpenAfterCalendar] = useState(false);
+
+  const downloadCsv = useTransactionsCsv('/transactions/billet-cashout/csv', 'billet-cashout');
+  const handleDownloadCsv = async () => {
+    await downloadCsv({
+      status,
+      receiverName,
+      receiverDocument,
+      min_amount,
+      max_amount,
+      banksId,
+      orderId,
+      created_after,
+      created_before,
+    });
+  };
 
   const resetLocal = () => {
     setLocalOrderId("");
@@ -222,6 +241,20 @@ export function BilletCashoutFilters(props: BilletCashoutFiltersProps) {
           )}
         </div>
       </div>
+
+      <div className="flex items-center gap-2">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button className="w-14 h-12" onClick={handleDownloadCsv}>
+                <Download size={18} color="#fff" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t("common.actions.downloadCsv")}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
       <Drawer open={open} onOpenChange={syncWhenOpen} direction="right">
         <DrawerTrigger asChild>
@@ -410,6 +443,7 @@ export function BilletCashoutFilters(props: BilletCashoutFiltersProps) {
           </div>
         </DrawerContent>
       </Drawer>
+      </div>
     </div>
   );
 }
