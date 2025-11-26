@@ -6,23 +6,26 @@ import { SidebarLayout } from "@/components/layouts/SidebarLayout";
 import UserInfo from "./renderViews/UserInfoView";
 import { KYCView } from "./renderViews/KYCView";
 import { WalletView } from "./renderViews/WalletView";
-import { NFEView } from "./renderViews/NFEView";
-import { ClientsData } from "@/interfaces/ClientsData";
-import { UserInfoData } from "@/interfaces/UserInfoData";
-import { useUserInfoByUserId } from "@/services/clients/useUserinfo";
 import { UserTransactionsView } from "./renderViews/UserTransactionsView";
+import { useDataUser } from "@/services/clients/useDataUser";
+import { DataUser } from "@/interfaces/DataUser";
+import { NFEView } from "./renderViews/NFEView";
+
 
 export interface ClientInfoProps {
-  client: ClientsData;
-  userInfo: UserInfoData | undefined;
+  userInfo: DataUser | undefined;
 }
+
 
 export default function ClientDetails() {
   const { state } = useLocation();
   const clientId = state?.clientId;
-  const { data: client, isLoading: loadingClient } = useClientById(clientId);
+  const clientDocument = state?.clientDocument;
 
-  const { data: userInfo } = useUserInfoByUserId(clientId)
+  const { data: client, isLoading: loadingClient } = useClientById(clientId);
+  
+  const { data: userInfo, isLoading: loadingKyc } = useDataUser(clientDocument);
+
 
   const [view, setView] = useState<"Perfil" | "KYC" | "Carteiras" | "Transações" | "NFE">("Perfil");
 
@@ -45,7 +48,7 @@ export default function ClientDetails() {
       ]}
       current={
         <>
-          Detalhes de <strong>{client?.name ?? "..."}</strong>
+          Detalhes de <strong className="text-foreground font-bold">{client?.name ?? "..."}</strong>
         </>
       }
     >
@@ -70,10 +73,10 @@ export default function ClientDetails() {
         })}
       </div>
 
-      {view === "Perfil" && client && (<UserInfo client={client} userInfo={userInfo} />)}
-      {view === "KYC" && client && (<KYCView client={client} userInfo={userInfo} />)}
-      {view === "Carteiras" && userInfo && <WalletView userinfo={userInfo} />}
-      {view === "Transações" && userInfo?.document && <UserTransactionsView document={userInfo.document} />}
+      {view === "Perfil" && client && (<UserInfo userInfo={userInfo} loading={loadingKyc} />)}
+      {view === "KYC" && client && (<KYCView userInfo={userInfo} />)}
+      {view === "Carteiras" && userInfo && <WalletView document={userInfo.res.document} />}
+      {view === "Transações" && userInfo?.res.document && <UserTransactionsView document={userInfo.res.document} />}
       {view === "NFE" && client && <NFEView client={client} />}
     </SidebarLayout>
   );

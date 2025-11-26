@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   FolderOpen,
   MapPinHouse,
@@ -10,30 +16,36 @@ import { Info } from "@/components/info";
 import { WalletSendGas } from "./components/walletSendGas";
 import { documentFormat, getFlagUrl, phoneFormat } from "@/lib/formatters";
 import { useWalletClientDocument } from "@/services/wallets/useWallets";
-import type { UserInfoData } from "@/interfaces/UserInfoData";
+// import type { UserInfoData } from "@/interfaces/UserInfoData";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
-import { SkeletonCard } from "@/components/skeletons/skeletonCard";
+// import { SkeletonCard } from "@/components/skeletons/skeletonCard";
+import { SkeletonCardLine } from "@/components/skeletons/skeletonCardline";
+// import { ClientInfoProps } from "..";
 
-export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
+interface UserTransactionsProps {
+  document: string;
+}
+
+export function WalletView({ document }: UserTransactionsProps) {
   const {
     data: walletAddress,
     isLoading,
     refetch,
-  } = useWalletClientDocument(userinfo.document);
+  } = useWalletClientDocument(document);
 
-  if (isLoading) {
-  return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
-        <SkeletonCard />
-        <SkeletonCard />
-        <SkeletonCard />
-        <SkeletonCard />
-      </div>
-    </div>
-  );
-}
+  //   if (isLoading) {
+  //   return (
+  //     <div className="space-y-6">
+  //       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
+  //         <SkeletonCard />
+  //         <SkeletonCard />
+  //         <SkeletonCard />
+  //         <SkeletonCard />
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   if (!walletAddress) {
     return (
@@ -64,13 +76,22 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
             </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Info label="ID" value={walletAddress.id} />
-            <Info label="UUID" value={walletAddress.uuid} />
-            <Info
-              label="Documento"
-              value={documentFormat(walletAddress.document)}
-            />
-            <Info label="Telefone" value={phoneFormat(walletAddress.phone)} />
+            {isLoading ? (
+              <SkeletonCardLine />
+            ) : (
+              <>
+                <Info label="ID" value={walletAddress.id} />
+                <Info label="UUID" value={walletAddress.uuid} />
+                <Info
+                  label="Documento"
+                  value={documentFormat(walletAddress.document)}
+                />
+                <Info
+                  label="Telefone"
+                  value={phoneFormat(walletAddress.phone)}
+                />
+              </>
+            )}
           </CardContent>
         </Card>
 
@@ -85,26 +106,32 @@ export function WalletView({ userinfo }: { userinfo: UserInfoData }) {
             </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Info label="CEP" value={walletAddress.zipCode} />
-            <Info
-              label="Rua"
-              value={`${walletAddress.address} - ${walletAddress.number}`}
-            />
+            {isLoading ? (
+              <SkeletonCardLine />
+            ) : (
+              <>
+                <Info label="CEP" value={walletAddress.zipCode} />
+                <Info
+                  label="Rua"
+                  value={`${walletAddress.address} - ${walletAddress.number}`}
+                />
 
-            <div className="min-w-0">
-              <p className="text-sm text-muted-foreground">País</p>
+                <div className="min-w-0">
+                  <p className="text-sm text-muted-foreground">País</p>
 
-              {walletAddress.nacionality && (
-                <div className="flex items-center gap-2">
-                  <img
-                    src={getFlagUrl(walletAddress.nacionality)}
-                    alt={walletAddress.nacionality}
-                    className="w-6 h-5 rounded-lg"
-                  />
-                  <strong>{walletAddress.nacionality}</strong>
+                  {walletAddress.nacionality && (
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={getFlagUrl(walletAddress.nacionality)}
+                        alt={walletAddress.nacionality}
+                        className="w-6 h-5 rounded-lg"
+                      />
+                      <strong>{walletAddress.nacionality}</strong>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              </>
+            )}
           </CardContent>
         </Card>
 

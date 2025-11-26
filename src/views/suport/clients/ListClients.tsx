@@ -56,7 +56,7 @@ export default function ListClients() {
   )
 
   const handleRowClick = (client: ClientsData) => {
-    navigate("/clientDetails", { state: { clientId: client.id } })
+    navigate("/clientDetails", { state: { clientId: client.id, clientDocument: client.document } })
   }
 
   return (
