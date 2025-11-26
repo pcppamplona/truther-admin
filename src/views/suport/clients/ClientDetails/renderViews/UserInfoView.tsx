@@ -21,7 +21,6 @@ import {
   MapPinHouse,
   User,
 } from "lucide-react";
-import { ClientInfoProps } from "..";
 import { Info } from "@/components/info";
 import {
   Table,
@@ -35,19 +34,27 @@ import { getColorRGBA, txStatusColors } from "@/lib/utils";
 import { SkeletonTableFull } from "@/components/skeletons/skeletonTableFull";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
+import { DataUser } from "@/interfaces/DataUser";
+import { SkeletonCardLine } from "@/components/skeletons/skeletonCardline";
 
-export default function UserInfo({ userInfo }: ClientInfoProps) {
+export interface UserInfoProps {
+  userInfo: DataUser | undefined;
+  loading?: boolean;
+}
+
+export default function UserInfo({ userInfo, loading }: UserInfoProps) {
   const page = 1;
   const limit = 5;
 
   const { data, isLoading, isError, refetch } = useUserTransactions(
-    userInfo?.document ?? "",
+    userInfo?.res.document ?? "",
     page,
     limit
   );
 
   const transactions = data?.data ?? [];
 
+  const isLoadingContent = loading || isLoading;
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
@@ -61,32 +68,37 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
             </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Info label="Nome" value={userInfo?.name} />
-            <Info label="E-mail" value={userInfo?.email} />
-            <Info
-              label="Documento"
-              value={documentFormat(userInfo?.document)}
-            />
-            <Info label="Telefone" value={phoneFormat(userInfo?.phone)} />
-            <Info label="Nascimento" value={userInfo?.birthday} />
-            <Info label="Nome da Mãe" value={userInfo?.mothers_name} />
-
-            <div>
-              <p className="text-muted-foreground">País</p>
-              <strong className="flex items-center gap-2">
-                <img
-                  src={getFlagUrl(userInfo?.nationality ?? "")}
-                  alt={userInfo?.nationality}
-                  className="w-6 h-5 rounded-lg"
+            {isLoadingContent ? (
+              <SkeletonCardLine />
+            ) : (
+              <>
+                <Info label="Nome" value={userInfo?.res.name} />
+                <Info label="E-mail" value={userInfo?.res.email} />
+                <Info
+                  label="Documento"
+                  value={documentFormat(userInfo?.res.document)}
                 />
-                {userInfo?.nationality}
-              </strong>
-            </div>
+                <Info
+                  label="Telefone"
+                  value={phoneFormat(userInfo?.res.phone)}
+                />
+                <Info label="Nascimento" value={userInfo?.res.birthday} />
+                <Info label="Nome da Mãe" value={userInfo?.res.mothersName} />
 
-            <div>
-              <p className="text-muted-foreground">uuid</p>
-              <strong>{userInfo?.uuid}</strong>
-            </div>
+                <div>
+                  <p className="text-muted-foreground">País</p>
+                  <strong className="flex items-center gap-2">
+                    <img
+                      src={getFlagUrl(userInfo?.res.nationality ?? "")}
+                      alt={userInfo?.res.nationality}
+                      className="w-6 h-5 rounded-lg"
+                    />
+                    {userInfo?.res.nationality}
+                  </strong>
+                </div>
+                <Info label="uuid" value={userInfo?.res.uuid} />
+              </>
+            )}
           </CardContent>
         </Card>
 
@@ -100,32 +112,43 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
             </CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Info label="CEP" value={userInfo?.cep} />
-            <Info
-              label="Rua"
-              value={`${userInfo?.street} - ${userInfo?.house_number}`}
-            />
-            <Info label="Bairro" value={userInfo?.neighborhood} />
-            <Info label="Cidade" value={userInfo?.city} />
-            <Info label="Estado" value={userInfo?.state?.toUpperCase()} />
+            {isLoadingContent ? (
+              <SkeletonCardLine />
+            ) : (
+              <>
+                <Info label="CEP" value={userInfo?.res.cep} />
+                <Info
+                  label="Rua"
+                  value={`${userInfo?.res.street} - ${userInfo?.res.houseNumber}`}
+                />
+                <Info label="Bairro" value={userInfo?.res.neighborhood} />
+                <Info label="Cidade" value={userInfo?.res.city} />
+                <Info
+                  label="Estado"
+                  value={userInfo?.res.state?.toUpperCase()}
+                />
 
-            <a
-              href={`https://www.google.com/maps/search/?api=1&query=${userInfo?.location.replace(
-                " / ",
-                ","
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block"
-            >
-              <div className="cursor-pointer">
-                <p className="text-muted-foreground flex items-center">
-                  Localização
-                  <ExternalLink size={14} className="ml-2" />
-                </p>
-                <strong className="uppercase">{userInfo?.location}</strong>
-              </div>
-            </a>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${userInfo?.res.location.replace(
+                    " / ",
+                    ","
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <div className="cursor-pointer">
+                    <p className="text-muted-foreground flex items-center">
+                      Localização
+                      <ExternalLink size={14} className="ml-2" />
+                    </p>
+                    <strong className="uppercase">
+                      {userInfo?.res.location}
+                    </strong>
+                  </div>
+                </a>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -137,7 +160,7 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
           </CardTitle>
           <CardDescription>
             Últimas 5 transações efetuadas por{" "}
-            <strong className="bold">{userInfo?.name}</strong>
+            <strong className="bold">{userInfo?.res.name}</strong>
           </CardDescription>
         </CardHeader>
 
@@ -219,11 +242,12 @@ export default function UserInfo({ userInfo }: ClientInfoProps) {
                           src={
                             {
                               USDT: "/usdt.png",
+                              BITCOIN: "/bitcoin.png",
                               BTC: "/bitcoin.png",
                               ETH: "/eth.png",
                               BRL: "/brl.png",
                               VRL: "/vrl.png",
-                            }[tx.symbol?.toUpperCase() ?? ""] || "/default.png"
+                            }[tx.symbol?.toUpperCase() ?? ""] || "/brl.png"
                           }
                           alt={tx.symbol ?? "token"}
                           className="w-5 h-5 object-contain"
