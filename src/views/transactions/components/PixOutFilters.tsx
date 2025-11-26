@@ -27,7 +27,7 @@ import {
 import { poStatusBlockchain } from "@/interfaces/Transactions";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { api } from "@/services/api";
+import { useTransactionsCsv } from "@/services/transactions/useTransactionsCsv";
 
 export interface PixOutFiltersValues {
   txid: string;
@@ -235,38 +235,20 @@ export function PixOutFilters(props: PixOutFiltersProps) {
     created_before,
   ]);
 
+  const downloadCsv = useTransactionsCsv('/transactions/pix-out/csv', 'pix-out');
   const handleDownloadCsv = async () => {
-    try {
-      const params = new URLSearchParams();
-      if (txid) params.append("txid", txid);
-      if (end2end) params.append("end2end", end2end);
-      if (pixKey) params.append("pixKey", pixKey);
-      if (receiverDocument) params.append("receiverDocument", receiverDocument);
-      if (receiverName) params.append("receiverName", receiverName);
-      if (wallet) params.append("wallet", wallet);
-      if (status_px) params.append("status_px", status_px);
-      if (status_bk) params.append("status_bk", status_bk);
-      if (min_amount) params.append("min_amount", min_amount);
-      if (max_amount) params.append("max_amount", max_amount);
-
-      const response = await api.get(`/transactions/pix-out/csv?${params.toString()}`,
-        { responseType: "blob" }
-      );
-      const blob = new Blob([response.data], { type: "text/csv;charset=utf-8" });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      const now = new Date();
-      const pad = (n: number) => String(n).padStart(2, "0");
-      const filename = `pix-out-${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}.csv`;
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (e) {
-      console.error("Failed to download CSV pix-out:", e);
-    }
+    await downloadCsv({
+      txid,
+      end2end,
+      pixKey,
+      receiverDocument,
+      receiverName,
+      wallet,
+      status_px,
+      status_bk,
+      min_amount,
+      max_amount,
+    });
   };
 
   return (
