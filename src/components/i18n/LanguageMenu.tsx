@@ -14,9 +14,7 @@ export const LanguageMenu: React.FC = () => {
 
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger
-        className="flex items-center justify-between w-full px-2 py-1.5 text-sm cursor-pointer"
-      >
+      <DropdownMenuSubTrigger className="flex w-full cursor-pointer items-center justify-between px-2 py-1.5 text-sm">
         <div className="flex items-center gap-2">
           <Languages />
           <span>{t("common.language")}</span>

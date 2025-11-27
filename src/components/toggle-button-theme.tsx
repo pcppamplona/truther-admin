@@ -1,6 +1,7 @@
 import { useThemeStore } from "@/store/theme";
 import { Moon, Sun } from "lucide-react";
 import { useI18n } from "@/i18n";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 export function ToggleThemeButton() {
   const { theme, setTheme } = useThemeStore();
@@ -20,9 +21,17 @@ export function ToggleThemeButton() {
   };
 
   return (
-    <div className="flex items-center cursor-pointer gap-2" onClick={toggleTheme}>
-      {isDark ? <Moon /> : <Sun />}
-      {isDark ? t("common.theme.dark") : t("common.theme.light")}
-    </div>
+    <DropdownMenuItem
+      className="cursor-pointer"
+      onClick={toggleTheme}
+    >
+      <div className="flex w-full items-center gap-2">
+        {isDark ? <Moon /> : <Sun />}
+        <span className="flex-1 text-left">
+          {t("common.theme.label")}:{" "}
+          {isDark ? t("common.theme.dark") : t("common.theme.light")}
+        </span>
+      </div>
+    </DropdownMenuItem>
   );
 }
