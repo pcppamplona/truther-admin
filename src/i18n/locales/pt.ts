@@ -10,6 +10,7 @@ const pt = {
     },
     language: "Idioma",
     theme: {
+      label: "Tema",
       light: "Claro",
       dark: "Escuro",
     },
@@ -46,6 +47,46 @@ const pt = {
     },
     users: "Usuários",
     audit: "Auditoria",
+  },
+  supportPages: {
+    sendGas: {
+      title: "Enviar GAS para cliente",
+      description: "Faça o envio de GAS para a rede do cliente escolhido.",
+      fields: {
+        ticket: "Ticket",
+        address: "Endereço",
+        network: "Rede (Network)",
+      },
+      actions: {
+        submit: "Enviar",
+        loading: "Enviando...",
+        cancel: "Cancelar",
+      },
+      toast: {
+        missingFields: "Preencha Ticket, Endereço e Rede para enviar GAS.",
+        successTitle: "GAS enviado com sucesso.",
+        successDescription: "Ticket {{ticket}} processado na rede {{network}}.",
+        errorTitle: "Erro ao enviar GAS.",
+        errorDescription: "Tente novamente em alguns instantes.",
+      },
+    },
+    decode: {
+      title: "Decodificar",
+      description: "Cole o código criptografado para fazer a decodificação.",
+      inputPlaceholder: "Conteúdo",
+      resultPlaceholder: "Resultado",
+      actions: {
+        submit: "Decodificar",
+        loading: "Decodificando...",
+        cancel: "Cancelar",
+      },
+      toast: {
+        emptyField: "Insira o código que deseja decodificar.",
+        successTitle: "Conteúdo decodificado com sucesso.",
+        errorTitle: "Não foi possível decodificar.",
+        errorDescription: "Tente novamente em instantes.",
+      },
+    },
   },
   transactions: {
     breadcrumb: "Transações",
