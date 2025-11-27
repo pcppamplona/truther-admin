@@ -36,6 +36,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/ui/button";
 import { DataUser } from "@/interfaces/DataUser";
 import { SkeletonCardLine } from "@/components/skeletons/skeletonCardline";
+import { BlockLevelDialog } from "./components/BlockLevelDialog";
 
 export interface UserInfoProps {
   userInfo: DataUser | undefined;
@@ -59,13 +60,18 @@ export default function UserInfo({ userInfo, loading }: UserInfoProps) {
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
         <Card>
-          <CardHeader>
-            <CardTitle className="flex flex-row items-center gap-2">
-              <User /> Informações Pessoais
-            </CardTitle>
-            <CardDescription>
-              Dados de identificação e registro vinculados ao cliente.
-            </CardDescription>
+          <CardHeader className="flex flex-row items-start justify-between">
+            <div>
+              <CardTitle className="flex flex-row items-center gap-2">
+                <User /> Informações Pessoais
+              </CardTitle>
+              <CardDescription>
+                Dados de identificação e registro vinculados ao cliente.
+              </CardDescription>
+            </div>
+
+            <BlockLevelDialog userId={userInfo?.res.userId} />
+
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {isLoadingContent ? (
@@ -142,7 +148,7 @@ export default function UserInfo({ userInfo, loading }: UserInfoProps) {
                       Localização
                       <ExternalLink size={14} className="ml-2" />
                     </p>
-                    <strong className="uppercase">
+                    <strong className="text-foreground font-bold">
                       {userInfo?.res.location}
                     </strong>
                   </div>
