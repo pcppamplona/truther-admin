@@ -288,7 +288,7 @@ export function AuditLogFilters({
         direction="right"
       >
         <DrawerTrigger asChild>
-          <Button className="w-12 h-10 mr-2" variant="outline">
+          <Button className="w-12 h-10" variant="outline">
             <Funnel size={16}  />
           </Button>
         </DrawerTrigger>

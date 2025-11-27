@@ -54,7 +54,7 @@ export const txStatusColors: Record<TxStatusBridge, string> = {
 };
 
 export const methodColors: Record<methodType, string> = {
-  POST: "text-[#f4da7a]",
+  POST: "text-[#E9C955]",
   DELETE: "text-[#d18785]",
   GET: "text-[#5aaa7a]",
   UPDATE: "text-[#73acf3]",

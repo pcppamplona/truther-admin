@@ -167,7 +167,6 @@ export function UserAudit({ user }: { user: UserData }) {
                           {audit.target_type}
                         </div>
                       </TableCell>
-                      <TableCell>{audit.target_external_id ?? "-"}</TableCell>
                       <TableCell>
                         {expandedId === audit.id ? (
                           <ChevronUp size={18} />
@@ -180,7 +179,7 @@ export function UserAudit({ user }: { user: UserData }) {
                     <AnimatePresence>
                       {expandedId === audit.id && (
                         <TableRow className="bg-muted/30">
-                          <TableCell colSpan={9} className="p-0">
+                          <TableCell colSpan={10} className="p-0">
                             <motion.div
                               initial={{ height: 0, opacity: 0 }}
                               animate={{ height: "auto", opacity: 1 }}
