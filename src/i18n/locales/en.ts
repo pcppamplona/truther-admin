@@ -10,6 +10,7 @@ const en = {
     },
     language: "Language",
     theme: {
+      label: "Theme",
       light: "Light",
       dark: "Dark",
     },
@@ -46,6 +47,46 @@ const en = {
     },
     users: "Users",
     audit: "Audit",
+  },
+  supportPages: {
+    sendGas: {
+      title: "Send GAS to client",
+      description: "Send GAS to the selected client's network.",
+      fields: {
+        ticket: "Ticket",
+        address: "Address",
+        network: "Network",
+      },
+      actions: {
+        submit: "Send",
+        loading: "Sending...",
+        cancel: "Cancel",
+      },
+      toast: {
+        missingFields: "Fill Ticket, Address and Network to send GAS.",
+        successTitle: "GAS sent successfully.",
+        successDescription: "Ticket {{ticket}} processed on the {{network}} network.",
+        errorTitle: "Error while sending GAS.",
+        errorDescription: "Please try again in a few moments.",
+      },
+    },
+    decode: {
+      title: "Decode",
+      description: "Paste the encrypted code to decode it.",
+      inputPlaceholder: "Content",
+      resultPlaceholder: "Result",
+      actions: {
+        submit: "Decode",
+        loading: "Decoding...",
+        cancel: "Cancel",
+      },
+      toast: {
+        emptyField: "Enter the code you want to decode.",
+        successTitle: "Content decoded successfully.",
+        errorTitle: "Could not decode.",
+        errorDescription: "Try again in a few moments.",
+      },
+    },
   },
   transactions: {
     breadcrumb: "Transactions",

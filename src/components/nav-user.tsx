@@ -79,13 +79,9 @@ export function NavUser() {
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <ToggleThemeButton />
-              </DropdownMenuItem>
+              <ToggleThemeButton />
 
-              <DropdownMenuItem>
-                <LanguageMenu />
-              </DropdownMenuItem>
+              <LanguageMenu />
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
